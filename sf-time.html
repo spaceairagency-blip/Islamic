@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramadan Sehri Iftar Time</title>
+
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --accent:#22c55e;
+  --text:#e5e7eb;
+}
+*{box-sizing:border-box;font-family:system-ui}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+header{
+  padding:15px;
+  text-align:center;
+  background:#020617;
+  font-size:18px;
+}
+.container{
+  padding:15px;
+  max-width:400px;
+  margin:auto;
+}
+select{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:none;
+  background:var(--card);
+  color:white;
+  margin-bottom:15px;
+}
+.card{
+  background:var(--card);
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:15px;
+  text-align:center;
+}
+.time{
+  font-size:28px;
+  color:var(--accent);
+}
+.label{
+  opacity:.8;
+  margin-bottom:5px;
+}
+.footer{
+  text-align:center;
+  opacity:.6;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🌙 Ramadan Sehri & Iftar Time</header>
+
+<div class="container">
+
+<select id="city">
+  <option value="Dhaka">ঢাকা</option>
+  <option value="Chittagong">চট্টগ্রাম</option>
+  <option value="Khulna">খুলনা</option>
+  <option value="Rajshahi">রাজশাহী</option>
+  <option value="Sylhet">সিলেট</option>
+</select>
+
+<div class="card">
+  <div class="label">আজকের সেহরি শেষ</div>
+  <div id="sehri" class="time">--:--</div>
+</div>
+
+<div class="card">
+  <div class="label">আজকের ইফতার</div>
+  <div id="iftar" class="time">--:--</div>
+</div>
+
+<div class="footer">
+  All right reserved | Made By Samiyyan
+</div>
+
+</div>
+
+<script>
+const citySelect = document.getElementById("city");
+const sehriEl = document.getElementById("sehri");
+const iftarEl = document.getElementById("iftar");
+
+async function loadTimes(city){
+  const today = new Date();
+  const date = today.getDate()+"-"+(today.getMonth()+1)+"-"+today.getFullYear();
+
+  const url = `https://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=Bangladesh&method=1`;
+
+  const res = await fetch(url);
+  const data = await res.json();
+
+  const timings = data.data.timings;
+
+  // Sehri ends at Fajr
+  sehriEl.textContent = timings.Fajr;
+  // Iftar at Maghrib
+  iftarEl.textContent = timings.Maghrib;
+}
+
+citySelect.addEventListener("change",()=>{
+  loadTimes(citySelect.value);
+});
+
+// initial load
+loadTimes(citySelect.value);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salah</title>
+
+<style>
+*{box-sizing:border-box;font-family:Arial}
+body{
+    margin:0;
+    background:#0f172a;
+    color:#fff;
+    display:flex;
+    justify-content:center;
+}
+.app{
+    width:100%;
+    max-width:420px;
+    padding:15px;
+}
+h2{text-align:center}
+.card{
+    background:#1e293b;
+    padding:15px;
+    border-radius:14px;
+    margin-bottom:15px;
+}
+.salah{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:8px;
+    background:#0f172a;
+    padding:10px;
+    border-radius:8px;
+}
+input{transform:scale(1.3)}
+.progress-bar{
+    background:#334155;
+    height:10px;
+    border-radius:10px;
+    overflow:hidden;
+}
+.progress{
+    height:100%;
+    width:0%;
+    background:#22c55e;
+}
+button{
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:10px;
+    margin-top:8px;
+    font-size:15px;
+    cursor:pointer;
+}
+.save{background:#22c55e;color:#000}
+.clear{background:#ef4444;color:#fff}
+.small{font-size:13px;color:#cbd5e1}
+.history div{
+    background:#0f172a;
+    padding:8px;
+    border-radius:8px;
+    margin-bottom:6px;
+    font-size:13px;
+}
+header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+</style>
+</head>
+
+<body>
+<div class="app">
+<a href="index.html" style="text-decoration: none;"><header>
+        <nav>
+            <h2 class="logo">
+                Islam | Topic
+            </h2>
+        </nav>
+    </header></a>
+<h2>🕌 Salah</h2>
+
+<!-- TODAY SALAH -->
+<div class="card">
+    <b>Today's Salah</b>
+    <div id="date" class="small"></div><br>
+
+    <div class="salah"><span>Fajr</span><input type="checkbox" class="p"></div>
+    <div class="salah"><span>Dhuhr</span><input type="checkbox" class="p"></div>
+    <div class="salah"><span>Asr</span><input type="checkbox" class="p"></div>
+    <div class="salah"><span>Maghrib</span><input type="checkbox" class="p"></div>
+    <div class="salah"><span>Isha</span><input type="checkbox" class="p"></div>
+
+    <div class="progress-bar"><div class="progress" id="dayBar"></div></div>
+    <div id="dayPercent" class="small">0%</div>
+
+    <button class="save" onclick="saveDay()">Save</button>
+    <button class="clear" onclick="clearDay()">Clear</button>
+</div>
+
+<!-- MONTHLY REPORT -->
+<div class="card">
+    <b>📊 Monthly Report</b>
+    <div class="progress-bar"><div class="progress" id="monthBar"></div></div>
+    <div id="monthPercent" class="small"></div>
+</div>
+
+<!-- HISTORY -->
+<div class="card">
+    <b>📅 Previous Days</b>
+    <div class="history" id="history"></div>
+</div>
+
+<!-- NOTIFICATION -->
+<!-- <div class="card">
+    <b>🔔 Prayer Reminder</b>
+    <button onclick="enableNotification()">Enable Notification</button>
+    <div class="small">Reminder every day at Maghrib (demo)</div>
+</div> -->
+
+</div>
+
+<script>
+const prayers=document.querySelectorAll(".p");
+const today=new Date();
+const key=today.toISOString().slice(0,10);
+document.getElementById("date").innerText=key;
+
+function updateDay(){
+    let c=0;
+    prayers.forEach(p=>p.checked && c++);
+    let per=Math.round((c/5)*100);
+    dayBar.style.width=per+"%";
+    dayPercent.innerText=per+"% Completed";
+}
+prayers.forEach(p=>p.onchange=updateDay);
+
+function saveDay(){
+    const data=[...prayers].map(p=>p.checked);
+    localStorage.setItem("salah-"+key,JSON.stringify(data));
+    loadHistory();
+    loadMonthly();
+}
+
+function clearDay(){
+    prayers.forEach(p=>p.checked=false);
+    updateDay();
+    localStorage.removeItem("salah-"+key);
+}
+
+(function loadToday(){
+    const d=localStorage.getItem("salah-"+key);
+    if(d){
+        JSON.parse(d).forEach((v,i)=>prayers[i].checked=v);
+        updateDay();
+    }
+})();
+
+function loadHistory(){
+    history.innerHTML="";
+    Object.keys(localStorage)
+    .filter(k=>k.startsWith("salah-"))
+    .sort().reverse()
+    .forEach(k=>{
+        const arr=JSON.parse(localStorage[k]);
+        const per=Math.round(arr.filter(v=>v).length/5*100);
+        history.innerHTML+=`<div>${k.replace("salah-","")} → ${per}%</div>`;
+    });
+}
+loadHistory();
+
+function loadMonthly(){
+    let total=0,count=0;
+    Object.keys(localStorage)
+    .filter(k=>k.startsWith("salah-"))
+    .forEach(k=>{
+        const arr=JSON.parse(localStorage[k]);
+        total+=arr.filter(v=>v).length;
+        count+=5;
+    });
+    let per=count?Math.round(total/count*100):0;
+    monthBar.style.width=per+"%";
+    monthPercent.innerText=per+"% Monthly Salah";
+}
+loadMonthly();
+
+// /* NOTIFICATION */
+// function enableNotification(){
+//     Notification.requestPermission().then(p=>{
+//         if(p==="granted"){
+//             setInterval(()=>{
+//                 new Notification("🕌 Maghrib Prayer Time",{body:"Don't forget your Salah"});
+//             },86400000);
+//             alert("Notification Enabled ✅");
+//         }
+//     });
+// }
+</script>
+</body>
+</html>

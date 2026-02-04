@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hadith App</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+  body { background-color: #0f172a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+
+  header {
+    background-color: #1e293b;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .hadith-card {
+    background-color: #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: transform 0.3s, opacity 0.3s;
+    text-align: center;
+  }
+
+  .hadith-text { font-size: 1rem; margin-bottom: 15px; line-height: 1.5; }
+  .hadith-source { font-size: 0.85rem; color: #94a3b8; }
+
+  button {
+    background-color: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+  }
+  button:hover { background-color: #2563eb; }
+
+  @media (max-width: 600px) {
+    .hadith-text { font-size: 0.9rem; }
+    header { font-size: 1.2rem; }
+    button { padding: 10px 20px; font-size: 0.95rem; }
+  }
+  header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+</style>
+</head>
+<body>
+
+<a href="index.html" style="text-decoration: none;"><header>
+        <nav>
+            <h2 class="logo">
+                Hadith | Topic
+            </h2>
+        </nav>
+    </header></a>
+
+<main>
+  <div class="hadith-card" id="hadithCard">
+    <p class="hadith-text">Swipe left or right, or press the button to see a Hadith</p>
+    <p class="hadith-source"></p>
+  </div>
+  <button onclick="showHadith()">Next Hadith</button>
+</main>
+
+<script>
+  const hadiths = [
+    { text: "Actions are judged by intentions, and every person will get what they intended.", source: "Sahih Bukhari 1" },
+    { text: "The best among you are those who have the best manners and character.", source: "Sahih Bukhari 6029" },
+    { text: "None of you truly believes until he loves for his brother what he loves for himself.", source: "Sahih Muslim 45" },
+    { text: "Feed the hungry, visit the sick, and free the captive.", source: "Sahih Bukhari 5678" },
+    { text: "The strongest among you is the one who controls his anger.", source: "Sahih Bukhari 6114" }
+    // Add more Hadiths here
+  ];
+
+  let currentIndex = 0;
+  const card = document.getElementById('hadithCard');
+
+  function showHadith(index = null) {
+    if (index !== null) currentIndex = index;
+    else currentIndex = Math.floor(Math.random() * hadiths.length);
+
+    const hadith = hadiths[currentIndex];
+    card.style.opacity = 0;
+    setTimeout(() => {
+      card.querySelector('.hadith-text').textContent = hadith.text;
+      card.querySelector('.hadith-source').textContent = hadith.source;
+      card.style.opacity = 1;
+    }, 200);
+  }
+
+  // Swipe functionality
+  let startX = 0;
+  card.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+  card.addEventListener('touchend', e => {
+    const endX = e.changedTouches[0].clientX;
+    if (endX < startX - 50) showHadith(); // swipe left
+    if (endX > startX + 50) showHadith(); // swipe right
+  });
+
+  // Auto-show new Hadith every 10 seconds
+  setInterval(() => showHadith(), 7000);
+
+  // Initial Hadith
+  showHadith(currentIndex);
+</script>
+
+</body>
+</html>

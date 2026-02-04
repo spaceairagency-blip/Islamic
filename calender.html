@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Ramadan Calendar 2026</title>
+
+<style>
+:root{
+  --bg:#020617;
+  --card:#0f172a;
+  --accent:#22c55e;
+  --muted:#94a3b8;
+}
+*{box-sizing:border-box;font-family:system-ui,-apple-system}
+body{
+  margin:0;
+  background:var(--bg);
+  color:white;
+}
+header{
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:#020617;
+  padding:14px;
+  text-align:center;
+  border-bottom:1px solid #1e293b;
+}
+header h1{
+  margin:0;
+  font-size:18px;
+}
+.controls{
+  padding:12px;
+  display:grid;
+  gap:10px;
+}
+input,button{
+  padding:12px;
+  font-size:15px;
+  border-radius:10px;
+  border:none;
+}
+input{
+  background:#0f172a;
+  color:white;
+}
+button{
+  background:var(--accent);
+  font-weight:700;
+  color:black;
+}
+.list{
+  padding:12px;
+  display:grid;
+  gap:12px;
+}
+.day{
+  background:var(--card);
+  border-radius:14px;
+  padding:14px;
+}
+.day h3{
+  margin:0 0 8px;
+  font-size:16px;
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin:6px 0;
+  font-size:14px;
+}
+.label{color:var(--muted)}
+.footer{
+  text-align:center;
+  padding:16px;
+  font-size:12px;
+  color:var(--muted);
+}
+        /* Header */
+        header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+</style>
+</head>
+
+<body>
+
+<a href="index.html" style="text-decoration: none;"><header>
+        <nav>
+            <h2 class="logo">
+                Islam | Topic
+            </h2>
+        </nav>
+    </header></a>
+
+<div class="controls">
+  <input id="city" placeholder="City (e.g. Dhaka)">
+  <input id="country" placeholder="Country (e.g. Bangladesh)">
+  <button onclick="loadRamadan()">Load Ramadan</button>
+</div>
+
+<div id="list" class="list"></div>
+
+<div class="footer">
+  Prayer times by Aladhan API
+</div>
+
+<script>
+async function loadRamadan(){
+  const city = cityInput.value.trim();
+  const country = countryInput.value.trim();
+  if(!city || !country){
+    alert("Enter city & country");
+    return;
+  }
+
+  list.innerHTML = "Loading...";
+
+  const url =
+    `https://api.aladhan.com/v1/hijriCalendarByCity?city=${city}&country=${country}&method=2&month=9&year=1447`;
+
+  try{
+    const res = await fetch(url);
+    const json = await res.json();
+    list.innerHTML = "";
+
+    json.data.forEach((d,i)=>{
+      list.innerHTML += `
+        <div class="day">
+          <h3>Day ${i+1}</h3>
+          <div class="row">
+            <span class="label">Gregorian</span>
+            <span>${d.date.gregorian.date}</span>
+          </div>
+          <div class="row">
+            <span class="label">Hijri</span>
+            <span>${d.date.hijri.date}</span>
+          </div>
+          <div class="row">
+            <span class="label">Sehri (Fajr)</span>
+            <span>${d.timings.Fajr.replace(" (GMT)","")}</span>
+          </div>
+          <div class="row">
+            <span class="label">Iftar (Maghrib)</span>
+            <span>${d.timings.Maghrib.replace(" (GMT)","")}</span>
+          </div>
+        </div>
+      `;
+    });
+
+  }catch{
+    list.innerHTML = "Failed to load data";
+  }
+}
+
+const cityInput = document.getElementById("city");
+const countryInput = document.getElementById("country");
+const list = document.getElementById("list");
+</script>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salah Time</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+body{
+    background:linear-gradient(135deg,#0f172a,#020617);
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.container{
+    width:95%;
+    max-width:420px;
+    background:#020617;
+    border-radius:15px;
+    padding:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+h1{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:24px;
+}
+.location{
+    text-align:center;
+    opacity:.8;
+    margin-bottom:20px;
+    font-size:14px;
+}
+.prayer{
+    display:flex;
+    justify-content:space-between;
+    padding:12px 15px;
+    background:#0f172a;
+    margin-bottom:10px;
+    border-radius:10px;
+    font-size:16px;
+}
+.prayer span:last-child{
+    font-weight:bold;
+}
+.footer{
+    text-align:center;
+    margin-top:10px;
+    font-size:12px;
+    opacity:.6;
+}
+header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+</style>
+<body>
+<div class="container">
+    <a href="index.html" style="text-decoration: none; color: white;">Home <h1><h1>🕌 Salah Time</h1></h1></a>
+    <div class="location" id="location">Loading...</div>
+
+    <div class="prayer"><span>Fajr</span><span id="fajr">--</span></div>
+    <div class="prayer"><span>Dhuhr</span><span id="dhuhr">--</span></div>
+    <div class="prayer"><span>Asr</span><span id="asr">--</span></div>
+    <div class="prayer"><span>Maghrib</span><span id="maghrib">--</span></div>
+    <div class="prayer"><span>Isha</span><span id="isha">--</span></div>
+
+    <div class="footer">All Right Reserved | Made By Samiyyan</div>
+</div>
+<br>
+<script>
+// Change city & country if needed
+const city = "Dhaka";
+const country = "Bangladesh";
+
+fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=1`)
+.then(res => res.json())
+.then(data => {
+    const t = data.data.timings;
+
+    document.getElementById("location").innerText =
+        `${city}, ${country} | ${data.data.date.readable}`;
+
+    document.getElementById("fajr").innerText = t.Fajr;
+    document.getElementById("dhuhr").innerText = t.Dhuhr;
+    document.getElementById("asr").innerText = t.Asr;
+    document.getElementById("maghrib").innerText = t.Maghrib;
+    document.getElementById("isha").innerText = t.Isha;
+})
+.catch(()=>{
+    document.getElementById("location").innerText = "Failed to load prayer times";
+});
+</script>
+
+</body>
+</html>

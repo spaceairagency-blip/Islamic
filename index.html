@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islam | Topic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+         *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        /* Header */
+        header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+        .cards{
+            display: grid;
+            margin: 50px;
+        }
+        .card{
+            height: 150px;
+            width: 150px;
+            background-color: #052543f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 20px;
+            box-shadow: 0 0 0 10px rgba(0, 0, 0, .5);
+            margin: 50px;
+        }
+        .card span{
+            font-size: 50px;
+        }
+        .card a{
+            text-decoration: none;
+            color: white;
+        }
+        .fa-book-quran{
+            font-size: 50px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" style="text-decoration: none;"><header>
+        <nav>
+            <h2 class="logo">
+                Islam | Topic
+            </h2>
+        </nav>
+    </header></a>
+    <div class="cards">
+        <div class="card">
+            <a href="ramadan.html">
+                <span>&#9789;</span>
+            <a href="ramadan.html"><h3>RAMADAN</h3></a>
+            </a>
+        </div>
+        <div class="card">
+            <a href="quran.html">
+                <i class="fas fa-book-quran"></i>
+            <a href="quran.html"><h3>Quran</h3></a>
+            </a>
+        </div>
+        <div class="card">
+            <a href="hadith.html">
+                <span>&#xFDFA;</span>
+            <a href="hadith.html"><h3>Hadith</h3></a>
+            </a>
+        </div>
+        <div class="card">
+            <a href="salah.html">
+                <span>&#128331;</span>
+            <a href="salah.html"><h3>Salah</h3></a>
+            </a>
+        </div>
+        <div class="card">
+            <a href="dua.html">
+                <span><i class="fas fa-hands-praying"></i></span>
+            <a href="dua.html"><h3>Dua</h3></a>
+            </a>
+        </div>
+        <div class="card">
+            <a href="salah-time.html">
+                <span>&#x23F0;</span>
+            <a href="salah-time.html"><h3>Salah Time</h3></a>
+            </a>
+        </div>
+    </div>
+    <footer>
+        <span style="margin: 20px;">All right reserved | Made By Samiyyan</span>
+    </footer>
+    <br><br>
+</body>
+</html>

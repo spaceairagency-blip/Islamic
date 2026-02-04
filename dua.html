@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dua App</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  font-family: system-ui, -apple-system;
+}
+body{
+  margin:0;
+  background:#0f172a;
+  color:white;
+}
+header{
+  background:#020617;
+  padding:15px;
+  text-align:center;
+  font-size:20px;
+  font-weight:600;
+}
+.search{
+  padding:12px;
+}
+.search input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
+}
+.container{
+  padding:12px;
+}
+.card{
+  background:#1e293b;
+  padding:15px;
+  border-radius:16px;
+  margin-bottom:12px;
+}
+.card h3{
+  margin:0;
+  color:#38bdf8;
+}
+.arabic{
+  font-size:22px;
+  margin:10px 0;
+  direction:rtl;
+}
+.meaning{
+  font-size:14px;
+  opacity:.9;
+}
+footer{
+  text-align:center;
+  padding:10px;
+  font-size:12px;
+  opacity:.6;
+}
+@media(min-width:768px){
+  body{max-width:600px;margin:auto;}
+}
+header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+</style>
+</head>
+
+<body>
+
+<a href="index.html" style="text-decoration: none;"><header>
+        <nav>
+            <h2 class="logo">
+               Dua | Topic
+            </h2>
+        </nav>
+    </header></a>
+
+<div class="search">
+  <input type="text" id="search" placeholder="Search dua...">
+</div>
+
+<div class="container" id="duaList"></div>
+
+<footer>All Right Reserved | Made By Samiyyan</footer>
+
+<script>
+const duas = [
+  {
+    title:"Before Eating",
+    arabic:"بِسْمِ اللَّهِ",
+    meaning:"In the name of Allah"
+  },
+  {
+    title:"After Eating",
+    arabic:"الْحَمْدُ لِلَّهِ",
+    meaning:"All praise is due to Allah"
+  },
+  {
+    title:"Before Sleep",
+    arabic:"بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+    meaning:"In Your name O Allah, I die and I live"
+  },
+  {
+    title:"After Waking Up",
+    arabic:"الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا",
+    meaning:"All praise is for Allah who gave us life after having taken it from us"
+  },
+  {
+    title:"Morning Dua",
+    arabic:"اللّهـمَّ أَنْتَ رَبِّـي لا إلهَ إلاّ أَنْتَ",
+    meaning:"O Allah, You are my Lord, none has the right to be worshipped except You"
+  },
+  {
+    title:"Evening Dua",
+    arabic:"اللّهـمَّ بِكَ أَمْسَيْنَا وَبِكَ أَصْبَحْنَا",
+    meaning:"O Allah, by You we enter the evening and by You we enter the morning"
+  },
+  {
+    title:"Entering Home",
+    arabic:"بِسْمِ اللَّهِ وَلَجْنَا",
+    meaning:"In the name of Allah we enter"
+  },
+  {
+    title:"Leaving Home",
+    arabic:"بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ",
+    meaning:"In the name of Allah, I place my trust in Allah"
+  },
+  {
+    title:"Before Studying",
+    arabic:"رَبِّ زِدْنِي عِلْمًا",
+    meaning:"My Lord, increase me in knowledge"
+  },
+  {
+    title:"For Parents",
+    arabic:"رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا",
+    meaning:"My Lord, have mercy upon them as they brought me up when I was small"
+  },
+  {
+    title:"For Forgiveness",
+    arabic:"رَبِّ اغْفِرْ لِي وَتُبْ عَلَيَّ",
+    meaning:"My Lord, forgive me and accept my repentance"
+  },
+  {
+    title:"For Protection",
+    arabic:"أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+    meaning:"I seek refuge in the perfect words of Allah from the evil of what He has created"
+  },
+  {
+    title:"Entering Mosque",
+    arabic:"اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+    meaning:"O Allah, open for me the doors of Your mercy"
+  },
+  {
+    title:"Leaving Mosque",
+    arabic:"اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ",
+    meaning:"O Allah, I ask You from Your bounty"
+  },
+  {
+    title:"When in Difficulty",
+    arabic:"حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ",
+    meaning:"Allah is sufficient for me; there is no deity except Him"
+  },
+  {
+    title:"For Rizq",
+    arabic:"اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ",
+    meaning:"O Allah, suffice me with what You have allowed instead of what You have forbidden"
+  },
+  {
+    title:"For Health",
+    arabic:"اللَّهُمَّ عَافِنِي فِي بَدَنِي",
+    meaning:"O Allah, grant me health in my body"
+  }
+];
+
+const duaList = document.getElementById("duaList");
+
+function showDuas(list){
+  duaList.innerHTML = "";
+  list.forEach(d=>{
+    duaList.innerHTML += `
+      <div class="card">
+        <h3>${d.title}</h3>
+        <div class="arabic">${d.arabic}</div>
+        <div class="meaning">${d.meaning}</div>
+      </div>
+    `;
+  });
+}
+
+// Initial load
+showDuas(duas);
+
+// Search
+document.getElementById("search").addEventListener("input", function(){
+  const val = this.value.toLowerCase();
+  const filtered = duas.filter(d =>
+    d.title.toLowerCase().includes(val) ||
+    d.meaning.toLowerCase().includes(val)
+  );
+  showDuas(filtered);
+});
+</script>
+
+
+
+</body>
+</html>

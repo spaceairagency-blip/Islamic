@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quran Mobile</title>
+<style>
+  * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; margin:0; padding:0; }
+  body { background: #0f172a; color: #f1f5f9; }
+  header { background: #1e293b; padding:15px; text-align:center; font-size:1.5rem; font-weight:bold; position:sticky; top:0; z-index:10; }
+  main { padding:15px; }
+  select { width:100%; padding:10px; font-size:1rem; margin-bottom:15px; border-radius:5px; border:none; background:#1e293b; color:#f1f5f9; }
+  .ayah-container { background:#1e293b; margin-bottom:10px; padding:10px; border-radius:8px; }
+  .arabic { font-size:1.2rem; text-align:right; direction:rtl; margin-bottom:5px; }
+  .roman { font-size:0.9rem; color:#cbd5e1; text-align:left; direction:ltr; }
+  .loading { text-align:center; margin-top:50px; }
+  @media (max-width:600px){
+    header { font-size:1.2rem; }
+    .arabic { font-size:1rem; }
+    .roman { font-size:0.8rem; }
+  }
+  header{
+            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
+            padding: 15px 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav{
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo{
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #facc15;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px){
+            .logo{
+                font-size: 20px;
+            }
+        }
+</style>
+</head>
+<body>
+<a href="index.html" style="text-decoration: none;"><header>
+        <nav>
+            <h2 class="logo">
+                Islam | Topic
+            </h2>
+        </nav>
+    </header></a>
+<main>
+  <select id="surahSelect">
+    <option value="">Select Surah</option>
+  </select>
+  <div id="ayahs"></div>
+  <div class="loading" id="loading">Loading Surahs...</div>
+</main>
+
+<script>
+const surahSelect = document.getElementById('surahSelect');
+const ayahsDiv = document.getElementById('ayahs');
+const loadingDiv = document.getElementById('loading');
+
+// Fetch all surahs
+async function fetchSurahs() {
+  try {
+    const res = await fetch('https://api.alquran.cloud/v1/surah');
+    const data = await res.json();
+    const surahs = data.data;
+
+    surahs.forEach(surah => {
+      const option = document.createElement('option');
+      option.value = surah.number;
+      option.textContent = `${surah.number}. ${surah.englishName} (${surah.name})`;
+      surahSelect.appendChild(option);
+    });
+
+    loadingDiv.style.display = 'none';
+  } catch (err) {
+    loadingDiv.textContent = 'Failed to load Surahs.';
+    console.error(err);
+  }
+}
+
+// Fetch ayahs of selected surah with transliteration (all in 1)
+async function fetchAyahs(surahNumber) {
+  ayahsDiv.innerHTML = '<p class="loading">Loading Ayahs...</p>';
+  try {
+    const res = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/ar.transliteration`);
+    const data = await res.json();
+    const ayahs = data.data.ayahs;
+
+    ayahsDiv.innerHTML = '';
+    ayahs.forEach(ayah => {
+      const container = document.createElement('div');
+      container.classList.add('ayah-container');
+
+      const arabicDiv = document.createElement('div');
+      arabicDiv.classList.add('arabic');
+      arabicDiv.textContent = `${ayah.numberInSurah}. ${ayah.text}`; // Arabic
+
+      const romanDiv = document.createElement('div');
+      romanDiv.classList.add('roman');
+      romanDiv.textContent = ayah.transliteration; // Roman
+
+      container.appendChild(arabicDiv);
+      container.appendChild(romanDiv);
+      ayahsDiv.appendChild(container);
+    });
+  } catch (err) {
+    ayahsDiv.innerHTML = '<p class="loading">Failed to load Ayahs.</p>';
+    console.error(err);
+  }
+}
+
+surahSelect.addEventListener('change', (e) => {
+  const surahNumber = e.target.value;
+  if (surahNumber) fetchAyahs(surahNumber);
+});
+
+fetchSurahs();
+</script>
+</body>
+</html>
