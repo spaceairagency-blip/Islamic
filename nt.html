@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramadan Alarm App ⏰</title>
+<style>
+* { box-sizing:border-box; margin:0; padding:0; font-family:system-ui,-apple-system,sans-serif; }
+body { background:#0f172a; color:white; display:flex; flex-direction:column; align-items:center; padding:20px; min-height:100vh; }
+h1 { margin-bottom:20px; text-align:center; }
+.alarm-form { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-bottom:20px; }
+input[type="time"] { padding:10px; border-radius:8px; border:none; outline:none; font-size:16px; }
+button { padding:10px 20px; background-color:#2563eb; border:none; border-radius:8px; color:white; font-size:16px; cursor:pointer; transition:0.3s; }
+button:hover { background-color:#1d4ed8; }
+ul { list-style:none; width:100%; max-width:400px; padding:0; }
+li { background:#1e293b; margin-bottom:10px; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; }
+li button { background:#ef4444; padding:5px 10px; border:none; border-radius:5px; cursor:pointer; }
+li button:hover { background:#dc2626; }
+.alarm-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#0f172a; color:white; z-index:9999; justify-content:center; align-items:center; flex-direction:column; text-align:center; }
+.alarm-modal.active { display:flex; }
+.alarm-modal h2 { font-size:2em; margin-bottom:20px; }
+.alarm-modal button { margin:10px; padding:15px 30px; font-size:18px; border-radius:10px; }
+.snooze-btn { background:#f59e0b; }
+.stop-btn { background:#ef4444; }
+.snooze-btn:hover { background:#d97706; }
+.stop-btn:hover { background:#dc2626; }
+@media (max-width:500px){ input[type="time"], button{ flex:1 1 100%; } }
+</style>
+</head>
+<body>
+
+<h1>Ramadan Alarm App ⏰</h1>
+
+<div class="alarm-form">
+<input type="time" id="customAlarmTime" placeholder="HH:MM">
+<button id="addAlarmBtn">Add Alarm</button>
+</div>
+
+<ul id="alarmsList"></ul>
+
+<div class="alarm-modal" id="alarmModal">
+<h2>⏰ Alarm Ringing!</h2>
+<button class="snooze-btn" id="snoozeBtn">Snooze 5 min</button>
+<button class="stop-btn" id="stopBtn">Stop</button>
+</div>
+
+<audio id="alarmSound" src="https://www.soundjay.com/button/button-3.mp3" preload="auto" loop></audio>
+
+<script>
+const alarmsList = document.getElementById('alarmsList');
+const alarmSound = document.getElementById('alarmSound');
+const alarmModal = document.getElementById('alarmModal');
+const snoozeBtn = document.getElementById('snoozeBtn');
+const stopBtn = document.getElementById('stopBtn');
+const addAlarmBtn = document.getElementById('addAlarmBtn');
+const customAlarmTime = document.getElementById('customAlarmTime');
+
+let alarms = JSON.parse(localStorage.getItem('alarms')) || [];
+let currentAlarm = null;
+
+// ---------- Save Alarms ----------
+function saveAlarms(){ localStorage.setItem('alarms', JSON.stringify(alarms)); }
+
+// ---------- Render ----------
+function renderAlarms(){
+  alarmsList.innerHTML = '';
+  alarms.sort();
+  alarms.forEach((time,index)=>{
+    const li=document.createElement('li');
+    li.textContent=time;
+    const delBtn=document.createElement('button');
+    delBtn.textContent='Delete';
+    delBtn.onclick=()=>{
+      alarms.splice(index,1);
+      saveAlarms();
+      renderAlarms();
+    };
+    li.appendChild(delBtn);
+    alarmsList.appendChild(li);
+  });
+}
+
+// ---------- Alarm Modal ----------
+function showAlarmModal(){ 
+  alarmModal.classList.add('active'); 
+  alarmSound.volume=0.3; 
+  alarmSound.play();
+}
+function hideAlarmModal(){ 
+  alarmModal.classList.remove('active'); 
+  alarmSound.pause(); 
+  alarmSound.currentTime=0;
+}
+
+// ---------- Snooze & Stop ----------
+snoozeBtn.addEventListener('click',()=>{
+  hideAlarmModal();
+  if(!currentAlarm) return;
+  let [h,m]=currentAlarm.split(':').map(Number);
+  m+=5; if(m>=60){ m-=60; h=(h+1)%24; }
+  const newTime=`${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+  alarms.push(newTime); saveAlarms(); renderAlarms();
+  currentAlarm=null;
+});
+stopBtn.addEventListener('click',()=>{ hideAlarmModal(); currentAlarm=null; });
+
+// ---------- Custom Alarm ----------
+addAlarmBtn.addEventListener('click',()=>{
+  const time = customAlarmTime.value;
+  if(!time) return alert('Select a time!');
+  if(alarms.includes(time)) return alert('Alarm already set!');
+  alarms.push(time); saveAlarms(); renderAlarms(); customAlarmTime.value='';
+});
+
+// ---------- Check Alarms Every Second ----------
+function checkAlarms(){
+  const now=new Date();
+  const currentTime=now.toTimeString().slice(0,5);
+  alarms.forEach((time,index)=>{
+    if(time===currentTime){
+      currentAlarm=time;
+      showAlarmModal();
+      alarms.splice(index,1); saveAlarms(); renderAlarms();
+    }
+  });
+}
+
+// ---------- Fetch Daily Sehri/Iftar ----------
+async function fetchSehriIftar(city='Dhaka',country='Bangladesh'){
+  try{
+    const today=new Date().toISOString().split('T')[0];
+    const res=await fetch(`https://api.aladhan.com/v1/timingsByCity/${today}?city=${city}&country=${country}&method=2`);
+    const data=await res.json();
+    const timings=data.data.timings;
+    const sehri=timings.Fajr;
+    const iftar=timings.Maghrib;
+    [sehri,iftar].forEach(t=>{
+      if(!alarms.includes(t)) alarms.push(t);
+    });
+    saveAlarms(); renderAlarms();
+  }catch(err){ console.error('Fetch error:',err); }
+}
+
+// ---------- Auto-update at midnight ----------
+function scheduleDailyFetch(){
+  const now=new Date();
+  const msUntilMidnight = new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,5) - now; // 5s after midnight
+  setTimeout(()=>{
+    fetchSehriIftar(); 
+    scheduleDailyFetch(); // schedule next day
+  },msUntilMidnight);
+}
+
+// ---------- Initialize ----------
+fetchSehriIftar();
+scheduleDailyFetch();
+renderAlarms();
+setInterval(checkAlarms,1000);
+
+</script>
+</body>
+</html>
