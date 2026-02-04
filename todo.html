@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile TODO</title>
+
+<style>
+:root{
+  --bg:#0f172a;
+  --card:#020617;
+  --accent:#22c55e;
+  --text:#e5e7eb;
+}
+*{
+  box-sizing:border-box;
+  font-family:system-ui,-apple-system;
+}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:16px;
+}
+.todo{
+  width:100%;
+  max-width:420px;
+  background:var(--card);
+  border-radius:18px;
+  padding:18px;
+}
+h2{
+  text-align:center;
+  margin-bottom:16px;
+}
+.input{
+  display:flex;
+  gap:10px;
+}
+input{
+  flex:1;
+  padding:14px;
+  font-size:16px;
+  border-radius:10px;
+  border:none;
+  outline:none;
+}
+button{
+  padding:14px 16px;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+  background:var(--accent);
+  color:#022c22;
+  font-weight:600;
+}
+ul{
+  list-style:none;
+  padding:0;
+  margin-top:20px;
+}
+li{
+  background:#0f172a;
+  padding:14px;
+  border-radius:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+li span{
+  flex:1;
+  font-size:16px;
+}
+li.done span{
+  text-decoration:line-through;
+  opacity:.5;
+}
+.actions button{
+  background:none;
+  color:#f87171;
+  font-size:20px;
+}
+@media(max-width:400px){
+  h2{font-size:18px;}
+}
+</style>
+</head>
+
+<body>
+<div class="todo">
+  <h2>📋 My Tasks</h2>
+
+  <div class="input">
+    <input id="task" placeholder="Add new task">
+    <button onclick="add()">➕</button>
+  </div>
+
+  <ul id="list"></ul>
+</div>
+
+<script>
+let list=document.getElementById("list");
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+
+function save(){
+  localStorage.setItem("tasks",JSON.stringify(tasks));
+}
+
+function draw(){
+  list.innerHTML="";
+  tasks.forEach((t,i)=>{
+    let li=document.createElement("li");
+    li.className=t.done?"done":"";
+    li.innerHTML=`
+      <span onclick="toggle(${i})">${t.text}</span>
+      <div class="actions">
+        <button onclick="del(${i})">🗑</button>
+      </div>`;
+    list.appendChild(li);
+  });
+}
+
+function add(){
+  let input=document.getElementById("task");
+  if(!input.value.trim()) return;
+  tasks.push({text:input.value,done:false});
+  input.value="";
+  save(); draw();
+}
+
+function toggle(i){
+  tasks[i].done=!tasks[i].done;
+  save(); draw();
+}
+
+function del(i){
+  tasks.splice(i,1);
+  save(); draw();
+}
+
+draw();
+</script>
+</body>
+</html>
