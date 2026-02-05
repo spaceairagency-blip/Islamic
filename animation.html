@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eid Mubarak</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:system-ui,-apple-system,sans-serif;
+}
+
+body{
+  height:100vh;
+  background:radial-gradient(circle at bottom,#020617,#000);
+  overflow:hidden;
+  color:white;
+}
+
+/* Center content */
+.center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  z-index:3;
+  pointer-events:none;
+}
+
+h1{
+  font-size:clamp(2.8rem,9vw,5rem);
+  letter-spacing:6px;
+  background:linear-gradient(90deg,#22c55e,#fde047,#38bdf8);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:pop 1.5s ease forwards, glow 2s infinite alternate;
+}
+
+p{
+  margin-top:14px;
+  font-size:1rem;
+  opacity:.9;
+}
+
+@keyframes pop{
+  from{opacity:0;transform:scale(.7) translateY(40px)}
+  to{opacity:1;transform:scale(1) translateY(0)}
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 10px #22c55e}
+  to{text-shadow:0 0 35px #fde047}
+}
+
+/* Moon */
+.moon{
+  position:absolute;
+  top:8%;
+  right:10%;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:#f8fafc;
+  box-shadow:0 0 60px rgba(255,255,255,.5);
+  opacity:.9;
+  z-index:2;
+}
+
+/* Canvas */
+canvas{
+  position:absolute;
+  inset:0;
+  z-index:1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="moon"></div>
+
+<div class="center">
+  <h1 id="title">Eid is coming</h1>
+  <p id="countdown"></p>
+</div>
+
+<canvas id="c"></canvas>
+
+<script>
+/* ===== CANVAS ===== */
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+/* ===== EID DATE (BD TIME) ===== */
+const eidDate = new Date("2026-03-21T00:00:00+06:00");
+
+const title = document.getElementById("title");
+const countdownEl = document.getElementById("countdown");
+
+/* ===== COUNTDOWN ===== */
+function updateCountdown(){
+  const now = new Date();
+  const diff = eidDate - now;
+
+  if(diff <= 0){
+    title.innerText = "EID MUBARAK";
+    countdownEl.innerText =
+      "May Allah fill your life with peace & blessings ✨";
+    return;
+  }
+
+  const sec = Math.floor(diff/1000)%60;
+  const min = Math.floor(diff/1000/60)%60;
+  const hour = Math.floor(diff/1000/60/60)%24;
+  const day = Math.floor(diff/1000/60/60/24)%30;
+  const month = Math.floor(diff/1000/60/60/24/30);
+
+  countdownEl.innerHTML = `
+    Eid is coming in<br><br>
+    <strong>
+      ${month} Month • ${day} Day<br>
+      ${hour} Hour • ${min} Min • ${sec} Sec
+    </strong>
+  `;
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+/* ===== FLOATING LIGHTS ===== */
+let lights=[];
+for(let i=0;i<40;i++){
+  lights.push({
+    x:Math.random()*innerWidth,
+    y:Math.random()*innerHeight,
+    r:Math.random()*2+1,
+    s:Math.random()*.3+.1
+  });
+}
+
+/* ===== FIREWORKS ===== */
+class Firework{
+  constructor(){
+    this.x=Math.random()*canvas.width;
+    this.y=canvas.height;
+    this.ty=Math.random()*canvas.height/2;
+    this.v=5+Math.random()*3;
+    this.ex=false;
+    this.ps=[];
+    this.c=`hsl(${Math.random()*360},100%,60%)`;
+  }
+  update(){
+    if(!this.ex){
+      this.y-=this.v;
+      if(this.y<=this.ty){
+        this.ex=true;
+        for(let i=0;i<80;i++){
+          this.ps.push(new Particle(this.x,this.y,this.c));
+        }
+      }
+    }else{
+      this.ps.forEach(p=>p.update());
+    }
+  }
+  draw(){
+    if(!this.ex){
+      ctx.fillStyle=this.c;
+      ctx.fillRect(this.x,this.y,2,10);
+    }else{
+      this.ps.forEach(p=>p.draw());
+    }
+  }
+}
+
+class Particle{
+  constructor(x,y,c){
+    this.x=x;
+    this.y=y;
+    this.c=c;
+    this.a=Math.random()*Math.PI*2;
+    this.v=Math.random()*6+2;
+    this.l=80;
+  }
+  update(){
+    this.x+=Math.cos(this.a)*this.v;
+    this.y+=Math.sin(this.a)*this.v;
+    this.v*=.96;
+    this.l--;
+  }
+  draw(){
+    ctx.globalAlpha=this.l/80;
+    ctx.fillStyle=this.c;
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,2,0,Math.PI*2);
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+}
+
+let fireworks=[];
+
+/* ===== ANIMATION LOOP ===== */
+function animate(){
+  ctx.fillStyle="rgba(0,0,0,.25)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  lights.forEach(l=>{
+    l.y-=l.s;
+    if(l.y<0) l.y=canvas.height;
+    ctx.globalAlpha=.15;
+    ctx.beginPath();
+    ctx.arc(l.x,l.y,l.r,0,Math.PI*2);
+    ctx.fill();
+  });
+  ctx.globalAlpha=1;
+
+  if(new Date()>=eidDate && Math.random()<.08){
+    fireworks.push(new Firework());
+  }
+
+  fireworks.forEach((f,i)=>{
+    f.update();
+    f.draw();
+    if(f.ex && f.ps.every(p=>p.l<=0)){
+      fireworks.splice(i,1);
+    }
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
