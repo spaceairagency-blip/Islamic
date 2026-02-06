@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Islam | Topic</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
     <style>
          *{
             margin: 0;
@@ -33,7 +33,7 @@
             margin: auto;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
         }
 
         .logo{
@@ -44,16 +44,47 @@
             text-align: center;
         }
 
-        /* Responsive */
-        @media (max-width: 600px){
-            .logo{
-                font-size: 20px;
-            }
+        /* Time Bar Section */
+        #unlock-container {
+            max-width: 600px;
+            margin: 40px auto 0 auto;
+            padding: 0 20px;
+            text-align: center;
         }
+
+        .progress-wrapper {
+            width: 100%;
+            height: 25px;
+            background: #1e293b;
+            border-radius: 20px;
+            border: 2px solid #facc15;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #progress-bar {
+            width: 0%; 
+            height: 100%;
+            background: linear-gradient(90deg, #facc15, #eab308);
+            box-shadow: 0 0 15px #facc15;
+            transition: width 0.4s linear;
+        }
+
+        .timer-display {
+            margin-top: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #facc15;
+        }
+
+        /* Grid Setup */
         .cards{
-            display: grid;
-            margin: 50px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
         }
+
         .card{
             height: 150px;
             width: 150px;
@@ -64,77 +95,128 @@
             flex-direction: column;
             border-radius: 20px;
             box-shadow: 0 0 0 10px rgba(0, 0, 0, .5);
-            margin: 50px;
-        }
-        .card span{
-            font-size: 50px;
-        }
-        .card a{
+            margin: 40px;
             text-decoration: none;
             color: white;
+            
+            /* Locked State by Default */
+            opacity: 0.3;
+            pointer-events: none;
+            filter: grayscale(1);
+            transition: all 0.5s ease;
         }
-        .fa-book-quran{
+
+        /* Active State */
+        .card.active {
+            opacity: 1;
+            filter: grayscale(0);
+            pointer-events: auto;
+        }
+
+        .card.active:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 10px #facc15;
+        }
+
+        .card span, .fa-book-quran, .fa-hands-praying {
             font-size: 50px;
-            margin: 10px;
+            margin-bottom: 10px;
+        }
+
+        footer{
+            text-align: center;
+            padding: 40px;
+        }
+
+        @media (max-width: 600px){
+            .logo{ font-size: 20px; }
+            .card{ margin: 20px; }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" style="text-decoration: none;"><header>
-        <nav>
-            <h2 class="logo">
-                Islam | Topic
-            </h2>
-        </nav>
-    </header></a>
-    <div class="cards">
-        <div class="card">
-            <a href="ramadan.html">
-                <span>&#9789;</span>
-            <a href="ramadan.html"><h3>RAMADAN</h3></a>
-            </a>
+
+    <a href="index.html" style="text-decoration: none;">
+        <header>
+            <nav><h2 class="logo">Islam | Topic</h2></nav>
+        </header>
+    </a>
+
+    <div id="unlock-container">
+        <div class="progress-wrapper">
+            <div id="progress-bar"></div>
         </div>
-        <div class="card">
-            <a href="animation.html">
-                <span>&#9789;</span>
-            <a href="animation.html"><h3>Eid</h3></a>
-            </a>
-        </div>
-        <div class="card">
-            <a href="quran.html">
-                <i class="fas fa-book-quran"></i>
-            <a href="quran.html"><h3>Quran</h3></a>
-            </a>
-        </div>
-        <div class="card">
-            <a href="hadith.html">
-                <span>&#xFDFA;</span>
-            <a href="hadith.html"><h3>Hadith</h3></a>
-            </a>
-        </div>
-        <div class="card">
-            <a href="salah.html">
-                <span>&#128331;</span>
-            <a href="salah.html"><h3>Salah</h3></a>
-            </a>
-        </div>
-        <div class="card">
-            <a href="dua.html">
-                <span><i class="fas fa-hands-praying"></i></span>
-            <a href="dua.html"><h3>Dua</h3></a>
-            </a>
-        </div>
-        <div class="card">
-            <a href="salah-time.html">
-                <span>&#x23F0;</span>
-            <a href="salah-time.html"><h3>Salah Time</h3></a>
-            </a>
-        </div>
-        
+        <div id="timer" class="timer-display">Calculating...</div>
     </div>
+
+    <div class="cards">
+        <a href="ramadan.html" class="card">
+            <span>&#9789;</span>
+            <h3>RAMADAN</h3>
+        </a>
+        <a href="animation.html" class="card">
+            <span>&#9789;</span>
+            <h3>Eid</h3>
+        </a>
+        <a href="quran.html" class="card">
+            <i class="fas fa-book-quran"></i>
+            <h3>Quran</h3>
+        </a>
+        <a href="hadith.html" class="card">
+            <span>&#xFDFA;</span>
+            <h3>Hadith</h3>
+        </a>
+        <a href="salah.html" class="card">
+            <span>&#128331;</span>
+            <h3>Salah</h3>
+        </a>
+        <a href="dua.html" class="card">
+            <i class="fas fa-hands-praying"></i>
+            <h3>Dua</h3>
+        </a>
+        <a href="salah-time.html" class="card">
+            <span>&#x23F0;</span>
+            <h3>Salah Time</h3>
+        </a>
+    </div>
+
     <footer>
-        <span style="margin: 20px;">All right reserved | Made By Samiyyan</span>
+        <span>All right reserved | Made By Samiyyan</span>
     </footer>
-    <br><br>
+
+    <script>
+        function updateStatus() {
+            // YOUR TARGET DATE (Using 2025 as requested - will unlock instantly)
+            const targetDate = new Date("February 19, 2026 00:00:00").getTime();
+            
+            // Reference point for the start of the progress bar
+            const startDate = new Date("February 7, 2026 00:00:00").getTime();
+            
+            const now = new Date().getTime();
+            const remaining = targetDate - now;
+
+            if (remaining > 0) {
+                // Calculation for the bar fill
+                const total = targetDate - startDate;
+                let percent = ((now - startDate) / total) * 100;
+                document.getElementById("progress-bar").style.width = Math.max(5, Math.min(100, percent)) + "%";
+
+                // Time Units
+                const d = Math.floor(remaining / (1000 * 60 * 60 * 24));
+                const h = Math.floor((remaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((remaining % (1000 * 60)) / 1000);
+
+                document.getElementById("timer").innerHTML = `Unlocking in: ${d}d ${h}h ${m}m ${s}s. Please wait for unlock.`;
+            } else {
+                // If date has passed: Hide bar and unlock
+                document.getElementById("unlock-container").style.display = "none";
+                document.querySelectorAll('.card').forEach(c => c.classList.add('active'));
+            }
+        }
+
+        setInterval(updateStatus, 1000);
+        updateStatus();
+    </script>
 </body>
 </html>
