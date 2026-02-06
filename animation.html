@@ -86,7 +86,7 @@ body{
 h1{font-family:'Cinzel',serif;font-size:3rem;color:var(--gold);text-shadow:0 0 15px rgba(255,215,0,.6);}
 p{color:#cbd5e1;margin:1rem 0;}
 input{width:100%;padding:12px;border:none;border-radius:8px;text-align:center;margin-bottom:12px; background: rgba(255,255,255,0.9); font-weight: bold;}
-button{width:100%;padding:12px;border:none;border-radius:8px;background:var(--gold);font-family:'Cinzel', sans-serif;font-weight:bold;cursor:pointer;transition:.3s;}
+button{width:100%;padding:12px;border:none;border-radius:8px;background:var(--gold);font-family:'Cinzel', sans-serif;font-weight:bold;cursor:pointer;transition:.3s; margin-bottom: 5px;}
 button:hover{background:#fff;box-shadow:0 0 20px var(--gold);}
 button:disabled{background:#555; cursor:not-allowed; color:#888;}
 
@@ -99,6 +99,11 @@ button:disabled{background:#555; cursor:not-allowed; color:#888;}
   border-radius:16px;
   display:none;
   animation:popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#shareBtn {
+    background: #25d366;
+    color: white;
+    margin-top: 15px;
 }
 @keyframes popIn{
   0%{opacity:0;transform:scale(0.8);}
@@ -142,6 +147,7 @@ button:disabled{background:#555; cursor:not-allowed; color:#888;}
     <div class="result" id="result">
       <h2>Eid Mubarak 🌙</h2>
       <p>With love,<br><b id="out"></b></p>
+      <button id="shareBtn" onclick="shareCard()">Share with Friends 🚀</button>
     </div>
   </div>
 </div>
@@ -160,7 +166,7 @@ let voiceEnabled = false;
 /* ===== VOICE FUNCTION ===== */
 function speak(text) {
   if (!voiceEnabled) return;
-  window.speechSynthesis.cancel(); // Stop current speech
+  window.speechSynthesis.cancel();
   const msg = new SpeechSynthesisUtterance(text);
   msg.lang = 'en-US';
   msg.rate = 0.9;
@@ -171,7 +177,7 @@ function speak(text) {
 function enableVoice() {
   if(!voiceEnabled) {
     voiceEnabled = true;
-    updateUI(); // Speak immediately on first click
+    updateUI();
   }
 }
 
@@ -184,7 +190,6 @@ function updateUI(){
     titleEl.innerText="Eid Mubarak! 🎉";
     messageEl.innerText="Enjoy your blessed celebration!";
     countdownEl.innerText="It's Eid!";
-    btn.disabled=false;
     btn.innerText="Create My Wish";
   } else {
     const d=Math.floor(diff/1000/60/60/24);
@@ -195,7 +200,6 @@ function updateUI(){
     countdownEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
     messageEl.innerText = "Remaining until the celebration";
     
-    // Voice Trigger: Speaks once every new minute
     if (m !== lastSpokenMinute) {
       lastSpokenMinute = m;
       let voiceText = `There are ${d} days, ${h} hours, and ${m} minutes remaining until Eid.`;
@@ -209,16 +213,46 @@ setInterval(updateUI, 1000);
 updateUI();
 
 /* ===== CARD LOGIC ===== */
-function showWish(){
-  const n=document.getElementById('name').value.trim();
+function showWish(customName){
+  const n = customName || document.getElementById('name').value.trim();
   if(!n) return alert("Please enter your name first!");
   
   document.getElementById('out').innerText = n;
   document.getElementById('result').style.display = "block";
   
-  speak(`Eid Mubarak ${n}! Wishing you a wonderful celebration. This website is made by samiyyan`);
+  if(!customName) {
+      speak(`Eid Mubarak ${n}! Wishing you a wonderful celebration. This website is made by samiyyan`);
+  }
   launchExtraFireworks();
 }
+
+/* ===== SHARE FUNCTION ===== */
+async function shareCard() {
+    const n = document.getElementById('out').innerText;
+    const shareUrl = `${window.location.origin}${window.location.pathname}?nameofplayer=${encodeURIComponent(n)}`;
+    
+    if (navigator.share) {
+        try {
+            await navigator.share({
+                title: 'Eid Mubarak!',
+                text: `✨ Check out this Eid wish from ${n}!`,
+                url: shareUrl
+            });
+        } catch (err) { console.log("Share cancelled"); }
+    } else {
+        navigator.clipboard.writeText(shareUrl);
+        alert("Link copied to clipboard! Send it to your friends.");
+    }
+}
+
+/* ===== LOAD SHARED NAME ===== */
+window.onload = () => {
+    const params = new URLSearchParams(window.location.search);
+    const sharedName = params.get('n');
+    if(sharedName) {
+        showWish(sharedName);
+    }
+};
 
 /* ===== FIREWORKS SYSTEM ===== */
 const c=document.getElementById('fireworks'), ctx=c.getContext('2d');
