@@ -1,296 +1,465 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eid Countdown & Mubarak Card</title>
-<link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cinzel:wght@600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#0f172a;
-  --gold:#ffd700;
-  --white:#f8fafc;
-  --glass:rgba(255,255,255,.1);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{
-  background:var(--bg);
-  color:var(--white);
-  font-family:'Amiri', serif;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  min-height:100vh;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid Countdown & Mubarak Card</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --gold: #ffd700;
+            --white: #f8fafc;
+            --glass: rgba(255, 255, 255, .1);
+        }
 
-/* ===== FIREWORKS ===== */
-#fireworks{
-  position:fixed;
-  inset:0;
-  z-index:2;
-  pointer-events:none;
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-/* ===== NIGHT SKY ===== */
-.night-sky{
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle at bottom,#1e293b,#0f172a);
-  z-index:1;
-}
+        body {
+            background: var(--bg);
+            color: var(--white);
+            font-family: 'Amiri', serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-/* ===== MOON ===== */
-.moon{
-  position:absolute;
-  top:60px;
-  right:10%;
-  width:90px;
-  height:90px;
-  border-radius:50%;
-  background:var(--white);
-  box-shadow:inset -18px 8px 0 var(--bg),0 0 25px rgba(255,255,255,.7);
-}
+        /* ===== FULLSCREEN BUTTON ===== */
+        #fullscreenBtn {
+           z-index: 1000;
+           width: 200px;
+        }
 
-/* ===== LANTERNS ===== */
-.lantern-container{
-  position:absolute;
-  top:0;
-  left:8%;
-  display:flex;
-  gap:40px;
-  z-index:3;
-}
-.lantern{
-  animation:swing 3s ease-in-out infinite alternate;
-  transform-origin:top;
-}
-.l-2{animation-delay:1s}
-.hook{width:2px;height:80px;background:var(--gold);margin:auto;}
-.body{width:35px;height:45px;background:#c5a000;border:2px solid var(--gold);border-radius:6px 6px 15px 15px;}
-.light{width:12px;height:12px;background:#ffeb3b;border-radius:50%;margin:14px auto;box-shadow:0 0 18px 6px rgba(255,235,59,.8);}
-@keyframes swing{from{transform:rotate(-6deg)}to{transform:rotate(6deg);}}
+        #fullscreenBtn:hover {
+            background: var(--gold);
+            color: var(--bg);
+        }
 
-/* ===== MAIN CARD ===== */
-.container{position:relative; z-index:4; width:90%; max-width:480px; text-align:center;}
-.box{
-  background:var(--glass);
-  backdrop-filter:blur(12px);
-  padding:2.5rem;
-  border-radius:24px;
-  border:1px solid rgba(255,215,0,.3);
-  box-shadow:0 20px 50px rgba(0,0,0,.5);
-  transition:0.5s;
-}
-h1{font-family:'Cinzel',serif;font-size:3rem;color:var(--gold);text-shadow:0 0 15px rgba(255,215,0,.6);}
-p{color:#cbd5e1;margin:1rem 0;}
-input{width:100%;padding:12px;border:none;border-radius:8px;text-align:center;margin-bottom:12px; background: rgba(255,255,255,0.9); font-weight: bold;}
-button{width:100%;padding:12px;border:none;border-radius:8px;background:var(--gold);font-family:'Cinzel', sans-serif;font-weight:bold;cursor:pointer;transition:.3s; margin-bottom: 5px;}
-button:hover{background:#fff;box-shadow:0 0 20px var(--gold);}
-button:disabled{background:#555; cursor:not-allowed; color:#888;}
+        /* ===== FIREWORKS ===== */
+        #fireworks {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+        }
 
-/* ===== RESULT CARD ===== */
-.result{
-  margin-top:20px;
-  background:#fff;
-  color:#000;
-  padding:20px;
-  border-radius:16px;
-  display:none;
-  animation:popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-#shareBtn {
-    background: #25d366;
-    color: white;
-    margin-top: 15px;
-}
-@keyframes popIn{
-  0%{opacity:0;transform:scale(0.8);}
-  100%{opacity:1;transform:scale(1);}
-}
+        /* ===== NIGHT SKY ===== */
+        .night-sky {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at bottom, #1e293b, #0f172a);
+            z-index: 1;
+        }
 
-/* ===== COUNTDOWN ===== */
-#countdown_text{
-  margin:15px 0 25px;
-  font-size:1.8rem;
-  font-weight:bold;
-  color:#ffd700;
-  letter-spacing: 1px;
-}
+        /* ===== MOON ===== */
+        .moon {
+            position: absolute;
+            top: 60px;
+            right: 10%;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: var(--white);
+            box-shadow: inset -18px 8px 0 var(--bg), 0 0 25px rgba(255, 255, 255, .7);
+        }
 
-/* MOBILE */
-@media(max-width:480px){h1{font-size:2.2rem}}
-</style>
+        /* ===== LANTERNS ===== */
+        .lantern-container {
+            position: absolute;
+            top: 0;
+            left: 8%;
+            display: flex;
+            gap: 40px;
+            z-index: 3;
+        }
+
+        .lantern {
+            animation: swing 3s ease-in-out infinite alternate;
+            transform-origin: top;
+        }
+
+        .l-2 {
+            animation-delay: 1s
+        }
+
+        .hook {
+            width: 2px;
+            height: 80px;
+            background: var(--gold);
+            margin: auto;
+        }
+
+        .body {
+            width: 35px;
+            height: 45px;
+            background: #c5a000;
+            border: 2px solid var(--gold);
+            border-radius: 6px 6px 15px 15px;
+        }
+
+        .light {
+            width: 12px;
+            height: 12px;
+            background: #ffeb3b;
+            border-radius: 50%;
+            margin: 14px auto;
+            box-shadow: 0 0 18px 6px rgba(255, 235, 59, .8);
+        }
+
+        @keyframes swing {
+            from {
+                transform: rotate(-6deg)
+            }
+            to {
+                transform: rotate(6deg);
+            }
+        }
+
+        /* ===== MAIN CARD ===== */
+        .container {
+            position: relative;
+            z-index: 4;
+            width: 90%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        .box {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            padding: 2.5rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 215, 0, .3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
+            transition: 0.5s;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            text-shadow: 0 0 15px rgba(255, 215, 0, .6);
+        }
+
+        p {
+            color: #cbd5e1;
+            margin: 1rem 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            font-weight: bold;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: var(--gold);
+            font-family: 'Cinzel', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .3s;
+            margin-bottom: 5px;
+        }
+
+        button:hover {
+            background: #fff;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+            color: #888;
+        }
+
+        /* ===== RESULT CARD ===== */
+        .result {
+            margin-top: 20px;
+            background: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 16px;
+            display: none;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #shareBtn {
+            background: #25d366;
+            color: white;
+            margin-top: 15px;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* ===== COUNTDOWN ===== */
+        #countdown_text {
+            margin: 15px 0 25px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ffd700;
+            letter-spacing: 1px;
+        }
+
+        /* MOBILE */
+        @media(max-width:480px) {
+            h1 {
+                font-size: 2.2rem
+            }
+            #fullscreenBtn {
+                top: 10px;
+                right: 10px;
+                padding: 5px 10px;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
 </head>
 <body onclick="enableVoice()">
 
+<button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+
 <canvas id="fireworks"></canvas>
-
-<div class="night-sky"><div class="moon"></div></div>
-
-<div class="lantern-container">
-  <div class="lantern"><div class="hook"></div><div class="body"><div class="light"></div></div></div>
-  <div class="lantern l-2"><div class="hook"></div><div class="body"><div class="light"></div></div></div>
+<div class="night-sky">
+    <div class="moon"></div>
 </div>
-
-<div class="container">
-  <div class="box" id="box">
-    <h1 id="title">Eid Countdown</h1>
-    <p id="message">Loading the time...</p>
-
-    <div id="countdown_text">00:00:00</div>
-
-    <input id="name" placeholder="Enter your name">
-    <button id="wishBtn" onclick="showWish()">Create My Wish</button>
-
-    <div class="result" id="result">
-      <h2>Eid Mubarak 🌙</h2>
-      <p>With love,<br><b id="out"></b></p>
-      <button id="shareBtn" onclick="shareCard()">Share with Friends 🚀</button>
+<div class="lantern-container">
+    <div class="lantern">
+        <div class="hook"></div>
+        <div class="body">
+            <div class="light"></div>
+        </div>
     </div>
-  </div>
+    <div class="lantern l-2">
+        <div class="hook"></div>
+        <div class="body">
+            <div class="light"></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="box" id="box">
+        <h1 id="title">Eid Countdown</h1>
+        <p id="message">Loading the time...</p>
+        <div id="countdown_text">00:00:00</div>
+        <input id="name" placeholder="Enter your name">
+        <button id="wishBtn" onclick="showWish()">Create My Wish</button>
+        <div class="result" id="result">
+            <h2>Eid Mubarak 🌙</h2>
+            <p>With love,<br><b id="out"></b></p>
+            <button id="shareBtn" onclick="shareCard()">Share with Friends 🚀</button>
+        </div>
+    </div>
 </div>
 
 <script>
-/* ===== EID DATE ===== */
-const eidDate = new Date("2026-03-19T00:00:00");
-const countdownEl = document.getElementById('countdown_text');
-const messageEl = document.getElementById('message');
-const titleEl = document.getElementById('title');
-const btn = document.getElementById('wishBtn');
-
-let lastSpokenMinute = -1;
-let voiceEnabled = false;
-
-/* ===== VOICE FUNCTION ===== */
-function speak(text) {
-  if (!voiceEnabled) return;
-  window.speechSynthesis.cancel();
-  const msg = new SpeechSynthesisUtterance(text);
-  msg.lang = 'en-US';
-  msg.rate = 0.9;
-  msg.pitch = 1;
-  window.speechSynthesis.speak(msg);
-}
-
-function enableVoice() {
-  if(!voiceEnabled) {
-    voiceEnabled = true;
-    updateUI();
-  }
-}
-
-/* ===== COUNTDOWN & UI ===== */
-function updateUI(){
-  const now = new Date();
-  const diff = eidDate - now;
-
-  if(diff <= 0){
-    titleEl.innerText="Eid Mubarak! 🎉";
-    messageEl.innerText="Enjoy your blessed celebration!";
-    countdownEl.innerText="It's Eid!";
-    btn.innerText="Create My Wish";
-  } else {
-    const d=Math.floor(diff/1000/60/60/24);
-    const h=Math.floor((diff/1000/60/60)%24);
-    const m=Math.floor((diff/1000/60)%60);
-    const s=Math.floor((diff/1000)%60);
-
-    countdownEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
-    messageEl.innerText = "Remaining until the celebration";
-    
-    if (m !== lastSpokenMinute) {
-      lastSpokenMinute = m;
-      let voiceText = `There are ${d} days, ${h} hours, and ${m} minutes remaining until Eid.`;
-      if (d === 0 && h === 0 && m === 0) voiceText = "Only a few seconds left until Eid!";
-      speak(voiceText);
-    }
-  }
-}
-
-setInterval(updateUI, 1000);
-updateUI();
-
-/* ===== CARD LOGIC ===== */
-function showWish(customName){
-  const n = customName || document.getElementById('name').value.trim();
-  if(!n) return alert("Please enter your name first!");
-  
-  document.getElementById('out').innerText = n;
-  document.getElementById('result').style.display = "block";
-  
-  if(!customName) {
-      speak(`Eid Mubarak ${n}! Wishing you a wonderful celebration. This website is made by samiyyan`);
-  }
-  launchExtraFireworks();
-}
-
-/* ===== SHARE FUNCTION ===== */
-async function shareCard() {
-    const n = document.getElementById('out').innerText;
-    const shareUrl = `${window.location.origin}${window.location.pathname}?nameofplayer=${encodeURIComponent(n)}`;
-    
-    if (navigator.share) {
-        try {
-            await navigator.share({
-                title: 'Eid Mubarak!',
-                text: `✨ Check out this Eid wish from ${n}!`,
-                url: shareUrl
+    /* ===== FULLSCREEN LOGIC ===== */
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message}`);
             });
-        } catch (err) { console.log("Share cancelled"); }
-    } else {
-        navigator.clipboard.writeText(shareUrl);
-        alert("Link copied to clipboard! Send it to your friends.");
+            document.getElementById('fullscreenBtn').innerText = "✕ Exit Fullscreen";
+        } else {
+            document.exitFullscreen();
+            document.getElementById('fullscreenBtn').innerText = "⛶ Fullscreen";
+        }
     }
-}
 
-/* ===== LOAD SHARED NAME ===== */
-window.onload = () => {
-    const params = new URLSearchParams(window.location.search);
-    const sharedName = params.get('n');
-    if(sharedName) {
-        showWish(sharedName);
+    /* ===== EID DATE ===== */
+    const eidDate = new Date("2026-03-19T00:00:00");
+    const countdownEl = document.getElementById('countdown_text');
+    const messageEl = document.getElementById('message');
+    const titleEl = document.getElementById('title');
+    const btn = document.getElementById('wishBtn');
+
+    let lastSpokenMinute = -1;
+    let voiceEnabled = false;
+
+    /* ===== VOICE FUNCTION ===== */
+    function speak(text) {
+        if (!voiceEnabled) return;
+        window.speechSynthesis.cancel();
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'en-US';
+        msg.rate = 0.9;
+        msg.pitch = 1;
+        window.speechSynthesis.speak(msg);
     }
-};
 
-/* ===== FIREWORKS SYSTEM ===== */
-const c=document.getElementById('fireworks'), ctx=c.getContext('2d');
-function resize(){c.width=innerWidth;c.height=innerHeight;}
-window.addEventListener('resize',resize); resize();
+    function enableVoice() {
+        if (!voiceEnabled) {
+            voiceEnabled = true;
+            updateUI();
+        }
+    }
 
-let particles=[];
-class Particle{
-  constructor(x,y,color,velocity){this.x=x;this.y=y;this.color=color;this.velocity=velocity;this.alpha=1;this.friction=0.95;this.gravity=0.05;}
-  draw(){ctx.save();ctx.globalAlpha=this.alpha;ctx.beginPath();ctx.arc(this.x,this.y,2,0,Math.PI*2);ctx.fillStyle=this.color;ctx.fill();ctx.restore();}
-  update(){this.velocity.x*=this.friction;this.velocity.y*=this.friction;this.velocity.y+=this.gravity;this.x+=this.velocity.x;this.y+=this.velocity.y;this.alpha-=0.012;}
-}
+    /* ===== COUNTDOWN & UI ===== */
+    function updateUI() {
+        const now = new Date();
+        const diff = eidDate - now;
 
-function createFirework(x,y){
-  const colors=['#ffd700','#ff5252','#40c4ff','#69f0ae','#ff80ab'];
-  const color = colors[Math.floor(Math.random()*colors.length)];
-  for(let i=0;i<50;i++){
-    const angle=Math.random()*Math.PI*2;
-    const speed=Math.random()*5+2;
-    particles.push(new Particle(x,y,color,{x:Math.cos(angle)*speed,y:Math.sin(angle)*speed}));
-  }
-}
+        if (diff <= 0) {
+            titleEl.innerText = "Eid Mubarak! 🎉";
+            messageEl.innerText = "Enjoy your blessed celebration!";
+            countdownEl.innerText = "It's Eid!";
+            btn.innerText = "Create My Wish";
+        } else {
+            const d = Math.floor(diff / 1000 / 60 / 60 / 24);
+            const h = Math.floor((diff / 1000 / 60 / 60) % 24);
+            const m = Math.floor((diff / 1000 / 60) % 60);
+            const s = Math.floor((diff / 1000) % 60);
 
-function animate(){
-  requestAnimationFrame(animate);
-  ctx.fillStyle="rgba(15,23,42,.15)";
-  ctx.fillRect(0,0,c.width,c.height);
-  particles.forEach((p,i)=>{
-    if(p.alpha>0){p.update();p.draw();}else{particles.splice(i,1);}
-  });
-}
-animate();
+            countdownEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
+            messageEl.innerText = "Remaining until the celebration";
+            if (m !== lastSpokenMinute) {
+                lastSpokenMinute = m;
+                let voiceText = `There are ${d} days, ${h} hours, and ${m} minutes remaining until Eid.`;
+                if (d === 0 && h === 0 && m === 0) voiceText = "Only a few seconds left until Eid!";
+                speak(voiceText);
+            }
+        }
+    }
 
-function launchExtraFireworks(){
-  for(let i=0;i<8;i++){
-    setTimeout(()=>{createFirework(Math.random()*c.width,Math.random()*c.height*0.4);}, i*200);
-  }
-}
+    setInterval(updateUI, 1000);
+    updateUI();
+
+    /* ===== CARD LOGIC ===== */
+    function showWish(customName) {
+        const n = customName || document.getElementById('name').value.trim();
+        if (!n) return alert("Please enter your name first!");
+        document.getElementById('out').innerText = n;
+        document.getElementById('result').style.display = "block";
+        if (!customName) {
+            speak(`Eid Mubarak ${n}! Wishing you a wonderful celebration. This website is made by samiyyan`);
+        }
+        launchExtraFireworks();
+    }
+
+    /* ===== SHARE FUNCTION ===== */
+    async function shareCard() {
+        const n = document.getElementById('out').innerText;
+        const shareUrl = `${window.location.origin}${window.location.pathname}?n=${encodeURIComponent(n)}`;
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Eid Mubarak!',
+                    text: `✨ Check out this Eid wish from ${n}!`,
+                    url: shareUrl
+                });
+            } catch (err) {
+                console.log("Share cancelled");
+            }
+        } else {
+            navigator.clipboard.writeText(shareUrl);
+            alert("Link copied to clipboard! Send it to your friends.");
+        }
+    }
+
+    /* ===== LOAD SHARED NAME ===== */
+    window.onload = () => {
+        const params = new URLSearchParams(window.location.search);
+        const sharedName = params.get('n');
+        if (sharedName) {
+            showWish(sharedName);
+        }
+    };
+
+    /* ===== FIREWORKS SYSTEM ===== */
+    const c = document.getElementById('fireworks'), ctx = c.getContext('2d');
+    function resize() {
+        c.width = innerWidth;
+        c.height = innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    let particles = [];
+    class Particle {
+        constructor(x, y, color, velocity) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.velocity = velocity;
+            this.alpha = 1;
+            this.friction = 0.95;
+            this.gravity = 0.05;
+        }
+        draw() {
+            ctx.save();
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+            ctx.restore();
+        }
+        update() {
+            this.velocity.x *= this.friction;
+            this.velocity.y *= this.friction;
+            this.velocity.y += this.gravity;
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+            this.alpha -= 0.012;
+        }
+    }
+
+    function createFirework(x, y) {
+        const colors = ['#ffd700', '#ff5252', '#40c4ff', '#69f0ae', '#ff80ab'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        for (let i = 0; i < 50; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 5 + 2;
+            particles.push(new Particle(x, y, color, { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed }));
+        }
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        ctx.fillStyle = "rgba(15, 23, 42, .15)";
+        ctx.fillRect(0, 0, c.width, c.height);
+        particles.forEach((p, i) => {
+            if (p.alpha > 0) {
+                p.update();
+                p.draw();
+            } else {
+                particles.splice(i, 1);
+            }
+        });
+    }
+    animate();
+
+    function launchExtraFireworks() {
+        for (let i = 0; i < 8; i++) {
+            setTimeout(() => {
+                createFirework(Math.random() * c.width, Math.random() * c.height * 0.4);
+            }, i * 200);
+        }
+    }
 </script>
 </body>
 </html>
