@@ -1,182 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coming Soon | Modern Launch</title>
-    <style>
-        /* CSS STYLES */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coming Soon → Islamic App</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+<style>
+/* Reset */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
 
-        body {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: white;
-            overflow: hidden;
-            text-align: center;
-        }
+/* === Coming Soon Styles === */
+#comingSoon {
+    height: 100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a1a2e);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color:white;
+    text-align:center;
+    z-index:1000;
+}
+@keyframes gradientBG { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+#comingSoon h1 { font-size: clamp(2rem,5vw,3.5rem); margin-bottom:1rem; color:#facc15; text-shadow:0 0 10px #facc15; text-transform:uppercase; }
+#comingSoon p { opacity:0.8; margin-bottom:2rem; font-size:1.1rem; }
+#comingSoon ul { display:flex; list-style:none; gap:20px; justify-content:center; margin-bottom:2rem; }
+#comingSoon li { font-size:0.9rem; text-transform:uppercase; letter-spacing:1px; }
+#comingSoon span { display:block; font-size:2rem; font-weight:800; padding:10px 15px; background:rgba(255,255,255,0.1); border-radius:12px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+/* === Main App Styles === */
+#mainApp { display:none; background:#0f172a; color:white; min-height:100vh; padding:20px; }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            padding: 3rem;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            max-width: 600px;
-            width: 90%;
-        }
+header { background: rgba(15,23,42,0.8); backdrop-filter:blur(10px); padding:20px; box-shadow:0 4px 30px rgba(0,0,0,0.3); position: sticky; top:0; border-bottom:1px solid rgba(255,255,255,0.1); }
+.logo { font-size:1.5rem; font-weight:800; letter-spacing:2px; color:#facc15; text-align:center; text-transform:uppercase; }
 
-        h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin-bottom: 1rem;
-            letter-spacing: -1px;
-        }
+.container { max-width:1200px; margin:40px auto; padding:0 20px; }
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:25px; justify-items:center; }
+.card { text-decoration:none; color:white; background: rgba(30,41,59,0.7); width:100%; max-width:180px; aspect-ratio:1/1; display:flex; flex-direction:column; justify-content:center; align-items:center; border-radius:24px; border:1px solid rgba(255,255,255,0.1); position:relative; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); cursor:pointer; overflow:visible; }
+.card i, .card span { font-size:2.5rem; margin-bottom:12px; color:#facc15; transition: transform 0.3s ease; }
+.card h3 { font-size:0.9rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
+.card:hover { transform: translateY(-8px); background: rgba(51,65,85,0.9); border-color: #facc15; box-shadow:0 10px 25px -5px rgba(250,204,21,0.2); }
+.card:hover i { transform: scale(1.1); }
+.new-badge { position:absolute; top:-10px; right:-10px; background:#ef4444; color:white; font-size:10px; font-weight:900; padding:5px 12px; border-radius:50px; box-shadow:0 4px 12px rgba(239,68,68,0.5); animation: badgePulse 2s infinite; }
+@keyframes badgePulse { 0%{transform:scale(1); box-shadow:0 0 0 0 rgba(239,68,68,0.7);} 70%{transform:scale(1.05); box-shadow:0 0 0 10px rgba(239,68,68,0);} 100%{transform:scale(1);} }
 
-        p {
-            font-size: 1.1rem;
-            opacity: 0.8;
-            margin-bottom: 2rem;
-        }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); display:none; justify-content:center; align-items:center; z-index:2000; padding:20px; }
+.modal-content { background:#1e293b; padding:40px 30px; border-radius:24px; width:100%; max-width:450px; text-align:center; border:1px solid rgba(250,204,21,0.3); position:relative; animation:slideUp 0.4s ease-out; }
+@keyframes slideUp { from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;} }
+.modal-close { position:absolute; top:20px; right:20px; font-size:24px; color:#94a3b8; cursor:pointer; transition:color 0.3s; }
+.modal-close:hover { color:#facc15; }
+.modal h2 { color:#facc15; margin-bottom:15px; }
 
-        /* Countdown Timer Styles */
-        #countdown ul {
-            display: flex;
-            list-style: none;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 2.5rem;
-        }
+footer { text-align:center; padding:60px 20px; color:#94a3b8; font-size:0.9rem; }
 
-        #countdown li {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #e94560;
-        }
-
-        #countdown span {
-            display: block;
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            font-weight: 800;
-            color: white;
-            margin-bottom: 5px;
-        }
-
-        /* Form Styles */
-        .email-signup {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        input[type="email"] {
-            padding: 12px 20px;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            outline: none;
-            width: 280px;
-            transition: 0.3s;
-        }
-
-        input[type="email"]:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #e94560;
-        }
-
-        button {
-            padding: 12px 30px;
-            border-radius: 50px;
-            border: none;
-            background: #e94560;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        button:hover {
-            background: #ff4d6d;
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-    </style>
+@media (max-width:480px){ .cards-grid{grid-template-columns:repeat(2,1fr); gap:15px;} .card{aspect-ratio:1/1.1;} }
+</style>
 </head>
 <body>
 
-    <main class="container">
-        <h1>Coming Soon</h1>
-        <p>Our new experience is under construction. We'll be ready in:</p>
-        
-        <div id="countdown">
-            <ul>
-                <li><span id="days">00</span>Days</li>
-                <li><span id="hours">00</span>Hours</li>
-                <li><span id="minutes">00</span>Min</li>
-                <li><span id="seconds">00</span>Sec</li>
-            </ul>
-        </div>
+<!-- Coming Soon -->
+<div id="comingSoon">
+    <h1>Coming Soon</h1>
+    <p>Our Islamic app will be ready in:</p>
+    <ul>
+        <li><span id="days">00</span>Days</li>
+        <li><span id="hours">00</span>Hrs</li>
+        <li><span id="minutes">00</span>Min</li>
+        <li><span id="seconds">00</span>Sec</li>
+    </ul>
+</div>
 
-        <form class="email-signup" onsubmit="event.preventDefault(); alert('Thanks for subscribing!');">
-            <input type="email" placeholder="Email address" required>
-            <button type="submit">Notify Me</button>
-        </form>
-    </main>
+<!-- Main App -->
+<div id="mainApp">
+<header>
+    <div class="logo">Islam | Topic</div>
+</header>
+<div class="container">
+    <div class="cards-grid">
+        <a href="99name.html" class="card"><div class="new-badge">NEW</div><i class="fa-solid fa-star-and-crescent"></i><h3>99 Names</h3></a>
+        <div class="card" id="ramadanCard"><div class="new-badge">LIVE</div><i class="fa-solid fa-moon"></i><h3>Ramadan</h3></div>
+        <a href="quran.html" class="card"><i class="fa-solid fa-book-quran"></i><h3>Quran</h3></a>
+        <a href="hadith.html" class="card"><i class="fa-solid fa-mosque"></i><h3>Hadith</h3></a>
+        <a href="salah-time.html" class="card"><i class="fa-solid fa-clock"></i><h3>Salah Time</h3></a>
+        <a href="zakat.html" class="card"><i class="fa-solid fa-hand-holding-dollar"></i><h3>Zakat</h3></a>
+        <a href="hajj.html" class="card"><i class="fa-solid fa-kaaba"></i><h3>Hajj & Umrah</h3></a>
+        <a href="tasbih.html" class="card"><i class="fa-solid fa-ellipsis-h"></i><h3>Tasbih</h3></a>
+        <a href="dua.html" class="card"><i class="fa-solid fa-hands-praying"></i><h3>Dua</h3></a>
+        <a href="sunnah.html" class="card"><i class="fa-solid fa-heart"></i><h3>Sunnah</h3></a>
+        <a href="names.html" class="card"><i class="fa-solid fa-baby"></i><h3>Baby Names</h3></a>
+        <a href="animation.html" class="card"><i class="fa-solid fa-calendar-day"></i><h3>Eid</h3></a>
+    </div>
+</div>
 
-    <script>
-        // JAVASCRIPT LOGIC
-        (function () {
-            const second = 1000,
-                  minute = second * 60,
-                  hour = minute * 60,
-                  day = hour * 24;
+<!-- Ramadan Modal -->
+<div class="modal" id="ramadanModal">
+    <div class="modal-content">
+        <span class="modal-close" id="modalClose">&times;</span>
+        <i class="fa-solid fa-calendar-check" style="font-size:3rem; color:#facc15; margin-bottom:15px;"></i>
+        <h2>Ramadan Day <span id="dayNumber"></span></h2>
+        <p id="dailyAmal" style="font-size:1.1rem; min-height:60px;"></p>
+    </div>
+</div>
 
-            // SET YOUR DATE HERE (Format: Month Day, Year HH:MM:SS)
-            let launchDate = "Feb 19, 2026 00:00:00";
-            
-            const countDown = new Date(launchDate).getTime();
-            
-            const x = setInterval(function() {    
-                const now = new Date().getTime();
-                const distance = countDown - now;
+<footer>
+    <p>&copy; 2026 | Developed with Heart by Samiyyan</p>
+</footer>
+</div>
 
-                document.getElementById("days").innerText = Math.floor(distance / (day));
-                document.getElementById("hours").innerText = Math.floor((distance % (day)) / (hour));
-                document.getElementById("minutes").innerText = Math.floor((distance % (hour)) / (minute));
-                document.getElementById("seconds").innerText = Math.floor((distance % (minute)) / second);
+<script>
+// === Countdown & Switch to Main App ===
+(function(){
+    const second=1000, minute=second*60, hour=minute*60, day=hour*24;
+    const comingSoonDiv=document.getElementById("comingSoon");
+    const mainAppDiv=document.getElementById("mainApp");
+    const cdDays=document.getElementById("days");
+    const cdHours=document.getElementById("hours");
+    const cdMinutes=document.getElementById("minutes");
+    const cdSeconds=document.getElementById("seconds");
 
-                // If the count down is finished
-                if (distance < 0) {
-                    clearInterval(x);
-                    document.getElementById("countdown").innerHTML = "<h2 style='color:#e94560'>WE ARE LIVE!</h2>";
-                }
-            }, 1000);
-        }());
-    </script>
+    const launchDate = new Date(Date.UTC(2026, 1, 7, 11, 0, 0)); 
+    const interval=setInterval(function(){
+        const now=new Date();
+        const distance=launchDate-now;
+
+        if(distance>0){
+            cdDays.innerText=Math.floor(distance/day);
+            cdHours.innerText=Math.floor((distance%day)/hour);
+            cdMinutes.innerText=Math.floor((distance%hour)/minute);
+            cdSeconds.innerText=Math.floor((distance%minute)/second);
+        } else {
+            clearInterval(interval);
+            comingSoonDiv.style.display="none";
+            mainAppDiv.style.display="block";
+            if(dayDiff>=1 && dayDiff<=amals.length){ setTimeout(showRamadanModal,1000); }
+        }
+    },1000);
+})();
+
+// === Ramadan Modal Logic ===
+const amals=[
+"Recite Surah Al-Fatiha 5 times today.","Give charity to someone in need.","Pray two extra voluntary Rakats.","Fast sincerely for Allah's pleasure.","Read 10 verses of Quran with understanding.","Help a family member with household work.","Make dua for yourself and others.","Send a kind message to a friend.","Feed a hungry person today.","Give sadaqah (charity) even a small amount.","Listen to a Hadith and reflect on it.","Perform dhikr after every prayer.","Avoid backbiting and speak kindly.","Recite Ayat Al-Kursi today.","Visit or call an elderly relative.","Make Istighfar 100 times.","Spend time learning a new Surah.","Do a random act of kindness.","Read Quran aloud with Tajweed.","Give water to someone thirsty or animals.","Make a sincere dua for the Ummah.","Fast for someone else as a gift.","Memorize a short dua.","Help someone without expecting reward.","Pray Tahajjud tonight.","Reflect on your intentions and renew them.","Share Islamic knowledge with someone.","Avoid wasting food today.","Smile and spread positivity to others.","Spend extra time in prayer and dhikr."
+];
+const ramadanStart=new Date("2026-02-19");
+const today=new Date();
+const dayDiff=Math.floor((today-ramadanStart)/(1000*60*60*24))+1;
+
+const ramadanCard=document.getElementById("ramadanCard");
+const ramadanModal=document.getElementById("ramadanModal");
+const modalClose=document.getElementById("modalClose");
+
+function showRamadanModal(){
+    const dayNumberElem=document.getElementById("dayNumber");
+    const dailyAmalElem=document.getElementById("dailyAmal");
+    if(dayDiff>=1 && dayDiff<=amals.length){
+        dailyAmalElem.textContent=amals[dayDiff-1];
+        dayNumberElem.textContent=dayDiff;
+    } else {
+        dailyAmalElem.textContent="Check back when Ramadan starts!";
+        dayNumberElem.textContent="-";
+    }
+    ramadanModal.style.display="flex";
+}
+
+ramadanCard.onclick=showRamadanModal;
+modalClose.onclick=()=>ramadanModal.style.display="none";
+window.onclick=(e)=>{ if(e.target===ramadanModal) ramadanModal.style.display="none"; }
+
+// Auto-show Ramadan modal if in Ramadan
+if(dayDiff>=1 && dayDiff<=amals.length){ setTimeout(showRamadanModal,1000); }
+</script>
 </body>
 </html>
