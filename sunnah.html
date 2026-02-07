@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Sunnah | Islam Topic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #facc15;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --success: #4ade80;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header i { font-size: 3rem; color: var(--accent); margin-bottom: 10px; }
+
+        /* Sunnah Card */
+        .sunnah-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .category-title {
+            color: var(--accent);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .habit-item:hover { background: rgba(250, 204, 21, 0.05); }
+
+        .checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--accent);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .habit-item.checked .checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .habit-item.checked .checkbox::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 12px;
+            color: #000;
+        }
+
+        .habit-item.checked span {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--text-dim);
+            text-decoration: none;
+        }
+
+        .random-box {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px dashed var(--accent);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Portal</a>
+
+    <div class="header">
+        <i class="fa-solid fa-heart"></i>
+        <h1>The Sunnah Way</h1>
+        <p style="color: var(--text-dim)">Follow the beautiful lifestyle of Prophet Muhammad (PBUH)</p>
+    </div>
+
+    <div class="random-box">
+        <h3 style="color: var(--accent); font-size: 0.9rem; margin-bottom: 8px;">SUNNAH OF THE MOMENT</h3>
+        <p id="randomSunnah" style="font-style: italic;">"Smiling at your brother is an act of charity."</p>
+    </div>
+
+    <div class="sunnah-card">
+        <div class="category-title"><i class="fa-solid fa-sun"></i> Morning Sunnahs</div>
+        <div class="habit-item" onclick="toggleHabit(this)">
+            <div class="checkbox"></div>
+            <span>Waking up and rubbing the face to remove sleep.</span>
+        </div>
+        <div class="habit-item" onclick="toggleHabit(this)">
+            <div class="checkbox"></div>
+            <span>Reciting the Dua after waking up.</span>
+        </div>
+        <div class="habit-item" onclick="toggleHabit(this)">
+            <div class="checkbox"></div>
+            <span>Using the Miswak (Siwak) for oral hygiene.</span>
+        </div>
+    </div>
+
+    <div class="sunnah-card">
+        <div class="category-title"><i class="fa-solid fa-utensils"></i> Eating & Drinking</div>
+        <div class="habit-item" onclick="toggleHabit(this)">
+            <div class="checkbox"></div>
+            <span>Saying 'Bismillah' before starting.</span>
+        </div>
+        <div class="habit-item" onclick="toggleHabit(this)">
+            <div class="checkbox"></div>
+            <span>Eating with the right hand.</span>
+        </div>
+        <div class="habit-item" onclick="toggleHabit(this)">
+            <div class="checkbox"></div>
+            <span>Sitting down while drinking water.</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    const randomSunnahs = [
+        "Greeting others with 'Assalamu Alaikum'.",
+        "Entering the Masjid with the right foot.",
+        "Wearing perfume (for men) and staying clean.",
+        "Visiting the sick and making Dua for them.",
+        "Shaking hands when meeting someone.",
+        "Sleeping on the right side.",
+        "Speaking only good or remaining silent."
+    ];
+
+    // Show a random sunnah on load
+    document.getElementById('randomSunnah').innerText = `"${randomSunnahs[Math.floor(Math.random() * randomSunnahs.length)]}"`;
+
+    function toggleHabit(element) {
+        element.classList.toggle('checked');
+        
+        // Add a small vibration for satisfaction if on mobile
+        if (navigator.vibrate) navigator.vibrate(20);
+    }
+</script>
+
+</body>
+</html>
