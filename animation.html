@@ -2,464 +2,245 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eid Countdown & Mubarak Card</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Eid Celebration Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg: #0f172a;
-            --gold: #ffd700;
-            --white: #f8fafc;
-            --glass: rgba(255, 255, 255, .1);
+            --gold: #f1c40f;
+            --white: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--white);
-            font-family: 'Amiri', serif;
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        /* ===== FULLSCREEN BUTTON ===== */
-        #fullscreenBtn {
-           z-index: 1000;
-           width: 200px;
-        }
-
-        #fullscreenBtn:hover {
-            background: var(--gold);
-            color: var(--bg);
-        }
-
-        /* ===== FIREWORKS ===== */
-        #fireworks {
-            position: fixed;
-            inset: 0;
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        /* ===== NIGHT SKY ===== */
-        .night-sky {
-            position: fixed;
-            inset: 0;
-            background: radial-gradient(circle at bottom, #1e293b, #0f172a);
-            z-index: 1;
-        }
-
-        /* ===== MOON ===== */
-        .moon {
-            position: absolute;
-            top: 60px;
-            right: 10%;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: var(--white);
-            box-shadow: inset -18px 8px 0 var(--bg), 0 0 25px rgba(255, 255, 255, .7);
-        }
-
-        /* ===== LANTERNS ===== */
-        .lantern-container {
-            position: absolute;
-            top: 0;
-            left: 8%;
-            display: flex;
-            gap: 40px;
-            z-index: 3;
-        }
-
-        .lantern {
-            animation: swing 3s ease-in-out infinite alternate;
-            transform-origin: top;
-        }
-
-        .l-2 {
-            animation-delay: 1s
-        }
-
-        .hook {
-            width: 2px;
-            height: 80px;
-            background: var(--gold);
-            margin: auto;
-        }
-
-        .body {
-            width: 35px;
-            height: 45px;
-            background: #c5a000;
-            border: 2px solid var(--gold);
-            border-radius: 6px 6px 15px 15px;
-        }
-
-        .light {
-            width: 12px;
-            height: 12px;
-            background: #ffeb3b;
-            border-radius: 50%;
-            margin: 14px auto;
-            box-shadow: 0 0 18px 6px rgba(255, 235, 59, .8);
-        }
-
-        @keyframes swing {
-            from {
-                transform: rotate(-6deg)
-            }
-            to {
-                transform: rotate(6deg);
-            }
-        }
-
-        /* ===== MAIN CARD ===== */
-        .container {
-            position: relative;
-            z-index: 4;
-            width: 90%;
-            max-width: 480px;
-            text-align: center;
-        }
-
-        .box {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            padding: 2.5rem;
-            border-radius: 24px;
-            border: 1px solid rgba(255, 215, 0, .3);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
-            transition: 0.5s;
-        }
-
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 3rem;
-            color: var(--gold);
-            text-shadow: 0 0 15px rgba(255, 215, 0, .6);
-        }
-
-        p {
-            color: #cbd5e1;
-            margin: 1rem 0;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            text-align: center;
-            margin-bottom: 12px;
-            background: rgba(255, 255, 255, 0.9);
-            font-weight: bold;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            background: var(--gold);
-            font-family: 'Cinzel', sans-serif;
-            font-weight: bold;
-            cursor: pointer;
-            transition: .3s;
-            margin-bottom: 5px;
-        }
-
-        button:hover {
-            background: #fff;
-            box-shadow: 0 0 20px var(--gold);
-        }
-
-        button:disabled {
-            background: #555;
-            cursor: not-allowed;
-            color: #888;
-        }
-
-        /* ===== RESULT CARD ===== */
-        .result {
-            margin-top: 20px;
-            background: #fff;
-            color: #000;
-            padding: 20px;
-            border-radius: 16px;
-            display: none;
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        #shareBtn {
-            background: #25d366;
+            background: #000;
+            font-family: 'Poppins', sans-serif;
             color: white;
-            margin-top: 15px;
+            touch-action: none; /* Prevents scrolling while interacting */
         }
 
-        @keyframes popIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+        #bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            z-index: -1;
         }
 
-        /* ===== COUNTDOWN ===== */
-        #countdown_text {
-            margin: 15px 0 25px;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ffd700;
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 30px 20px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 85%;
+            max-width: 400px;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+        }
+
+        /* Responsive Typography */
+        h1 {
+            font-family: 'Bungee', cursive;
+            font-size: 2.2rem; /* Scaled for mobile */
+            margin: 10px 0;
+            line-height: 1.1;
+        }
+
+        @media (min-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .glass-card { padding: 50px; }
+        }
+
+        /* Countdown Grid - Responsive */
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2x2 on small phones */
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 400px) {
+            .countdown-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .time-box {
+            background: rgba(241, 196, 15, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--gold);
+        }
+
+        .num {
+            display: block;
+            font-family: 'Bungee', cursive;
+            font-size: 1.5rem;
+            color: var(--gold);
+        }
+
+        .label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
             letter-spacing: 1px;
+            opacity: 0.8;
         }
 
-        /* MOBILE */
-        @media(max-width:480px) {
-            h1 {
-                font-size: 2.2rem
-            }
-            #fullscreenBtn {
-                top: 10px;
-                right: 10px;
-                padding: 5px 10px;
-                font-size: 0.7rem;
-            }
+        /* Celebration UI */
+        #eid-ui { display: none; }
+        
+        .celebration h1 {
+            animation: chroma 2s infinite linear;
+            font-size: 2.5rem;
+        }
+
+        @keyframes chroma {
+            0% { color: #ff00ea; text-shadow: 0 0 10px #ff00ea; }
+            50% { color: #00f2ff; text-shadow: 0 0 10px #00f2ff; }
+            100% { color: #ff00ea; text-shadow: 0 0 10px #ff00ea; }
+        }
+
+        .mega-btn {
+            background: var(--gold);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-family: 'Bungee', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 250px;
+        }
+
+        #trail {
+            position: fixed;
+            top: 0; left: 0;
+            pointer-events: none;
+            z-index: 100;
         }
     </style>
 </head>
-<body onclick="enableVoice()">
+<body>
 
-<button id="fullscreenBtn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <div id="bg"></div>
+    <canvas id="trail"></canvas>
 
-<canvas id="fireworks"></canvas>
-<div class="night-sky">
-    <div class="moon"></div>
-</div>
-<div class="lantern-container">
-    <div class="lantern">
-        <div class="hook"></div>
-        <div class="body">
-            <div class="light"></div>
+    <div class="container">
+        <div id="countdown-ui" class="glass-card">
+            <p style="letter-spacing: 3px; font-size: 0.8rem; color: var(--gold);">THE COUNTDOWN</p>
+            <h1>EID IS COMING</h1>
+            <div class="countdown-grid">
+                <div class="time-box"><span class="num" id="days">00</span><span class="label">Days</span></div>
+                <div class="time-box"><span class="num" id="hours">00</span><span class="label">Hrs</span></div>
+                <div class="time-box"><span class="num" id="mins">00</span><span class="label">Min</span></div>
+                <div class="time-box"><span class="num" id="secs">00</span><span class="label">Sec</span></div>
+            </div>
+        </div>
+
+        <div id="eid-ui" class="glass-card celebration">
+            <div style="font-size: 60px;">🌙</div>
+            <h1>EID MUBARAK</h1>
+            <p>Blessings to you and your family!</p>
+            <button class="mega-btn" onclick="megaBlast()">HYPER PARTY 🎉</button>
         </div>
     </div>
-    <div class="lantern l-2">
-        <div class="hook"></div>
-        <div class="body">
-            <div class="light"></div>
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="box" id="box">
-        <h1 id="title">Eid Countdown</h1>
-        <p id="message">Loading the time...</p>
-        <div id="countdown_text">00:00:00</div>
-        <input id="name" placeholder="Enter your name">
-        <button id="wishBtn" onclick="showWish()">Create My Wish</button>
-        <div class="result" id="result">
-            <h2>Eid Mubarak 🌙</h2>
-            <p>With love,<br><b id="out"></b></p>
-            <button id="shareBtn" onclick="shareCard()">Share with Friends 🚀</button>
-        </div>
-    </div>
-</div>
 
-<script>
-    /* ===== FULLSCREEN LOGIC ===== */
-    function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message}`);
+    <script>
+        // Set your target Eid Date
+        const eidDate = new Date(2026, 2, 20).getTime(); 
+
+        function updateClock() {
+            const now = new Date().getTime();
+            const distance = eidDate - now;
+
+            if (distance < 0) {
+                document.getElementById('countdown-ui').style.display = 'none';
+                document.getElementById('eid-ui').style.display = 'block';
+                return;
+            }
+
+            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = d.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
+            document.getElementById('mins').innerText = m.toString().padStart(2, '0');
+            document.getElementById('secs').innerText = s.toString().padStart(2, '0');
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- MOBILE FRIENDLY INTERACTION ---
+        const card = document.querySelector('.glass-card');
+        const trailCanvas = document.getElementById('trail');
+        const tctx = trailCanvas.getContext('2d');
+        let dots = [];
+
+        function handleMove(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            // Tilt effect
+            const x = (window.innerWidth / 2 - clientX) / 15;
+            const y = (window.innerHeight / 2 - clientY) / 15;
+            document.querySelectorAll('.glass-card').forEach(c => {
+                c.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
             });
-            document.getElementById('fullscreenBtn').innerText = "✕ Exit Fullscreen";
-        } else {
-            document.exitFullscreen();
-            document.getElementById('fullscreenBtn').innerText = "⛶ Fullscreen";
+
+            // Trail particles
+            dots.push({ x: clientX, y: clientY, alpha: 1, color: Math.random() * 360 });
         }
-    }
 
-    /* ===== EID DATE ===== */
-    const eidDate = new Date("2026-03-19T00:00:00");
-    const countdownEl = document.getElementById('countdown_text');
-    const messageEl = document.getElementById('message');
-    const titleEl = document.getElementById('title');
-    const btn = document.getElementById('wishBtn');
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('touchmove', handleMove);
 
-    let lastSpokenMinute = -1;
-    let voiceEnabled = false;
-
-    /* ===== VOICE FUNCTION ===== */
-    function speak(text) {
-        if (!voiceEnabled) return;
-        window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'en-US';
-        msg.rate = 0.9;
-        msg.pitch = 1;
-        window.speechSynthesis.speak(msg);
-    }
-
-    function enableVoice() {
-        if (!voiceEnabled) {
-            voiceEnabled = true;
-            updateUI();
+        // Trail Animation
+        function animateTrail() {
+            tctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+            dots.forEach((dot, index) => {
+                dot.alpha -= 0.03;
+                tctx.fillStyle = `hsla(${dot.color}, 100%, 70%, ${dot.alpha})`;
+                tctx.beginPath();
+                tctx.arc(dot.x, dot.y, 4, 0, Math.PI * 2);
+                tctx.fill();
+                if(dot.alpha <= 0) dots.splice(index, 1);
+            });
+            requestAnimationFrame(animateTrail);
         }
-    }
+        animateTrail();
 
-    /* ===== COUNTDOWN & UI ===== */
-    function updateUI() {
-        const now = new Date();
-        const diff = eidDate - now;
-
-        if (diff <= 0) {
-            titleEl.innerText = "Eid Mubarak! 🎉";
-            messageEl.innerText = "Enjoy your blessed celebration!";
-            countdownEl.innerText = "It's Eid!";
-            btn.innerText = "Create My Wish";
-        } else {
-            const d = Math.floor(diff / 1000 / 60 / 60 / 24);
-            const h = Math.floor((diff / 1000 / 60 / 60) % 24);
-            const m = Math.floor((diff / 1000 / 60) % 60);
-            const s = Math.floor((diff / 1000) % 60);
-
-            countdownEl.innerText = `${d}d ${h}h ${m}m ${s}s`;
-            messageEl.innerText = "Remaining until the celebration";
-            if (m !== lastSpokenMinute) {
-                lastSpokenMinute = m;
-                let voiceText = `There are ${d} days, ${h} hours, and ${m} minutes remaining until Eid.`;
-                if (d === 0 && h === 0 && m === 0) voiceText = "Only a few seconds left until Eid!";
-                speak(voiceText);
-            }
-        }
-    }
-
-    setInterval(updateUI, 1000);
-    updateUI();
-
-    /* ===== CARD LOGIC ===== */
-    function showWish(customName) {
-        const n = customName || document.getElementById('name').value.trim();
-        if (!n) return alert("Please enter your name first!");
-        document.getElementById('out').innerText = n;
-        document.getElementById('result').style.display = "block";
-        if (!customName) {
-            speak(`Eid Mubarak ${n}! Wishing you a wonderful celebration. This website is made by samiyyan`);
-        }
-        launchExtraFireworks();
-    }
-
-    /* ===== SHARE FUNCTION ===== */
-    async function shareCard() {
-        const n = document.getElementById('out').innerText;
-        const shareUrl = `${window.location.origin}${window.location.pathname}?n=${encodeURIComponent(n)}`;
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: 'Eid Mubarak!',
-                    text: `✨ Check out this Eid wish from ${n}!`,
-                    url: shareUrl
-                });
-            } catch (err) {
-                console.log("Share cancelled");
-            }
-        } else {
-            navigator.clipboard.writeText(shareUrl);
-            alert("Link copied to clipboard! Send it to your friends.");
-        }
-    }
-
-    /* ===== LOAD SHARED NAME ===== */
-    window.onload = () => {
-        const params = new URLSearchParams(window.location.search);
-        const sharedName = params.get('n');
-        if (sharedName) {
-            showWish(sharedName);
-        }
-    };
-
-    /* ===== FIREWORKS SYSTEM ===== */
-    const c = document.getElementById('fireworks'), ctx = c.getContext('2d');
-    function resize() {
-        c.width = innerWidth;
-        c.height = innerHeight;
-    }
-    window.addEventListener('resize', resize);
-    resize();
-
-    let particles = [];
-    class Particle {
-        constructor(x, y, color, velocity) {
-            this.x = x;
-            this.y = y;
-            this.color = color;
-            this.velocity = velocity;
-            this.alpha = 1;
-            this.friction = 0.95;
-            this.gravity = 0.05;
-        }
-        draw() {
-            ctx.save();
-            ctx.globalAlpha = this.alpha;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
-            ctx.fill();
-            ctx.restore();
-        }
-        update() {
-            this.velocity.x *= this.friction;
-            this.velocity.y *= this.friction;
-            this.velocity.y += this.gravity;
-            this.x += this.velocity.x;
-            this.y += this.velocity.y;
-            this.alpha -= 0.012;
-        }
-    }
-
-    function createFirework(x, y) {
-        const colors = ['#ffd700', '#ff5252', '#40c4ff', '#69f0ae', '#ff80ab'];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        for (let i = 0; i < 50; i++) {
-            const angle = Math.random() * Math.PI * 2;
-            const speed = Math.random() * 5 + 2;
-            particles.push(new Particle(x, y, color, { x: Math.cos(angle) * speed, y: Math.sin(angle) * speed }));
-        }
-    }
-
-    function animate() {
-        requestAnimationFrame(animate);
-        ctx.fillStyle = "rgba(15, 23, 42, .15)";
-        ctx.fillRect(0, 0, c.width, c.height);
-        particles.forEach((p, i) => {
-            if (p.alpha > 0) {
-                p.update();
-                p.draw();
-            } else {
-                particles.splice(i, 1);
-            }
+        window.addEventListener('resize', () => {
+            trailCanvas.width = window.innerWidth;
+            trailCanvas.height = window.innerHeight;
         });
-    }
-    animate();
+        window.dispatchEvent(new Event('resize'));
 
-    function launchExtraFireworks() {
-        for (let i = 0; i < 8; i++) {
-            setTimeout(() => {
-                createFirework(Math.random() * c.width, Math.random() * c.height * 0.4);
-            }, i * 200);
+        function megaBlast() {
+            const end = Date.now() + (3 * 1000);
+            (function frame() {
+              confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
+              confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
+              if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
         }
-    }
-</script>
+    </script>
 </body>
 </html>
