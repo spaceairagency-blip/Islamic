@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Baby Names | Islam Topic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #facc15;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --boy-color: #38bdf8;
+            --girl-color: #fb7185;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .header { text-align: center; margin-bottom: 30px; }
+        .header i { font-size: 3rem; color: var(--accent); margin-bottom: 10px; }
+
+        /* Search Section */
+        .search-container {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            background: var(--bg-dark);
+            padding: 10px 0;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .search-box:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(250, 204, 21, 0.2); }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+        }
+
+        .tab.active[data-gender="all"] { background: var(--accent); color: #000; }
+        .tab.active[data-gender="boy"] { background: var(--boy-color); color: #000; }
+        .tab.active[data-gender="girl"] { background: var(--girl-color); color: #000; }
+
+        /* Names Grid */
+        .names-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .name-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid transparent;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .name-card.boy { border-left-color: var(--boy-color); }
+        .name-card.girl { border-left-color: var(--girl-color); }
+
+        .name-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 5px; }
+        .name-meaning { color: var(--text-dim); font-size: 0.9rem; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-link { display: inline-block; color: var(--text-dim); text-decoration: none; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Portal</a>
+
+    <div class="header">
+        <i class="fa-solid fa-baby"></i>
+        <h1>Islamic Baby Names</h1>
+        <p style="color: var(--text-dim)">Find meaningful names for your little one</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="nameSearch" class="search-box" placeholder="Search by name or meaning...">
+        <div class="filter-tabs" id="filterTabs">
+            <div class="tab active" data-gender="all">All</div>
+            <div class="tab" data-gender="boy">Boys</div>
+            <div class="tab" data-gender="girl">Girls</div>
+        </div>
+    </div>
+
+    <div class="names-grid" id="namesDisplay">
+        </div>
+</div>
+
+<script>
+    const nameData = [
+        { name: "Aayan", meaning: "God's Gift / Blessing", gender: "boy" },
+        { name: "Zayan", meaning: "Bright / Graceful", gender: "boy" },
+        { name: "Amira", meaning: "Princess / Leader", gender: "girl" },
+        { name: "Maryam", meaning: "Beloved / Pious", gender: "girl" },
+        { name: "Rayyan", meaning: "Gate of Paradise", gender: "boy" },
+        { name: "Inaya", meaning: "Concern / Gift of God", gender: "girl" },
+        { name: "Arham", meaning: "Merciful / Compassionate", gender: "boy" },
+        { name: "Zoya", meaning: "Alive / Loving", gender: "girl" },
+        { name: "Omar", meaning: "Long-lived / Flourishing", gender: "boy" },
+        { name: "Safiya", meaning: "Pure / Sincere", gender: "girl" }
+    ];
+
+    const searchInput = document.getElementById('nameSearch');
+    const display = document.getElementById('namesDisplay');
+    const tabs = document.querySelectorAll('.tab');
+    let currentGender = 'all';
+
+    function renderNames() {
+        const query = searchInput.value.toLowerCase();
+        display.innerHTML = '';
+
+        const filtered = nameData.filter(item => {
+            const matchesSearch = item.name.toLowerCase().includes(query) || 
+                                 item.meaning.toLowerCase().includes(query);
+            const matchesGender = currentGender === 'all' || item.gender === currentGender;
+            return matchesSearch && matchesGender;
+        });
+
+        filtered.forEach(item => {
+            display.innerHTML += `
+                <div class="name-card ${item.gender}">
+                    <div class="name-title">${item.name}</div>
+                    <div class="name-meaning">${item.meaning}</div>
+                </div>
+            `;
+        });
+    }
+
+    // Tab Logic
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentGender = tab.dataset.gender;
+            renderNames();
+        });
+    });
+
+    searchInput.addEventListener('input', renderNames);
+    
+    // Initial load
+    renderNames();
+</script>
+
+</body>
+</html>
