@@ -32,7 +32,7 @@
 @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.1);} }
 
 /* === Main App Styles === */
-#mainApp { display:none; background:#0f172a; color:white; min-height:100vh; padding:20px; }
+#mainApp {background:#0f172a; color:white; min-height:100vh; padding:20px; }
 
 header { background: rgba(15,23,42,0.8); backdrop-filter:blur(10px); padding:20px; box-shadow:0 4px 30px rgba(0,0,0,0.3); position: sticky; top:0; border-bottom:1px solid rgba(255,255,255,0.1); }
 .logo { font-size:1.5rem; font-weight:800; letter-spacing:2px; color:#facc15; text-align:center; text-transform:uppercase; }
@@ -60,19 +60,6 @@ footer { text-align:center; padding:60px 20px; color:#94a3b8; font-size:0.9rem; 
 </style>
 </head>
 <body>
-
-<!-- Coming Soon -->
-<div id="comingSoon">
-    <h1>Coming Soon</h1>
-    <p>Our Islamic app will be ready in:</p>
-    <ul>
-        <li><span id="days">00</span>Days</li>
-        <li><span id="hours">00</span>Hrs</li>
-        <li><span id="minutes">00</span>Min</li>
-        <li><span id="seconds">00</span>Sec</li>
-    </ul>
-</div>
-
 <!-- Main App -->
 <div id="mainApp">
 <header>
@@ -113,33 +100,6 @@ footer { text-align:center; padding:60px 20px; color:#94a3b8; font-size:0.9rem; 
 
 <script>
 // === Countdown & Switch to Main App ===
-(function(){
-    const second=1000, minute=second*60, hour=minute*60, day=hour*24;
-    const comingSoonDiv=document.getElementById("comingSoon");
-    const mainAppDiv=document.getElementById("mainApp");
-    const cdDays=document.getElementById("days");
-    const cdHours=document.getElementById("hours");
-    const cdMinutes=document.getElementById("minutes");
-    const cdSeconds=document.getElementById("seconds");
-
-    const launchDate = new Date(Date.UTC(2026, 1, 7, 11, 0, 0)); 
-    const interval=setInterval(function(){
-        const now=new Date();
-        const distance=launchDate-now;
-
-        if(distance>0){
-            cdDays.innerText=Math.floor(distance/day);
-            cdHours.innerText=Math.floor((distance%day)/hour);
-            cdMinutes.innerText=Math.floor((distance%hour)/minute);
-            cdSeconds.innerText=Math.floor((distance%minute)/second);
-        } else {
-            clearInterval(interval);
-            comingSoonDiv.style.display="none";
-            mainAppDiv.style.display="block";
-            if(dayDiff>=1 && dayDiff<=amals.length){ setTimeout(showRamadanModal,1000); }
-        }
-    },1000);
-})();
 
 // === Ramadan Modal Logic ===
 const amals=[
