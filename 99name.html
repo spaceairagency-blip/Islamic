@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>99 Names of Allah | Asma-ul-Husna</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --accent: #facc15;
+            --text-main: #ffffff;
+            --text-dim: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        header h1 {
+            font-family: 'Amiri', serif;
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+        }
+
+        /* Search Section */
+        .search-container {
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            margin: 30px 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
+        }
+
+        /* Grid Styles */
+        .names-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            padding-bottom: 50px;
+        }
+
+        .name-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .name-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            background: rgba(250, 204, 21, 0.05);
+        }
+
+        .number {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent);
+            opacity: 0.6;
+        }
+
+        .arabic {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .transliteration {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .meaning {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        /* No Results */
+        #noResults {
+            text-align: center;
+            padding: 50px;
+            display: none;
+            color: var(--text-dim);
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            header h1 { font-size: 2.2rem; }
+            .names-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .name-card { padding: 20px 10px; }
+            .arabic { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>أسماء الله الحسنى</h1>
+        <p>The 99 Beautiful Names of Allah</p>
+    </header>
+
+    <div class="search-container">
+        <input type="text" id="nameSearch" class="search-box" placeholder="Search by name or meaning...">
+    </div>
+
+    <div id="noResults">No names found matching your search.</div>
+
+    <div class="names-grid" id="namesGrid">
+        </div>
+</div>
+
+<script>
+    const asmaUlHusna = [
+        { n: 1, a: "الرحمن", t: "Ar-Rahman", m: "The All-Beneficent" },
+        { n: 2, a: "الرحيم", t: "Ar-Raheem", m: "The Most Merciful" },
+        { n: 3, a: "الملك", t: "Al-Malik", m: "The Absolute Ruler" },
+        { n: 4, a: "القدوس", t: "Al-Quddus", m: "The Pure One" },
+        { n: 5, a: "السلام", t: "As-Salam", m: "The Source of Peace" },
+        { n: 6, a: "المؤمن", t: "Al-Mu'min", m: "The Inspirer of Faith" },
+        { n: 7, a: "المهيمن", t: "Al-Muhaymin", m: "The Guardian" },
+        { n: 8, a: "العزيز", t: "Al-Aziz", m: "The Victorious" },
+        { n: 9, a: "الجبار", t: "Al-Jabbar", m: "The Compeller" },
+        { n: 10, a: "المتكبر", t: "Al-Mutakabbir", m: "The Greatest" },
+        { n: 11, a: "الخالق", t: "Al-Khaliq", m: "The Creator" },
+        { n: 12, a: "البارئ", t: "Al-Bari'", m: "The Maker of Order" },
+        { n: 13, a: "المصور", t: "Al-Musawwir", m: "The Shaper of Beauty" },
+        { n: 14, a: "الغفار", t: "Al-Ghaffar", m: "The Forgiving" },
+        { n: 15, a: "القهار", t: "Al-Qahhar", m: "The Subduer" },
+        { n: 16, a: "الوهاب", t: "Al-Wahhab", m: "The Giver of All" },
+        { n: 17, a: "الرزاق", t: "Ar-Razzaq", m: "The Sustainer" },
+        { n: 18, a: "الفتاح", t: "Al-Fattah", m: "The Opener" },
+        { n: 19, a: "العليم", t: "Al-Alim", m: "The All-Knowing" },
+        { n: 20, a: "القابض", t: "Al-Qabid", m: "The Withholder" },
+        { n: 21, a: "الباسط", t: "Al-Basit", m: "The Expander" },
+        { n: 22, a: "الخافض", t: "Al-Khafid", m: "The Abaser" },
+        { n: 23, a: "الرافع", t: "Ar-Rafi", m: "The Exalter" },
+        { n: 24, a: "المعز", t: "Al-Mu'izz", m: "The Bestower of Honors" },
+        { n: 25, a: "المذل", t: "Al-Mudhill", m: "The Humiliator" },
+        { n: 26, a: "السميع", t: "As-Sami", m: "The All-Hearing" },
+        { n: 27, a: "البصير", t: "Al-Basir", m: "The All-Seeing" },
+        { n: 28, a: "الحكم", t: "Al-Hakam", m: "The Judge" },
+        { n: 29, a: "العدل", t: "Al-Adl", m: "The Just" },
+        { n: 30, a: "اللطيف", t: "Al-Latif", m: "The Subtle One" },
+        { n: 31, a: "الخبير", t: "Al-Khabir", m: "The All-Aware" },
+        { n: 32, a: "الحليم", t: "Al-Halim", m: "The Forbearing" },
+        { n: 33, a: "العظيم", t: "Al-Azim", m: "The Magnificent" },
+        { n: 34, a: "الغفور", t: "Al-Ghafur", m: "The Forgiver and Hider of Faults" },
+        { n: 35, a: "الشكور", t: "Ash-Shakur", m: "The Rewarder of Thankfulness" },
+        { n: 36, a: "العلي", t: "Al-Ali", m: "The Highest" },
+        { n: 37, a: "الكبير", t: "Al-Kabir", m: "The Greatest" },
+        { n: 38, a: "الحفيظ", t: "Al-Hafiz", m: "The Preserver" },
+        { n: 39, a: "المقيت", t: "Al-Muqit", m: "The Nourisher" },
+        { n: 40, a: "الحسيب", t: "Al-Hasib", m: "The Accounter" },
+        { n: 41, a: "الجليل", t: "Al-Jalil", m: "The Mighty" },
+        { n: 42, a: "الكريم", t: "Al-Karim", m: "The Generous" },
+        { n: 43, a: "الرقيب", t: "Ar-Raqib", m: "The Watchful One" },
+        { n: 44, a: "المجيب", t: "Al-Mujib", m: "The Responder to Prayer" },
+        { n: 45, a: "الواسع", t: "Al-Wasi", m: "The All-Comprehending" },
+        { n: 46, a: "الحكيم", t: "Al-Hakim", m: "The Perfectly Wise" },
+        { n: 47, a: "الودود", t: "Al-Wadud", m: "The Loving One" },
+        { n: 48, a: "المجيد", t: "Al-Majid", m: "The Majestic One" },
+        { n: 49, a: "الباعث", t: "Al-Ba'ith", m: "The Resurrector" },
+        { n: 50, a: "الشهيد", t: "Ash-Shahid", m: "The Witness" },
+        { n: 51, a: "الحق", t: "Al-Haqq", m: "The Truth" },
+        { n: 52, a: "الوكيل", t: "Al-Wakil", m: "The Trustee" },
+        { n: 53, a: "القوي", t: "Al-Qawiyy", m: "The Possessor of All Strength" },
+        { n: 54, a: "المتين", t: "Al-Matin", m: "The Forceful One" },
+        { n: 55, a: "الولي", t: "Al-Wali", m: "The Governor" },
+        { n: 56, a: "الحميد", t: "Al-Hamid", m: "The Praised One" },
+        { n: 57, a: "المحصي", t: "Al-Muhsi", m: "The Appraiser" },
+        { n: 58, a: "المبدئ", t: "Al-Mubdi'", m: "The Originator" },
+        { n: 59, a: "المعيد", t: "Al-Mu'id", m: "The Restorer" },
+        { n: 60, a: "المحيي", t: "Al-Muhyi", m: "The Giver of Life" },
+        { n: 61, a: "المميت", t: "Al-Mumit", m: "The Taker of Life" },
+        { n: 62, a: "الحي", t: "Al-Hayy", m: "The Ever Living One" },
+        { n: 63, a: "القيوم", t: "Al-Qayyum", m: "The Self-Existing One" },
+        { n: 64, a: "الواجد", t: "Al-Wajid", m: "The Finder" },
+        { n: 65, a: "الماجد", t: "Al-Majid", m: "The Glorious" },
+        { n: 66, a: "الواحد", t: "Al-Wahid", m: "The Only One" },
+        { n: 67, a: "الاحد", t: "Al-Ahad", m: "The One" },
+        { n: 68, a: "الصمد", t: "As-Samad", m: "The Satisfier of All Needs" },
+        { n: 69, a: "القادر", t: "Al-Qadir", m: "The All Powerful" },
+        { n: 70, a: "المقتدر", t: "Al-Muqtadir", m: "The Creator of All Power" },
+        { n: 71, a: "المقدم", t: "Al-Muqaddim", m: "The Expediter" },
+        { n: 72, a: "المؤخر", t: "Al-Mu'akhkhir", m: "The Delayer" },
+        { n: 73, a: "الأول", t: "Al-Awwal", m: "The First" },
+        { n: 74, a: "الأخر", t: "Al-Akhir", m: "The Last" },
+        { n: 75, a: "الظاهر", t: "Az-Zahir", m: "The Manifest One" },
+        { n: 76, a: "الباطن", t: "Al-Batin", m: "The Hidden One" },
+        { n: 77, a: "الوالي", t: "Al-Wali", m: "The Protecting Friend" },
+        { n: 78, a: "المتعالي", t: "Al-Muta'ali", m: "The Supreme One" },
+        { n: 79, a: "البر", t: "Al-Barr", m: "The Doer of Good" },
+        { n: 80, a: "التواب", t: "At-Tawwab", m: "The Ever-Relenting" },
+        { n: 81, a: "المنتقم", t: "Al-Muntaqim", m: "The Avenger" },
+        { n: 82, a: "العفو", t: "Al-Afu", m: "The Forgiver" },
+        { n: 83, a: "الرؤوف", t: "Ar-Ra'uf", m: "The Compassionate" },
+        { n: 84, a: "مالك الملك", t: "Malik-ul-Mulk", m: "The Owner of All" },
+        { n: 85, a: "ذو الجلال والإكرام", t: "Dhul-Jalal wal-Ikram", m: "The Lord of Majesty and Bounty" },
+        { n: 86, a: "المقسط", t: "Al-Muqsit", m: "The Equitable One" },
+        { n: 87, a: "الجامع", t: "Al-Jami", m: "The Gatherer" },
+        { n: 88, a: "الغني", t: "Al-Ghani", m: "The Rich One" },
+        { n: 89, a: "المغني", t: "Al-Mughni", m: "The Enricher" },
+        { n: 90, a: "المانع", t: "Al-Mani", m: "The Preventer of Harm" },
+        { n: 91, a: "الضار", t: "Ad-Darr", m: "The Creator of the Harmful" },
+        { n: 92, a: "النافع", t: "An-Nafi", m: "The Bestower of Benefits" },
+        { n: 93, a: "النور", t: "An-Nur", m: "The Light" },
+        { n: 94, a: "الهادي", t: "Al-Hadi", m: "The Guider" },
+        { n: 95, a: "البديع", t: "Al-Badi", m: "The Originator" },
+        { n: 96, a: "الباقي", t: "Al-Baqi", m: "The Everlasting One" },
+        { n: 97, a: "الوارث", t: "Al-Warith", m: "The Inheritor of All" },
+        { n: 98, a: "الرشيد", t: "Ar-Rashid", m: "The Righteous Teacher" },
+        { n: 99, a: "الصبور", t: "As-Sabur", m: "The Patient One" }
+    ];
+
+    const grid = document.getElementById('namesGrid');
+    const searchInput = document.getElementById('nameSearch');
+    const noResults = document.getElementById('noResults');
+
+    function renderNames(data) {
+        grid.innerHTML = data.map(name => `
+            <div class="name-card">
+                <span class="number">${name.n}</span>
+                <div class="arabic">${name.a}</div>
+                <div class="transliteration">${name.t}</div>
+                <div class="meaning">${name.m}</div>
+            </div>
+        `).join('');
+        
+        noResults.style.display = data.length === 0 ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = asmaUlHusna.filter(item => 
+            item.t.toLowerCase().includes(term) || 
+            item.m.toLowerCase().includes(term) ||
+            item.a.includes(term)
+        );
+        renderNames(filtered);
+    });
+
+    // Initial render
+    renderNames(asmaUlHusna);
+</script>
+
+</body>
+</html>
