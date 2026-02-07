@@ -61,18 +61,6 @@ footer { text-align:center; padding:60px 20px; color:#94a3b8; font-size:0.9rem; 
 </head>
 <body>
 
-<!-- <!-- Coming Soon -->
-<div id="comingSoon">
-    <h1>Coming Soon</h1>
-    <p>Our Islamic app will be ready in:</p>
-    <ul>
-        <li><span id="days">00</span>Days</li>
-        <li><span id="hours">00</span>Hrs</li>
-        <li><span id="minutes">00</span>Min</li>
-        <li><span id="seconds">00</span>Sec</li>
-    </ul>
-</div> -->
-
 <!-- Main App -->
 <div id="mainApp">
 <header>
@@ -112,35 +100,6 @@ footer { text-align:center; padding:60px 20px; color:#94a3b8; font-size:0.9rem; 
 </div>
 
 <script>
-// === Countdown & Switch to Main App ===
-(function(){
-    const second=1000, minute=second*60, hour=minute*60, day=hour*24;
-    const comingSoonDiv=document.getElementById("comingSoon");
-    const mainAppDiv=document.getElementById("mainApp");
-    const cdDays=document.getElementById("days");
-    const cdHours=document.getElementById("hours");
-    const cdMinutes=document.getElementById("minutes");
-    const cdSeconds=document.getElementById("seconds");
-
-    const launchDate = new Date(Date.UTC(2026, 1, 7, 11, 0, 0)); 
-    const interval=setInterval(function(){
-        const now=new Date();
-        const distance=launchDate-now;
-
-        if(distance>0){
-            cdDays.innerText=Math.floor(distance/day);
-            cdHours.innerText=Math.floor((distance%day)/hour);
-            cdMinutes.innerText=Math.floor((distance%hour)/minute);
-            cdSeconds.innerText=Math.floor((distance%minute)/second);
-        } else {
-            clearInterval(interval);
-            comingSoonDiv.style.display="none";
-            mainAppDiv.style.display="block";
-            if(dayDiff>=1 && dayDiff<=amals.length){ setTimeout(showRamadanModal,1000); }
-        }
-    },1000);
-})();
-
 // === Ramadan Modal Logic ===
 const amals=[
 "Recite Surah Al-Fatiha 5 times today.","Give charity to someone in need.","Pray two extra voluntary Rakats.","Fast sincerely for Allah's pleasure.","Read 10 verses of Quran with understanding.","Help a family member with household work.","Make dua for yourself and others.","Send a kind message to a friend.","Feed a hungry person today.","Give sadaqah (charity) even a small amount.","Listen to a Hadith and reflect on it.","Perform dhikr after every prayer.","Avoid backbiting and speak kindly.","Recite Ayat Al-Kursi today.","Visit or call an elderly relative.","Make Istighfar 100 times.","Spend time learning a new Surah.","Do a random act of kindness.","Read Quran aloud with Tajweed.","Give water to someone thirsty or animals.","Make a sincere dua for the Ummah.","Fast for someone else as a gift.","Memorize a short dua.","Help someone without expecting reward.","Pray Tahajjud tonight.","Reflect on your intentions and renew them.","Share Islamic knowledge with someone.","Avoid wasting food today.","Smile and spread positivity to others.","Spend extra time in prayer and dhikr."
@@ -175,4 +134,5 @@ if(dayDiff>=1 && dayDiff<=amals.length){ setTimeout(showRamadanModal,1000); }
 </script>
 </body>
 </html>
+
 
