@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Ramadan Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --input-bg: #f1f5f9;
+        }
+
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); color: var(--text-dark); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Header */
+        header { background: var(--header-grad); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        nav { max-width: 800px; margin: auto; display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+        .theme-dots { display: flex; gap: 8px; align-items: center; }
+        .dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        /* Form Container */
+        .container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .contact-card { 
+            background: var(--card-bg); 
+            width: 100%; 
+            max-width: 450px; 
+            padding: 35px; 
+            border-radius: 25px; 
+            border: 1px solid var(--border); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+        }
+
+        h2 { color: var(--primary); margin-bottom: 10px; font-size: 1.6rem; text-align: center; }
+        p.subtitle { text-align: center; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; margin-left: 5px; opacity: 0.8; }
+        
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 0.9rem; }
+        
+        input, textarea { 
+            width: 100%; 
+            padding: 12px 15px 12px 42px; 
+            background: var(--input-bg); 
+            border: 1px solid var(--border); 
+            border-radius: 12px; 
+            color: var(--text-dark); 
+            outline: none; 
+            font-size: 0.95rem;
+        }
+
+        textarea { padding-left: 15px; min-height: 120px; resize: none; }
+        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 210, 133, 0.1); }
+
+        .submit-btn { 
+            width: 100%; 
+            padding: 15px; 
+            background: var(--primary); 
+            color: #000; 
+            border: none; 
+            border-radius: 12px; 
+            font-weight: 800; 
+            font-size: 1rem; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 10px;
+        }
+
+        .submit-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
+        footer { text-align: center; padding: 20px; font-size: 0.8rem; opacity: 0.6; }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-chevron-left"></i> Support</a>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="contact-card">
+        <h2>Get in Touch</h2>
+        <p class="subtitle">Have questions or feedback about the portal? Send us a message!</p>
+        
+        <form action="https://formspree.io/f/xvzbgngr" method="POST">
+            <div class="form-group">
+                <label>Email Address</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" name="email" placeholder="example@mail.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Your Message</label>
+                <textarea name="message" placeholder="How can we help you?" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                SEND MESSAGE <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<footer>
+   All right reserved | &copy; 2026 Made BY Samiyyan 
+</footer>
+
+<script>
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('portal_theme_pref', t);
+    }
+
+    function initTheme() {
+        const saved = localStorage.getItem('portal_theme_pref');
+        const hour = new Date().getHours();
+        if (!saved) {
+            // Auto-Midnight logic (6PM to 6AM)
+            setTheme((hour >= 18 || hour < 6) ? 'midnight' : 'emerald');
+        } else {
+            setTheme(saved);
+        }
+    }
+    initTheme();
+</script>
+
+</body>
+</html>
