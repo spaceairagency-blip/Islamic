@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ramadan Quiz | Samiyyan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE === */
+        :root {
+            --primary: #6c5ce7; --correct: #00b894; --wrong: #d63031; --bg: #f0f2f5;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --input-bg: #f1f5f9;
+        }
+
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); color: var(--text-dark); min-height: 100vh; }
+
+        /* Header */
+        header { background: var(--header-grad); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; }
+        nav { max-width: 800px; margin: auto; display: flex; justify-content: space-between; align-items: center; color: white; }
+        .back-btn { color: white; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container { display: flex; justify-content: center; align-items: flex-start; padding-top: 30px; }
+
+        /* Quiz Container */
+        .quiz-container { 
+            background: var(--card-bg); width: 95%; max-width: 450px; 
+            padding: 25px; border-radius: 20px; border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+
+        h1 { font-size: 1.5rem; text-align: center; color: var(--primary); margin-bottom: 20px; }
+        input, select { 
+            width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; 
+            border: 1px solid var(--border); background: var(--input-bg); color: var(--text-dark);
+        }
+
+        .timer-bar { height: 6px; background: var(--input-bg); border-radius: 3px; margin-bottom: 20px; overflow: hidden; }
+        #timer-progress { height: 100%; background: var(--primary); width: 100%; transition: width 1s linear; }
+
+        .choice-btn { 
+            width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 12px;
+            border: 1px solid var(--border); background: var(--input-bg);
+            color: var(--text-dark); text-align: left; cursor: pointer; font-weight: 600;
+        }
+
+        .correct { background: var(--correct) !important; color: white !important; border-color: var(--correct); }
+        .wrong { background: var(--wrong) !important; color: white !important; border-color: var(--wrong); }
+
+        .action-btn { 
+            width: 100%; padding: 15px; background: var(--primary); 
+            color: #000; border: none; border-radius: 12px; font-weight: 800; 
+            cursor: pointer; margin-top: 10px; 
+        }
+
+        .leaderboard { margin-top: 20px; background: var(--input-bg); padding: 15px; border-radius: 15px; }
+        .score-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-trophy"></i> QUIZ</a>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="quiz-container">
+        <div id="setup-screen">
+            <h1>Ramadan Quiz</h1>
+            <input type="text" id="username" placeholder="Enter Your Name..." autocomplete="off">
+            <select id="category">
+                <option value="9">General Knowledge</option>
+                <option value="18">Computers & Tech</option>
+                <option value="23">History</option>
+            </select>
+            <button class="action-btn" onclick="startQuiz()">START GAME</button>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="timer-bar"><div id="timer-progress"></div></div>
+            <h2 id="question" style="font-size: 1.1rem; min-height: 60px; margin-bottom: 20px;"></h2>
+            <div id="answer-buttons"></div>
+            <button id="next-btn" class="action-btn hidden">NEXT QUESTION</button>
+        </div>
+
+        <div id="result-screen" class="hidden" style="text-align:center;">
+            <h1>Finish!</h1>
+            <p id="final-score" style="font-size: 1.2rem; font-weight: 700;"></p>
+            
+            <div class="leaderboard">
+                <h3>🏆 Leaderboard</h3>
+                <div id="leaderboard-list"></div>
+            </div>
+            
+            <button class="action-btn" onclick="location.reload()">PLAY AGAIN</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let questions = [], currentIdx = 0, score = 0, timer, timeLeft = 15;
+
+    // --- Theme Engine ---
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('quiz_theme_pref', t);
+    }
+    const hour = new Date().getHours();
+    setTheme(localStorage.getItem('quiz_theme_pref') || (hour >= 18 || hour < 6 ? 'midnight' : 'emerald'));
+
+    // --- Quiz Logic ---
+    async function startQuiz() {
+        const name = document.getElementById('username').value.trim();
+        if(!name) return alert("Please enter your name!");
+
+        const cat = document.getElementById('category').value;
+        document.getElementById('setup-screen').classList.add('hidden');
+        
+        try {
+            const res = await fetch(`https://opentdb.com/api.php?amount=5&category=${cat}&type=multiple`);
+            const data = await res.json();
+            questions = data.results;
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            showQuestion();
+        } catch (err) { alert("Check your internet connection!"); }
+    }
+
+    function showQuestion() {
+        resetState();
+        startTimer();
+        const q = questions[currentIdx];
+        document.getElementById('question').innerHTML = q.question;
+
+        const choices = [...q.incorrect_answers, q.correct_answer].sort(() => Math.random() - 0.5);
+        choices.forEach(text => {
+            const btn = document.createElement('button');
+            btn.innerHTML = text;
+            btn.classList.add('choice-btn');
+            btn.onclick = () => selectAnswer(btn, q.correct_answer);
+            document.getElementById('answer-buttons').appendChild(btn);
+        });
+    }
+
+    function startTimer() {
+        timeLeft = 15;
+        const progress = document.getElementById('timer-progress');
+        progress.style.width = "100%";
+        clearInterval(timer);
+        timer = setInterval(() => {
+            timeLeft--;
+            progress.style.width = (timeLeft / 15 * 100) + "%";
+            if(timeLeft <= 0) { clearInterval(timer); revealCorrect(); }
+        }, 1000);
+    }
+
+    function selectAnswer(btn, correct) {
+        clearInterval(timer);
+        const isCorrect = btn.innerHTML === correct;
+        if(isCorrect) { btn.classList.add('correct'); score++; } 
+        else { btn.classList.add('wrong'); revealCorrect(); }
+        disableButtons();
+        document.getElementById('next-btn').classList.remove('hidden');
+    }
+
+    function revealCorrect() {
+        const btns = document.getElementById('answer-buttons').querySelectorAll('button');
+        const correct = questions[currentIdx].correct_answer;
+        btns.forEach(b => { if(b.innerHTML === correct) b.classList.add('correct'); });
+        disableButtons();
+        document.getElementById('next-btn').classList.remove('hidden');
+    }
+
+    function disableButtons() {
+        document.getElementById('answer-buttons').querySelectorAll('button').forEach(b => b.disabled = true);
+    }
+
+    function resetState() {
+        document.getElementById('next-btn').classList.add('hidden');
+        document.getElementById('answer-buttons').innerHTML = '';
+    }
+
+    document.getElementById('next-btn').onclick = () => {
+        currentIdx++;
+        if(currentIdx < questions.length) showQuestion();
+        else saveAndShowResults();
+    };
+
+    function saveAndShowResults() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('final-score').innerText = `Score: ${score} / ${questions.length}`;
+
+        const name = document.getElementById('username').value;
+        const highScores = JSON.parse(localStorage.getItem('quizScores')) || [];
+        highScores.push({ name, score });
+        highScores.sort((a, b) => b.score - a.score);
+        const topFive = highScores.slice(0, 5);
+        localStorage.setItem('quizScores', JSON.stringify(topFive));
+
+        document.getElementById('leaderboard-list').innerHTML = topFive.map(s => `
+            <div class="score-item">
+                <span>${s.name}</span>
+                <span><b>${s.score} pts</b></span>
+            </div>
+        `).join('');
+    }
+</script>
+
+</body>
+</html>
