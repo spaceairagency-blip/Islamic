@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramadan Vlog Tracker (LocalStorage)</title>
+
+<style>
+body { font-family:Segoe UI,sans-serif; background:#f0f2f5; padding:20px; }
+.container { max-width:600px; margin:auto; background:#fff; padding:25px; border-radius:15px; box-shadow:0 10px 30px rgba(0,0,0,.1); }
+h2 { text-align:center; color:#1a5d1a; }
+.upload-box { background:#f9f9f9; padding:20px; border-radius:10px; border:2px dashed #ddd; margin-bottom:25px; }
+.input-group { display:flex; flex-direction:column; gap:10px; }
+input { padding:12px; border-radius:8px; border:1px solid #ccc; }
+button { padding:12px; background:#1a5d1a; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight:bold; }
+button:disabled { background:#ccc; }
+
+#progress { display:none; text-align:center; margin-top:10px; font-size:13px; }
+
+.vlog-card { margin-top:20px; border-bottom:2px solid #eee; padding-bottom:20px; }
+.vlog-header { display:flex; justify-content:space-between; }
+video { width:100%; border-radius:10px; margin-top:8px; background:#000; }
+.del-btn { background:#ff4d4d; margin-top:10px; width:100%; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>🌙 My Ramadan Vlogs</h2>
+
+<div class="upload-box">
+<div class="input-group">
+<input type="number" id="day" placeholder="Ramadan Day">
+<input type="date" id="date">
+<input type="text" id="title" placeholder="Vlog Title">
+<input type="file" id="video" accept="video/*">
+</div>
+
+<button onclick="saveVlog()">Upload & Save</button>
+<div id="progress">Processing video...</div>
+</div>
+
+<div id="vlogs"></div>
+</div>
+
+<script>
+const STORAGE_KEY = "ramadan_vlogs";
+
+function getVlogs(){
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function saveVlogs(data){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function saveVlog(){
+    const file = video.files[0];
+    if(!file || !day.value || !date.value || !title.value){
+        alert("Fill all fields");
+        return;
+    }
+
+    // ⚠️ Size limit warning
+    if(file.size > 3 * 1024 * 1024){
+        alert("Video too large for localStorage (max ~3MB)");
+        return;
+    }
+
+    progress.style.display = "block";
+
+    const reader = new FileReader();
+    reader.onload = e => {
+        const vlogs = getVlogs();
+        vlogs.push({
+            id: Date.now(),
+            day: Number(day.value),
+            date: date.value,
+            title: title.value,
+            video: e.target.result
+        });
+        saveVlogs(vlogs);
+        progress.style.display = "none";
+        video.value = "";
+        displayVlogs();
+    };
+
+    reader.readAsDataURL(file);
+}
+
+function displayVlogs(){
+    const data = getVlogs().sort((a,b)=>b.day-a.day);
+    vlogs.innerHTML = "";
+
+    data.forEach(v=>{
+        const card = document.createElement("div");
+        card.className = "vlog-card";
+        card.innerHTML = `
+            <div class="vlog-header">
+                <strong>Day ${v.day}: ${v.title}</strong>
+                <small>${v.date}</small>
+            </div>
+            <video controls src="${v.video}"></video>
+            <button class="del-btn" onclick="deleteVlog(${v.id})">Remove</button>
+        `;
+        vlogs.appendChild(card);
+    });
+}
+
+function deleteVlog(id){
+    const filtered = getVlogs().filter(v=>v.id!==id);
+    saveVlogs(filtered);
+    displayVlogs();
+}
+
+displayVlogs();
+</script>
+
+</body>
+</html>
