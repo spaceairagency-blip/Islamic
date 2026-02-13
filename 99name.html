@@ -8,158 +8,142 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
+        /* === THEME ENGINE VARIABLES === */
         :root {
             --bg-dark: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
             --card-bg: rgba(30, 41, 59, 0.7);
-            --accent: #facc15;
+            --accent: #38bdf8;
             --text-main: #ffffff;
             --text-dim: #94a3b8;
             --border: rgba(255, 255, 255, 0.1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        [data-theme="emerald"] {
+            --bg-dark: #061f1a;
+            --header-grad: linear-gradient(135deg, #004d40, #00796b);
+            --accent: #00e676;
+            --card-bg: rgba(0, 77, 64, 0.4);
+            --text-dim: #b2dfdb;
         }
+
+        [data-theme="royal"] {
+            --bg-dark: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --accent: #a78bfa;
+            --card-bg: rgba(45, 27, 78, 0.4);
+            --text-dim: #c4b5fd;
+        }
+
+        [data-theme="gold"] {
+            --bg-dark: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --accent: #facc15;
+            --card-bg: rgba(68, 64, 60, 0.4);
+            --text-dim: #d6d3d1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.3s, border 0.3s; }
 
         body {
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
-            padding: 20px;
+            padding-bottom: 50px;
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
+        /* Toolbar / Top Nav */
+        .toolbar {
+            background: var(--header-grad);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* Header Styles */
-        header {
-            text-align: center;
-            padding: 40px 0;
-        }
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
 
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+        header { text-align: center; padding: 40px 0; }
         header h1 {
             font-family: 'Amiri', serif;
-            font-size: 3rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             color: var(--accent);
             margin-bottom: 10px;
         }
-
-        header p {
-            color: var(--text-dim);
-            font-size: 1.1rem;
-        }
+        header p { color: var(--text-dim); font-size: 1.1rem; }
 
         /* Search Section */
-        .search-container {
-            position: sticky;
-            top: 20px;
-            z-index: 100;
-            margin: 30px 0;
-            display: flex;
-            justify-content: center;
-        }
-
+        .search-container { margin: 20px 0 40px; display: flex; justify-content: center; }
         .search-box {
-            width: 100%;
-            max-width: 500px;
-            padding: 15px 25px;
-            border-radius: 50px;
-            border: 2px solid var(--border);
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%; max-width: 500px; padding: 15px 25px; border-radius: 50px;
+            border: 2px solid var(--border); background: var(--card-bg);
+            backdrop-filter: blur(10px); color: white; font-size: 1rem; outline: none;
         }
-
-        .search-box:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
-        }
+        .search-box:focus { border-color: var(--accent); }
 
         /* Grid Styles */
         .names-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 20px;
-            padding-bottom: 50px;
         }
 
         .name-card {
             background: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 30px 20px;
             text-align: center;
-            transition: 0.3s ease;
             position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        .name-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            background: rgba(250, 204, 21, 0.05);
-        }
+        .name-card:hover { transform: translateY(-5px); border-color: var(--accent); }
 
         .number {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            color: var(--accent);
-            opacity: 0.6;
+            position: absolute; top: 15px; left: 15px;
+            font-size: 0.75rem; font-weight: bold; color: var(--accent); opacity: 0.7;
         }
 
         .arabic {
             font-family: 'Amiri', serif;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             color: var(--accent);
             margin-bottom: 10px;
         }
 
-        .transliteration {
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            letter-spacing: 0.5px;
-        }
+        .transliteration { font-weight: 700; font-size: 1.1rem; margin-bottom: 5px; }
+        .meaning { font-size: 0.9rem; color: var(--text-dim); }
 
-        .meaning {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            line-height: 1.4;
-        }
+        #noResults { text-align: center; padding: 50px; display: none; color: var(--text-dim); }
 
-        /* No Results */
-        #noResults {
-            text-align: center;
-            padding: 50px;
-            display: none;
-            color: var(--text-dim);
-        }
-
-        /* Responsive Fixes */
         @media (max-width: 600px) {
-            header h1 { font-size: 2.2rem; }
-            .names-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .names-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .name-card { padding: 20px 10px; }
             .arabic { font-size: 1.8rem; }
         }
     </style>
 </head>
 <body>
+
+<div class="toolbar">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+    <div class="theme-dots">
+        <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+        <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+        <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+        <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+    </div>
+</div>
 
 <div class="container">
     <header>
@@ -168,16 +152,23 @@
     </header>
 
     <div class="search-container">
-        <input type="text" id="nameSearch" class="search-box" placeholder="Search by name or meaning...">
+        <input type="text" id="nameSearch" class="search-box" placeholder="Search name or meaning...">
     </div>
 
     <div id="noResults">No names found matching your search.</div>
 
-    <div class="names-grid" id="namesGrid">
-        </div>
+    <div class="names-grid" id="namesGrid"></div>
 </div>
 
 <script>
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    // Sync with main page
+    setTheme(localStorage.getItem('user_theme_pref') || 'midnight');
+
     const asmaUlHusna = [
         { n: 1, a: "الرحمن", t: "Ar-Rahman", m: "The All-Beneficent" },
         { n: 2, a: "الرحيم", t: "Ar-Raheem", m: "The Most Merciful" },
@@ -212,7 +203,7 @@
         { n: 31, a: "الخبير", t: "Al-Khabir", m: "The All-Aware" },
         { n: 32, a: "الحليم", t: "Al-Halim", m: "The Forbearing" },
         { n: 33, a: "العظيم", t: "Al-Azim", m: "The Magnificent" },
-        { n: 34, a: "الغفور", t: "Al-Ghafur", m: "The Forgiver and Hider of Faults" },
+        { n: 34, a: "الغفور", t: "Al-Ghafur", m: "The Forgiver" },
         { n: 35, a: "الشكور", t: "Ash-Shakur", m: "The Rewarder of Thankfulness" },
         { n: 36, a: "العلي", t: "Al-Ali", m: "The Highest" },
         { n: 37, a: "الكبير", t: "Al-Kabir", m: "The Greatest" },
@@ -222,7 +213,7 @@
         { n: 41, a: "الجليل", t: "Al-Jalil", m: "The Mighty" },
         { n: 42, a: "الكريم", t: "Al-Karim", m: "The Generous" },
         { n: 43, a: "الرقيب", t: "Ar-Raqib", m: "The Watchful One" },
-        { n: 44, a: "المجيب", t: "Al-Mujib", m: "The Responder to Prayer" },
+        { n: 44, a: "المجيب", t: "Al-Mujib", m: "The Responder" },
         { n: 45, a: "الواسع", t: "Al-Wasi", m: "The All-Comprehending" },
         { n: 46, a: "الحكيم", t: "Al-Hakim", m: "The Perfectly Wise" },
         { n: 47, a: "الودود", t: "Al-Wadud", m: "The Loving One" },
@@ -231,7 +222,7 @@
         { n: 50, a: "الشهيد", t: "Ash-Shahid", m: "The Witness" },
         { n: 51, a: "الحق", t: "Al-Haqq", m: "The Truth" },
         { n: 52, a: "الوكيل", t: "Al-Wakil", m: "The Trustee" },
-        { n: 53, a: "القوي", t: "Al-Qawiyy", m: "The Possessor of All Strength" },
+        { n: 53, a: "القوي", t: "Al-Qawiyy", m: "The Strong" },
         { n: 54, a: "المتين", t: "Al-Matin", m: "The Forceful One" },
         { n: 55, a: "الولي", t: "Al-Wali", m: "The Governor" },
         { n: 56, a: "الحميد", t: "Al-Hamid", m: "The Praised One" },
@@ -246,9 +237,9 @@
         { n: 65, a: "الماجد", t: "Al-Majid", m: "The Glorious" },
         { n: 66, a: "الواحد", t: "Al-Wahid", m: "The Only One" },
         { n: 67, a: "الاحد", t: "Al-Ahad", m: "The One" },
-        { n: 68, a: "الصمد", t: "As-Samad", m: "The Satisfier of All Needs" },
+        { n: 68, a: "الصمد", t: "As-Samad", m: "The Satisfier of Needs" },
         { n: 69, a: "القادر", t: "Al-Qadir", m: "The All Powerful" },
-        { n: 70, a: "المقتدر", t: "Al-Muqtadir", m: "The Creator of All Power" },
+        { n: 70, a: "المقتدر", t: "Al-Muqtadir", m: "The Creator of Power" },
         { n: 71, a: "المقدم", t: "Al-Muqaddim", m: "The Expediter" },
         { n: 72, a: "المؤخر", t: "Al-Mu'akhkhir", m: "The Delayer" },
         { n: 73, a: "الأول", t: "Al-Awwal", m: "The First" },
@@ -263,19 +254,19 @@
         { n: 82, a: "العفو", t: "Al-Afu", m: "The Forgiver" },
         { n: 83, a: "الرؤوف", t: "Ar-Ra'uf", m: "The Compassionate" },
         { n: 84, a: "مالك الملك", t: "Malik-ul-Mulk", m: "The Owner of All" },
-        { n: 85, a: "ذو الجلال والإكرام", t: "Dhul-Jalal wal-Ikram", m: "The Lord of Majesty and Bounty" },
+        { n: 85, a: "ذو الجلال والإكرام", t: "Dhul-Jalal wal-Ikram", m: "Lord of Majesty" },
         { n: 86, a: "المقسط", t: "Al-Muqsit", m: "The Equitable One" },
         { n: 87, a: "الجامع", t: "Al-Jami", m: "The Gatherer" },
         { n: 88, a: "الغني", t: "Al-Ghani", m: "The Rich One" },
         { n: 89, a: "المغني", t: "Al-Mughni", m: "The Enricher" },
-        { n: 90, a: "المانع", t: "Al-Mani", m: "The Preventer of Harm" },
-        { n: 91, a: "الضار", t: "Ad-Darr", m: "The Creator of the Harmful" },
+        { n: 90, a: "المانع", t: "Al-Mani", m: "The Preventer" },
+        { n: 91, a: "الضار", t: "Ad-Darr", m: "The Creator of Harm" },
         { n: 92, a: "النافع", t: "An-Nafi", m: "The Bestower of Benefits" },
         { n: 93, a: "النور", t: "An-Nur", m: "The Light" },
         { n: 94, a: "الهادي", t: "Al-Hadi", m: "The Guider" },
         { n: 95, a: "البديع", t: "Al-Badi", m: "The Originator" },
         { n: 96, a: "الباقي", t: "Al-Baqi", m: "The Everlasting One" },
-        { n: 97, a: "الوارث", t: "Al-Warith", m: "The Inheritor of All" },
+        { n: 97, a: "الوارث", t: "Al-Warith", m: "The Inheritor" },
         { n: 98, a: "الرشيد", t: "Ar-Rashid", m: "The Righteous Teacher" },
         { n: 99, a: "الصبور", t: "As-Sabur", m: "The Patient One" }
     ];
@@ -293,7 +284,6 @@
                 <div class="meaning">${name.m}</div>
             </div>
         `).join('');
-        
         noResults.style.display = data.length === 0 ? 'block' : 'none';
     }
 
@@ -307,7 +297,6 @@
         renderNames(filtered);
     });
 
-    // Initial render
     renderNames(asmaUlHusna);
 </script>
 
