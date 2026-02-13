@@ -1,124 +1,271 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ramadan Sehri Iftar Time</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sehri & Iftar | Islam Topic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE VARIABLES === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --input-bg: #f1f5f9;
+        }
 
-<style>
-:root{
-  --bg:#0f172a;
-  --card:#1e293b;
-  --accent:#22c55e;
-  --text:#e5e7eb;
-}
-*{box-sizing:border-box;font-family:system-ui}
-body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
-}
-header{
-  padding:15px;
-  text-align:center;
-  background:#020617;
-  font-size:18px;
-}
-.container{
-  padding:15px;
-  max-width:400px;
-  margin:auto;
-}
-select{
-  width:100%;
-  padding:10px;
-  border-radius:8px;
-  border:none;
-  background:var(--card);
-  color:white;
-  margin-bottom:15px;
-}
-.card{
-  background:var(--card);
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:15px;
-  text-align:center;
-}
-.time{
-  font-size:28px;
-  color:var(--accent);
-}
-.label{
-  opacity:.8;
-  margin-bottom:5px;
-}
-.footer{
-  text-align:center;
-  opacity:.6;
-  font-size:13px;
-}
-</style>
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', 'Hind Siliguri', sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--header-grad);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.1rem; font-weight: 800; color: white; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container {
+            max-width: 450px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* City Selector */
+        .select-box {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 600;
+            appearance: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .select-box::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--primary);
+        }
+
+        /* Time Cards */
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .time {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 5px 0;
+        }
+
+        .countdown {
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            background: var(--input-bg);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
-
 <body>
 
-<header>🌙 Ramadan Sehri & Iftar Time</header>
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">সেহরি ও ইফতার</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
 
 <div class="container">
+    <div class="select-box">
+        <select id="city">
+            <option value="Dhaka">ঢাকা (Dhaka)</option>
+            <option value="Chittagong">চট্টগ্রাম (Chittagong)</option>
+            <option value="Khulna">খুলনা (Khulna)</option>
+            <option value="Rajshahi">রাজশাহী (Rajshahi)</option>
+            <option value="Sylhet">সিলেট (Sylhet)</option>
+            <option value="Barisal">বরিশাল (Barisal)</option>
+            <option value="Rangpur">রংপুর (Rangpur)</option>
+            <option value="Mymensingh">ময়মনসিংহ (Mymensingh)</option>
+        </select>
+    </div>
 
-<select id="city">
-  <option value="Dhaka">ঢাকা</option>
-  <option value="Chittagong">চট্টগ্রাম</option>
-  <option value="Khulna">খুলনা</option>
-  <option value="Rajshahi">রাজশাহী</option>
-  <option value="Sylhet">সিলেট</option>
-</select>
+    <div class="card">
+        <div class="label"><i class="fa-solid fa-moon"></i> আজকের সেহরি শেষ</div>
+        <div id="sehri" class="time">--:--</div>
+        <div id="sehriCount" class="countdown">পরবর্তী সেহরি লোড হচ্ছে...</div>
+    </div>
 
-<div class="card">
-  <div class="label">আজকের সেহরি শেষ</div>
-  <div id="sehri" class="time">--:--</div>
-</div>
+    <div class="card">
+        <div class="label"><i class="fa-solid fa-sun"></i> আজকের ইফতার</div>
+        <div id="iftar" class="time">--:--</div>
+        <div id="iftarCount" class="countdown">ইফতারের সময় লোড হচ্ছে...</div>
+    </div>
 
-<div class="card">
-  <div class="label">আজকের ইফতার</div>
-  <div id="iftar" class="time">--:--</div>
-</div>
-
-<div class="footer">
-  All right reserved | Made By Samiyyan
-</div>
-
+    <div class="footer">
+        All rights reserved | Made By Samiyyan
+    </div>
 </div>
 
 <script>
-const citySelect = document.getElementById("city");
-const sehriEl = document.getElementById("sehri");
-const iftarEl = document.getElementById("iftar");
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-async function loadTimes(city){
-  const today = new Date();
-  const date = today.getDate()+"-"+(today.getMonth()+1)+"-"+today.getFullYear();
+    const citySelect = document.getElementById("city");
+    const sehriEl = document.getElementById("sehri");
+    const iftarEl = document.getElementById("iftar");
+    let currentTimings = {};
 
-  const url = `https://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=Bangladesh&method=1`;
+    async function loadTimes(city) {
+        const today = new Date();
+        const date = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+        const url = `https://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=Bangladesh&method=1`;
 
-  const res = await fetch(url);
-  const data = await res.json();
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+            currentTimings = data.data.timings;
 
-  const timings = data.data.timings;
+            sehriEl.textContent = formatTime(currentTimings.Fajr);
+            iftarEl.textContent = formatTime(currentTimings.Maghrib);
+            startCountdown();
+        } catch (e) {
+            console.error("Error loading times");
+        }
+    }
 
-  // Sehri ends at Fajr
-  sehriEl.textContent = timings.Fajr;
-  // Iftar at Maghrib
-  iftarEl.textContent = timings.Maghrib;
-}
+    function formatTime(time24) {
+        let [hrs, mins] = time24.split(':');
+        let h = parseInt(hrs);
+        let ampm = h >= 12 ? 'PM' : 'AM';
+        h = h % 12 || 12;
+        return `${h}:${mins} ${ampm}`;
+    }
 
-citySelect.addEventListener("change",()=>{
-  loadTimes(citySelect.value);
-});
+    function startCountdown() {
+        setInterval(() => {
+            const now = new Date();
+            updateTimer(currentTimings.Fajr, "sehriCount", "সেহরি শেষ হতে বাকি: ");
+            updateTimer(currentTimings.Maghrib, "iftarCount", "ইফতার হতে বাকি: ");
+        }, 1000);
+    }
 
-// initial load
-loadTimes(citySelect.value);
+    function updateTimer(targetTime, elementId, label) {
+        if (!targetTime) return;
+        const now = new Date();
+        const [hrs, mins] = targetTime.split(':');
+        const target = new Date();
+        target.setHours(hrs, mins, 0);
+
+        let diff = target - now;
+        if (diff < 0) {
+            document.getElementById(elementId).textContent = "সময় অতিক্রান্ত";
+            return;
+        }
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById(elementId).textContent = `${label} ${h}ঘণ্টা ${m}মিনিট ${s}সেকেন্ড`;
+    }
+
+    citySelect.addEventListener("change", () => loadTimes(citySelect.value));
+    loadTimes(citySelect.value);
 </script>
 
 </body>
