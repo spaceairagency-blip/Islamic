@@ -1,155 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="emerald">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hadith App</title>
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-  body { background-color: #0f172a; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
-
-  header {
-    background-color: #1e293b;
-    padding: 15px;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-  }
-
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    gap: 20px;
-  }
-
-  .hadith-card {
-    background-color: #1e293b;
-    border-radius: 12px;
-    padding: 20px;
-    width: 100%;
-    max-width: 500px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: transform 0.3s, opacity 0.3s;
-    text-align: center;
-  }
-
-  .hadith-text { font-size: 1rem; margin-bottom: 15px; line-height: 1.5; }
-  .hadith-source { font-size: 0.85rem; color: #94a3b8; }
-
-  button {
-    background-color: #3b82f6;
-    color: #fff;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s;
-  }
-  button:hover { background-color: #2563eb; }
-
-  @media (max-width: 600px) {
-    .hadith-text { font-size: 0.9rem; }
-    header { font-size: 1.2rem; }
-    button { padding: 10px 20px; font-size: 0.95rem; }
-  }
-  header{
-            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
-            padding: 15px 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hadith Collection | Samiyyan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --input-bg: #f1f5f9;
         }
 
-        nav{
-            max-width: 1100px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
         }
 
-        .logo{
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #facc15;
-            text-align: center;
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
         }
 
-        /* Responsive */
-        @media (max-width: 600px){
-            .logo{
-                font-size: 20px;
-            }
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
         }
-</style>
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s ease; }
+        body { background: var(--bg); color: var(--text-dark); min-height: 100vh; padding-bottom: 50px; }
+
+        /* Header */
+        header { background: var(--header-grad); padding: 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        nav { max-width: 800px; margin: auto; display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        /* Search Section */
+        .search-area { background: var(--card-bg); padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
+        h1 { margin-bottom: 20px; font-size: 1.8rem; color: var(--primary); }
+        .search-box { position: relative; max-width: 500px; margin: auto; }
+        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        #searchInput { 
+            width: 100%; padding: 15px 15px 15px 50px; border-radius: 50px; border: 1px solid var(--border);
+            background: var(--input-bg); color: var(--text-dark); font-size: 1rem; outline: none;
+        }
+        #searchInput:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 210, 133, 0.1); }
+
+        /* Hadith List */
+        .container { max-width: 800px; margin: auto; padding: 0 20px; }
+        .hadith-list { display: flex; flex-direction: column; gap: 20px; }
+        
+        .hadith-item { 
+            background: var(--card-bg); padding: 30px; border-radius: 30px; 
+            border: 1px solid var(--border); position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+        .hadith-item:hover { transform: translateY(-5px); border-color: var(--primary); }
+
+        .arabic { 
+            font-size: 1.5rem; color: var(--primary-dark); direction: rtl; 
+            margin-bottom: 20px; line-height: 1.8; font-family: 'Amiri', serif; 
+            text-align: right;
+        }
+        .english { font-size: 1.1rem; line-height: 1.6; color: var(--text-dark); font-weight: 500; margin-bottom: 15px; }
+        .ref { font-size: 0.8rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+        .no-results { text-align: center; padding: 50px; color: var(--text-muted); }
+    </style>
 </head>
 <body>
 
-<a href="index.html" style="text-decoration: none;"><header>
-        <nav>
-            <h2 class="logo">
-                Hadith | Topic
-            </h2>
-        </nav>
-    </header></a>
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
 
-<main>
-  <div class="hadith-card" id="hadithCard">
-    <p class="hadith-text">Swipe left or right, or press the button to see a Hadith</p>
-    <p class="hadith-source"></p>
-  </div>
-  <button onclick="showHadith()">Next Hadith</button>
-</main>
+<div class="search-area">
+    <h1>Hadith Collection</h1>
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="searchInput" placeholder="Search Hadith..." onkeyup="filterList()">
+    </div>
+</div>
+
+<div class="container">
+    <div class="hadith-list" id="listContainer"></div>
+</div>
 
 <script>
-  const hadiths = [
-    { text: "Actions are judged by intentions, and every person will get what they intended.", source: "Sahih Bukhari 1" },
-    { text: "The best among you are those who have the best manners and character.", source: "Sahih Bukhari 6029" },
-    { text: "None of you truly believes until he loves for his brother what he loves for himself.", source: "Sahih Muslim 45" },
-    { text: "Feed the hungry, visit the sick, and free the captive.", source: "Sahih Bukhari 5678" },
-    { text: "The strongest among you is the one who controls his anger.", source: "Sahih Bukhari 6114" }
-    // Add more Hadiths here
-  ];
+    // === DATA ===
+    const hadithList = [
+        { ar:"إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ", en:"Actions are judged by intentions.", ref:"Bukhari & Muslim" },
+        { ar:"الدِّينُ النَّصِيحَةُ", en:"Religion is sincere advice.", ref:"Muslim" },
+        { ar:"الطُّهُورُ شَطْرُ الإِيمَانِ", en:"Purity is half of faith.", ref:"Muslim" },
+        { ar:"الْكَلِمَةُ الطَّيِّبَةُ صَدَقَةٌ", en:"A good word is charity.", ref:"Bukhari" },
+        { ar:"مَنْ لاَ يَرْحَمْ لاَ يُرْحَمْ", en:"Whoever does not show mercy will not be shown mercy.", ref:"Bukhari & Muslim" },
+        { ar:"خَيْرُكُمْ مَنْ تَعَلَّمَ الْقُرْآنَ وَعَلَّمَهُ", en:"The best of you are those who learn the Quran and teach it.", ref:"Bukhari" },
+        { ar:"الْحَيَاءُ مِنَ الإِيمَانِ", en:"Modesty is part of faith.", ref:"Bukhari & Muslim" },
+        { ar:"الدُّنْيَا سِجْنُ الْمُؤْمِنِ", en:"This world is a prison for the believer.", ref:"Muslim" },
+        { ar:"اتَّقِ اللَّهَ حَيْثُمَا كُنْتَ", en:"Fear Allah wherever you are.", ref:"Tirmidhi" },
+        { ar:"مَنْ غَشَّ فَلَيْسَ مِنَّا", en:"Whoever cheats is not one of us.", ref:"Muslim" },
+        { ar:"أَفْضَلُ الأَعْمَالِ الصَّلَاةُ", en:"The best deed is prayer.", ref:"Muslim" },
+        { ar:"الصَّدَقَةُ تُطْفِئُ الْخَطِيئَةَ", en:"Charity extinguishes sin.", ref:"Tirmidhi" },
+        { ar:"الصِّيَامُ جُنَّةٌ", en:"Fasting is a shield.", ref:"Bukhari" },
+        { ar:"تَبَسُّمُكَ فِي وَجْهِ أَخِيكَ صَدَقَةٌ", en:"Your smile to your brother is charity.", ref:"Tirmidhi" },
+        { ar:"الْمُسْلِمُ مَنْ سَلِمَ النَّاسُ مِنْ لِسَانِهِ", en:"A Muslim is one from whose tongue people are safe.", ref:"Bukhari" },
+        { ar:"لاَ تَغْضَبْ", en:"Do not get angry.", ref:"Bukhari" },
+        { ar:"الْمُؤْمِنُ مِرْآةُ الْمُؤْمِنِ", en:"A believer is the mirror of another believer.", ref:"Abu Dawud" },
+        { ar:"أَحَبُّ النَّاسِ إِلَى اللَّهِ أَنْفَعُهُمْ", en:"The most beloved people to Allah are those most beneficial to others.", ref:"Tabarani" },
+        { ar:"إِنَّ اللَّهَ جَمِيلٌ يُحِبُّ الْجَمَالَ", en:"Allah is Beautiful and loves beauty.", ref:"Muslim" },
+        { ar:"الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَٰنُ", en:"The merciful are shown mercy by the Most Merciful.", ref:"Tirmidhi" }
+    ];
 
-  let currentIndex = 0;
-  const card = document.getElementById('hadithCard');
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-  function showHadith(index = null) {
-    if (index !== null) currentIndex = index;
-    else currentIndex = Math.floor(Math.random() * hadiths.length);
+    // === LOGIC ===
+    const listContainer = document.getElementById('listContainer');
 
-    const hadith = hadiths[currentIndex];
-    card.style.opacity = 0;
-    setTimeout(() => {
-      card.querySelector('.hadith-text').textContent = hadith.text;
-      card.querySelector('.hadith-source').textContent = hadith.source;
-      card.style.opacity = 1;
-    }, 200);
-  }
+    function renderList(items) {
+        listContainer.innerHTML = '';
+        if (items.length === 0) {
+            listContainer.innerHTML = '<div class="no-results">No Hadiths found.</div>';
+            return;
+        }
+        items.forEach(h => {
+            const card = document.createElement('div');
+            card.className = 'hadith-item';
+            card.innerHTML = `
+                <div class="arabic">${h.ar}</div>
+                <div class="english">"${h.en}"</div>
+                <div class="ref"><i class="fa-solid fa-bookmark"></i> ${h.ref}</div>
+            `;
+            listContainer.appendChild(card);
+        });
+    }
 
-  // Swipe functionality
-  let startX = 0;
-  card.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
-  card.addEventListener('touchend', e => {
-    const endX = e.changedTouches[0].clientX;
-    if (endX < startX - 50) showHadith(); // swipe left
-    if (endX > startX + 50) showHadith(); // swipe right
-  });
+    function filterList() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = hadithList.filter(h => 
+            h.en.toLowerCase().includes(query) || h.ref.toLowerCase().includes(query) || h.ar.includes(query)
+        );
+        renderList(filtered);
+    }
 
-  // Auto-show new Hadith every 10 seconds
-  setInterval(() => showHadith(), 7000);
-
-  // Initial Hadith
-  showHadith(currentIndex);
+    renderList(hadithList);
 </script>
 
 </body>
