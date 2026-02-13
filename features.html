@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Features | Samiyyan Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --icon-bg: #ebfaf3;
+        }
+        [data-theme="midnight"] { --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a; --header-grad: linear-gradient(135deg, #1e293b, #334155); --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8; --icon-bg: rgba(30, 41, 59, 0.7); --border: rgba(255, 255, 255, 0.1); }
+        [data-theme="royal"] { --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625; --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85); --card-bg: #1e1b2e; --text-dark: #ffffff; --text-muted: #c4b5fd; --icon-bg: rgba(45, 27, 78, 0.4); --border: rgba(255, 255, 255, 0.1); }
+        [data-theme="gold"] { --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917; --header-grad: linear-gradient(135deg, #44403c, #78716c); --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1; --icon-bg: rgba(68, 64, 60, 0.4); --border: rgba(255, 255, 255, 0.1); }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s ease; }
+        body { background: var(--bg); color: var(--text-dark); padding-bottom: 50px; }
+
+        header { background: var(--header-grad); padding: 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        nav { max-width: 1000px; margin: auto; display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { color: white; text-decoration: none; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; font-weight: 700; }
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container { max-width: 800px; margin: auto; padding: 20px; }
+        
+        .category-title { 
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; 
+            color: var(--primary); font-weight: 800; margin: 30px 0 15px 10px; 
+            display: flex; align-items: center; gap: 10px;
+        }
+        .category-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+        .feature-list { background: var(--card-bg); border-radius: 25px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        
+        .item { 
+            display: flex; align-items: center; padding: 18px 20px; 
+            text-decoration: none; color: inherit; border-bottom: 1px solid var(--border);
+        }
+        .item:last-child { border: none; }
+        .item:hover { background: var(--icon-bg); padding-left: 25px; }
+
+        .item i { width: 40px; font-size: 1.2rem; color: var(--primary); text-align: center; margin-right: 15px; }
+        .item .name { flex: 1; font-weight: 600; font-size: 0.95rem; }
+        .item .arrow { font-size: 0.8rem; opacity: 0.3; }
+
+        .footer-note { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.75rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-house"></i> HUB</a>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+
+    <div class="category-title">Spiritual Knowledge</div>
+    <div class="feature-list">
+        <a href="quran.html" class="item"><i class="fa-solid fa-book-quran"></i><span class="name">Holy Quran (Digital)</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="99name.html" class="item"><i class="fa-solid fa-star-and-crescent"></i><span class="name">99 Names of Allah</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="hadith.html" class="item"><i class="fa-solid fa-mosque"></i><span class="name">Hadith Collection</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="sunnah.html" class="item"><i class="fa-solid fa-heart"></i><span class="name">Daily Sunnah Acts</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+    </div>
+
+    <div class="category-title">Ramadan Specials</div>
+    <div class="feature-list">
+        <a href="ramadan.html" class="item"><i class="fa-solid fa-moon"></i><span class="name">Ramadan Topic Hub</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="calender.html" class="item"><i class="fa-solid fa-calendar-days"></i><span class="name">2026 Ramadan Calendar</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="dua-ramadan.html" class="item"><i class="fa-solid fa-hands-praying"></i><span class="name">Special Ramadan Duas</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="recipe.html" class="item"><i class="fa-solid fa-video"></i><span class="name">Iftar Vlogs & Recipes</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+    </div>
+
+    <div class="category-title">Tools & Utilities</div>
+    <div class="feature-list">
+        <a href="salah-time.html" class="item"><i class="fa-solid fa-clock"></i><span class="name">Prayer Times (Dhaka)</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="weather.html" class="item"><i class="fa-solid fa-cloud-sun"></i><span class="name">Weather Forecast</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="zakat.html" class="item"><i class="fa-solid fa-hand-holding-dollar"></i><span class="name">Zakat Calculator</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="tasbih.html" class="item"><i class="fa-solid fa-ellipsis-h"></i><span class="name">Digital Tasbih Counter</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="hajj.html" class="item"><i class="fa-solid fa-kaaba"></i><span class="name">Hajj & Umrah Guide</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="names.html" class="item"><i class="fa-solid fa-baby"></i><span class="name">Islamic Baby Names</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+    </div>
+
+    <div class="category-title">Others</div>
+    <div class="feature-list">
+        <a href="quiz.html" class="item"><i class="fa-solid fa-trophy"></i><span class="name">Knowledge Quiz Game</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="animation.html" class="item"><i class="fa-solid fa-gift"></i><span class="name">Eid Special Animation</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+        <a href="problem.html" class="item"><i class="fa-solid fa-circle-exclamation"></i><span class="name">Report a Problem</span><i class="fa-solid fa-chevron-right arrow"></i></a>
+    </div>
+
+    <div class="footer-note">
+        <p>All links are optimized for Mobile & Desktop</p>
+        <p>© 2026 Ramadan Portal | Samiyyan</p>
+    </div>
+</div>
+
+<script>
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
+</script>
+
+</body>
+</html>
