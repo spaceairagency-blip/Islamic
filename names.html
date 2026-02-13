@@ -6,54 +6,94 @@
     <title>Islamic Baby Names | Islam Topic</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
+        /* === THEME ENGINE VARIABLES === */
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --accent: #facc15;
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --boy-color: #38bdf8;
-            --girl-color: #fb7185;
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --boy: #38bdf8; --girl: #fb7185;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 20px;
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
         }
+
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--header-grad);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
 
         .container {
             max-width: 800px;
-            margin: 40px auto;
+            margin: auto;
+            padding: 20px;
         }
 
-        .header { text-align: center; margin-bottom: 30px; }
-        .header i { font-size: 3rem; color: var(--accent); margin-bottom: 10px; }
-
-        /* Search Section */
-        .search-container {
+        .search-area {
+            background: var(--bg);
+            padding: 20px 0;
             position: sticky;
-            top: 20px;
-            z-index: 100;
-            background: var(--bg-dark);
-            padding: 10px 0;
+            top: 65px;
+            z-index: 99;
         }
 
         .search-box {
             width: 100%;
             padding: 15px 25px;
             border-radius: 50px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border);
             background: var(--card-bg);
-            color: white;
+            color: var(--text-dark);
             font-size: 1rem;
             outline: none;
-            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .search-box:focus { border-color: var(--accent); box-shadow: 0 0 15px rgba(250, 204, 21, 0.2); }
+        .search-box:focus { border-color: var(--primary); }
 
         .filter-tabs {
             display: flex;
@@ -63,76 +103,100 @@
         }
 
         .tab {
-            padding: 8px 20px;
+            padding: 8px 25px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 0.9rem;
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: 0.3s;
+            font-weight: 600;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
         }
 
-        .tab.active[data-gender="all"] { background: var(--accent); color: #000; }
-        .tab.active[data-gender="boy"] { background: var(--boy-color); color: #000; }
-        .tab.active[data-gender="girl"] { background: var(--girl-color); color: #000; }
+        .tab.active[data-gender="all"] { background: var(--primary); color: white; }
+        .tab.active[data-gender="boy"] { background: var(--boy); color: white; }
+        .tab.active[data-gender="girl"] { background: var(--girl); color: white; }
 
-        /* Names Grid */
+        .results-info {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
         .names-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 10px;
+            padding-bottom: 40px;
         }
 
         .name-card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 15px;
-            border-left: 5px solid transparent;
-            display: flex;
-            flex-direction: column;
+            border-radius: 18px;
+            border-left: 6px solid transparent;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             animation: fadeIn 0.4s ease;
         }
 
-        .name-card.boy { border-left-color: var(--boy-color); }
-        .name-card.girl { border-left-color: var(--girl-color); }
+        .name-card.boy { border-left-color: var(--boy); }
+        .name-card.girl { border-left-color: var(--girl); }
 
-        .name-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 5px; }
-        .name-meaning { color: var(--text-dim); font-size: 0.9rem; }
+        .name-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 5px; color: var(--text-dark); }
+        .name-meaning { color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; }
         
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .back-link { display: inline-block; color: var(--text-dim); text-decoration: none; margin-bottom: 20px; }
+        footer { text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
+<header>
+    <nav>
+        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Islamic Baby Names</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
+
 <div class="container">
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Portal</a>
-
-    <div class="header">
-        <i class="fa-solid fa-baby"></i>
-        <h1>Islamic Baby Names</h1>
-        <p style="color: var(--text-dim)">Find meaningful names for your little one</p>
-    </div>
-
-    <div class="search-container">
-        <input type="text" id="nameSearch" class="search-box" placeholder="Search by name or meaning...">
+    <div class="search-area">
+        <input type="text" id="nameSearch" class="search-box" placeholder="Search 100+ names or meanings...">
         <div class="filter-tabs" id="filterTabs">
             <div class="tab active" data-gender="all">All</div>
             <div class="tab" data-gender="boy">Boys</div>
             <div class="tab" data-gender="girl">Girls</div>
         </div>
+        <div class="results-info" id="resultsCount">Showing 112 names</div>
     </div>
 
-    <div class="names-grid" id="namesDisplay">
-        </div>
+    <div class="names-grid" id="namesDisplay"></div>
 </div>
 
+<footer>All Rights Reserved | Made By Samiyyan</footer>
+
 <script>
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
+
+    // === DATA (112 NAMES) ===
     const nameData = [
+        // Original 12
         { name: "Aayan", meaning: "God's Gift / Blessing", gender: "boy" },
         { name: "Zayan", meaning: "Bright / Graceful", gender: "boy" },
         { name: "Amira", meaning: "Princess / Leader", gender: "girl" },
@@ -142,11 +206,116 @@
         { name: "Arham", meaning: "Merciful / Compassionate", gender: "boy" },
         { name: "Zoya", meaning: "Alive / Loving", gender: "girl" },
         { name: "Omar", meaning: "Long-lived / Flourishing", gender: "boy" },
-        { name: "Safiya", meaning: "Pure / Sincere", gender: "girl" }
+        { name: "Safiya", meaning: "Pure / Sincere", gender: "girl" },
+        { name: "Hamza", meaning: "Lion / Strong", gender: "boy" },
+        { name: "Aisha", meaning: "Prosperous / Living", gender: "girl" },
+        // 50 Boys
+        { name: "Abid", meaning: "Worshipper of Allah", gender: "boy" },
+        { name: "Adnan", meaning: "Settler / Pioneer", gender: "boy" },
+        { name: "Ahmad", meaning: "Highly Praised", gender: "boy" },
+        { name: "Ali", meaning: "Exalted / Noble", gender: "boy" },
+        { name: "Anas", meaning: "Affection / Love", gender: "boy" },
+        { name: "Asad", meaning: "Lion / Brave", gender: "boy" },
+        { name: "Azlan", meaning: "Lion / Bold", gender: "boy" },
+        { name: "Bilal", meaning: "Moistening / Refreshing", gender: "boy" },
+        { name: "Daniyal", meaning: "Famous Intellectual", gender: "boy" },
+        { name: "Ehsan", meaning: "Perfection / Excellence", gender: "boy" },
+        { name: "Fahad", meaning: "Panther / Strong", gender: "boy" },
+        { name: "Faisal", meaning: "Decisive Leader", gender: "boy" },
+        { name: "Farhan", meaning: "Happy / Cheerful", gender: "boy" },
+        { name: "Ghalib", meaning: "Victorious / Conqueror", gender: "boy" },
+        { name: "Hadi", meaning: "Guide to Righteousness", gender: "boy" },
+        { name: "Hassan", meaning: "Handsome / Good", gender: "boy" },
+        { name: "Huzaifa", meaning: "Wise / Intellectual", gender: "boy" },
+        { name: "Ibrahim", meaning: "Father of Nations", gender: "boy" },
+        { name: "Idris", meaning: "Studious / Instructor", gender: "boy" },
+        { name: "Imran", meaning: "Prosperity / Population", gender: "boy" },
+        { name: "Irfan", meaning: "Knowledge / Wisdom", gender: "boy" },
+        { name: "Jabr", meaning: "Consolation / Comfort", gender: "boy" },
+        { name: "Junaid", meaning: "Small Soldier / Warrior", gender: "boy" },
+        { name: "Kamil", meaning: "Perfect / Complete", gender: "boy" },
+        { name: "Khalid", meaning: "Eternal / Immortal", gender: "boy" },
+        { name: "Luqman", meaning: "Wise / Intelligent", gender: "boy" },
+        { name: "Mahir", meaning: "Skilled / Expert", gender: "boy" },
+        { name: "Mansoor", meaning: "Divinely Aided", gender: "boy" },
+        { name: "Mustafa", meaning: "The Chosen One", gender: "boy" },
+        { name: "Nabil", meaning: "Noble / Generous", gender: "boy" },
+        { name: "Nasir", meaning: "Helper / Protector", gender: "boy" },
+        { name: "Noman", meaning: "Men of Blessings", gender: "boy" },
+        { name: "Owais", meaning: "Little Wolf / Companion", gender: "boy" },
+        { name: "Qasim", meaning: "One who Distributes", gender: "boy" },
+        { name: "Rafay", meaning: "The Exalter / High Rank", gender: "boy" },
+        { name: "Rashid", meaning: "Rightly Guided", gender: "boy" },
+        { name: "Saad", meaning: "Good Fortune / Luck", gender: "boy" },
+        { name: "Sameer", meaning: "Jovial Companion", gender: "boy" },
+        { name: "Shariq", meaning: "Radiant / Shining", gender: "boy" },
+        { name: "Sufyan", meaning: "Fast Moving / Light", gender: "boy" },
+        { name: "Taha", meaning: "Pure / Mystical", gender: "boy" },
+        { name: "Talha", meaning: "Kind of Tree", gender: "boy" },
+        { name: "Usman", meaning: "Wise / Brave", gender: "boy" },
+        { name: "Waleed", meaning: "Newborn Child", gender: "boy" },
+        { name: "Yahya", meaning: "God is Gracious", gender: "boy" },
+        { name: "Yousef", meaning: "God Increases", gender: "boy" },
+        { name: "Zahid", meaning: "Devout / Ascetic", gender: "boy" },
+        { name: "Zaid", meaning: "Abundance / Growth", gender: "boy" },
+        { name: "Zain", meaning: "Beauty / Adornment", gender: "boy" },
+        { name: "Zubair", meaning: "Strong / Powerful", gender: "boy" },
+        // 50 Girls
+        { name: "Aaliyah", meaning: "Highest Social Standing", gender: "girl" },
+        { name: "Afreen", meaning: "Beautiful / Stimulating", gender: "girl" },
+        { name: "Aleena", meaning: "Fair / Soft", gender: "girl" },
+        { name: "Amal", meaning: "Hope / Aspiration", gender: "girl" },
+        { name: "Anum", meaning: "Blessing of Allah", gender: "girl" },
+        { name: "Aqsa", meaning: "Farthest / Ultimate", gender: "girl" },
+        { name: "Arwa", meaning: "Mountain Goat / Grace", gender: "girl" },
+        { name: "Asma", meaning: "Precious / High Status", gender: "girl" },
+        { name: "Bushra", meaning: "Good Omen / News", gender: "girl" },
+        { name: "Dua", meaning: "Prayer / Supplication", gender: "girl" },
+        { name: "Eesha", meaning: "Life / Way of Living", gender: "girl" },
+        { name: "Eiza", meaning: "Noble / Honorable", gender: "girl" },
+        { name: "Faiza", meaning: "Successful / Victorious", gender: "girl" },
+        { name: "Farah", meaning: "Joy / Happiness", gender: "girl" },
+        { name: "Fatima", meaning: "Captivating / Chaste", gender: "girl" },
+        { name: "Hafsa", meaning: "Young Lioness", gender: "girl" },
+        { name: "Hania", meaning: "Happy / Pleased", gender: "girl" },
+        { name: "Hareem", meaning: "Sanctuary / Respectable", gender: "girl" },
+        { name: "Hibah", meaning: "Gift / Donation", gender: "girl" },
+        { name: "Humaira", meaning: "Reddish / Rosy Cheeked", gender: "girl" },
+        { name: "Iffat", meaning: "Chastity / Purity", gender: "girl" },
+        { name: "Ira", meaning: "Watchful / Pure", gender: "girl" },
+        { name: "Jannat", meaning: "Paradise / Garden", gender: "girl" },
+        { name: "Khadeeja", meaning: "Trustworthy / Honest", gender: "girl" },
+        { name: "Kinza", meaning: "Hidden Treasure", gender: "girl" },
+        { name: "Laiba", meaning: "Angel of Heaven", gender: "girl" },
+        { name: "Madiha", meaning: "Praiseworthy", gender: "girl" },
+        { name: "Mahnoor", meaning: "Moonlight", gender: "girl" },
+        { name: "Maliha", meaning: "Beautiful / Elegant", gender: "girl" },
+        { name: "Mehak", meaning: "Fragrance / Aroma", gender: "girl" },
+        { name: "Minahil", meaning: "Door to Heaven", gender: "girl" },
+        { name: "Mishal", meaning: "Light / Radiant", gender: "girl" },
+        { name: "Nabeela", meaning: "Noble / High-born", gender: "girl" },
+        { name: "Nadia", meaning: "Hope / Delicate", gender: "girl" },
+        { name: "Naima", meaning: "Comfort / Peace", gender: "girl" },
+        { name: "Noor", meaning: "Divine Light", gender: "girl" },
+        { name: "Rameen", meaning: "Successful / Obedient", gender: "girl" },
+        { name: "Rimsha", meaning: "Bouquet of Flowers", gender: "girl" },
+        { name: "Saba", meaning: "Soft Breeze", gender: "girl" },
+        { name: "Sadia", meaning: "Lucky / Blessed", gender: "girl" },
+        { name: "Saira", meaning: "Traveler / Wanderer", gender: "girl" },
+        { name: "Sana", meaning: "Radiance / Brilliance", gender: "girl" },
+        { name: "Sara", meaning: "Pure / Princess", gender: "girl" },
+        { name: "Sidra", meaning: "Lote Tree of Heaven", gender: "girl" },
+        { name: "Sumaira", meaning: "Night Companion", gender: "girl" },
+        { name: "Urwa", meaning: "Strong Support", gender: "girl" },
+        { name: "Warda", meaning: "Rose / Guardian", gender: "girl" },
+        { name: "Yusra", meaning: "Ease / Prosperity", gender: "girl" },
+        { name: "Zara", meaning: "Flower / High Status", gender: "girl" },
+        { name: "Zunaira", meaning: "Flower of Paradise", gender: "girl" }
     ];
 
     const searchInput = document.getElementById('nameSearch');
     const display = document.getElementById('namesDisplay');
+    const resultsCount = document.getElementById('resultsCount');
     const tabs = document.querySelectorAll('.tab');
     let currentGender = 'all';
 
@@ -161,6 +330,16 @@
             return matchesSearch && matchesGender;
         });
 
+        // Alphabetical sort
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+        resultsCount.innerText = `Showing ${filtered.length} names`;
+
+        if (filtered.length === 0) {
+            display.innerHTML = `<p style="grid-column: 1/-1; text-align:center; opacity:0.5; margin-top:20px;">No names found matching your criteria.</p>`;
+            return;
+        }
+
         filtered.forEach(item => {
             display.innerHTML += `
                 <div class="name-card ${item.gender}">
@@ -171,7 +350,6 @@
         });
     }
 
-    // Tab Logic
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('active'));
@@ -182,8 +360,6 @@
     });
 
     searchInput.addEventListener('input', renderNames);
-    
-    // Initial load
     renderNames();
 </script>
 
