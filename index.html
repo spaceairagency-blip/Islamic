@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islamic App - Medina Transition</title>
+    <title>Islamic App - Complete Edition</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
     <style>
         /* === THEME VARIABLES === */
@@ -25,25 +25,12 @@
             display: none; justify-content: center; align-items: center; flex-direction: column;
             backdrop-filter: blur(5px);
         }
-
         .medina-img {
-            width: 180px; height: 180px;
-            border-radius: 50%;
-            border: 6px solid var(--primary);
-            object-fit: cover;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            /* Pop out animation */
+            width: 180px; height: 180px; border-radius: 50%; border: 6px solid var(--primary);
+            object-fit: cover; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             animation: popOut 2.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
-
-        .loading-text {
-            margin-top: 20px;
-            font-weight: 700;
-            color: var(--text-dark);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
+        .loading-text { margin-top: 20px; font-weight: 700; color: var(--text-dark); letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem; }
 
         @keyframes popOut {
             0% { transform: scale(0); opacity: 0; }
@@ -65,13 +52,19 @@
         .menu-sheet { background: white; margin-top: -45px; border-radius: 45px 45px 0 0; padding: 45px 20px; position: relative; z-index: 10; }
         .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px 15px; max-width: 600px; margin: 0 auto; }
         
-        .card { text-decoration: none; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .card { text-decoration: none; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; }
         .card i { width: 75px; height: 75px; background: var(--icon-bg); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--primary-dark); font-size: 1.8rem; margin-bottom: 12px; }
         .card h3 { color: var(--text-dark); font-size: 0.8rem; font-weight: 600; text-align: center; }
+
+        /* Badge for the Amal Tracker */
+        .badge-count { position: absolute; top: -5px; right: 5px; background: #ff4757; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; border: 2px solid white; font-weight: bold; z-index: 5; }
 
         /* === MODAL === */
         .modal { position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; justify-content:center; align-items:center; z-index:2000; }
         .modal-content { background:white; padding:40px 30px; border-radius:32px; width:90%; max-width:400px; text-align:center; }
+        
+        .btn-done { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; margin-top: 20px; cursor: pointer; font-size: 1rem; }
+        .btn-clear { color: #ff4757; font-size: 0.75rem; cursor: pointer; margin-top: 25px; display: block; text-decoration: underline; font-weight: bold; padding-top: 15px; border-top: 1px solid #eee; }
 
         footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.8rem; }
     </style>
@@ -104,7 +97,13 @@
 <div class="menu-sheet">
     <div class="grid">
         <a href="99name.html" class="card"><i class="fa-solid fa-star-and-crescent"></i><h3>99 Names</h3></a>
-        <div class="card" id="ramadanCard"><i class="fa-solid fa-moon"></i><h3>Ramadan <br>Amals</h3></div>
+        
+        <div class="card" id="ramadanCard">
+            <span class="badge-count" id="amalBadge">0</span>
+            <i class="fa-solid fa-moon"></i>
+            <h3>Ramadan <br>Amals</h3>
+        </div>
+
         <a href="quran.html" class="card"><i class="fa-solid fa-book-quran"></i><h3>Quran</h3></a>
         <a href="weather.html" class="card"><i class="fa-solid fa-trophy"></i><h3>Quiz</h3></a>
         <a href="ramadan.html" class="card"><i class="fa-solid fa-mosque"></i><h3>Ramadan</h3></a>
@@ -126,46 +125,68 @@
 <div class="modal" id="ramadanModal">
     <div class="modal-content">
         <h2 id="ramadanTitle" style="color:var(--primary-dark)">Ramadan Day</h2>
-        <p id="ramadanAmal" style="margin-top:20px; font-size:1.1rem; line-height:1.5;"></p>
-        <button onclick="closeModal()" style="margin-top:20px; padding:10px 20px; border:none; border-radius:10px; background:var(--primary); color:white; cursor:pointer;">Close</button>
+        <p id="ramadanAmal" style="margin-top:20px; font-size:1.1rem; line-height:1.5; color: #333;"></p>
+        
+        <div id="statsText" style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); font-weight: bold;">Completed: 0 / 30</div>
+        
+        <button id="doneBtn" class="btn-done" onclick="markAsDone()">MashaAllah, Done!</button>
+        <button onclick="closeModal()" style="margin-top:15px; background:none; border:none; color:var(--text-muted); cursor:pointer; text-decoration: underline;">Close</button>
+        
+        <span class="btn-clear" onclick="resetProgress()">CLEAR ALL PROGRESS</span>
     </div>
 </div>
 
 <footer>© 2026 | MADE BY SAMIYYAN</footer>
 
 <script>
-// --- THEME & TRANSITION LOGIC ---
+// --- CONFIG & DATA ---
+const ramadanStart = new Date("2026-02-13"); 
+const amals = [
+    "Read Surah Al-Fatiha 5 times with translation.", "Recite 'Rabbana atina...' 10 times.",
+    "Read Surah Al-Ikhlas 20 times.", "Recite 'Allahumma innaka 'afuwwun...' 33 times.",
+    "Read Surah Al-Baqarah (1-20).", "Recite 'Sayyidul Istighfar' once.",
+    "Read Surah Al-Kafirun.", "Recite 'Subhan-Allahi wa bihamdihi' 100x.",
+    "Read Ayatul Kursi after Salah.", "Recite 'Rabbi ighfir li...' 100x.",
+    "Read Surah Al-Mulk at night.", "Recite 'La ilaha illa anta...' 100x.",
+    "Read Surah Ya-Sin.", "Recite 'Hasbunallahu wa ni’mal wakil' 33x.",
+    "Read Surah Al-Waqi'ah.", "Recite Dua for parents.",
+    "Read Surah Ar-Rahman.", "Recite 'Allahumma ajirni minan-nar' 7x.",
+    "Read last 2 verses of Al-Baqarah.", "Recite 'Radhitu billahi...' 3x.",
+    "Read Surah Al-Kahf (1-10).", "Recite 'Subhan-Allahi wa bi-hamdihi...'",
+    "Read Surah Al-Qadr 5 times.", "Recite 'La hawla wa la quwwata...' 33x.",
+    "Read Surah Ad-Duha.", "Recite 'Bismillahil-ladhi...' 3x.",
+    "Read Surah Al-A'la.", "Recite 'Allahumma inni as’aluka al-jannah' 3x.",
+    "Read Surah Al-Inshirah 10 times.", "Final Day: Read 3 Quls 10 times each."
+];
+
+// --- THEME & TRANSITION ---
 function setTheme(t) {
     document.documentElement.setAttribute('data-theme', t);
     localStorage.setItem('user_theme_pref', t);
 }
 setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-// New pop-out transition logic
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', function(e) {
         if (this.tagName === 'A') {
             e.preventDefault();
             const destination = this.href;
             const overlay = document.getElementById('transition-overlay');
-            
             overlay.style.display = 'flex';
-            
-            // Wait exactly 1 second (1000ms) before navigating
-            setTimeout(() => { 
-                window.location.href = destination; 
-            }, 1000);
+            setTimeout(() => { window.location.href = destination; }, 1000);
         }
     });
 });
 
-// --- PRAYER ENGINE ---
+// --- PRAYER & PROGRESS ENGINE ---
 async function initApp() {
     try {
         const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=1');
         const data = (await res.json()).data;
         document.getElementById('hijriDisplay').textContent = `${data.date.hijri.day} ${data.date.hijri.month.en} ${data.date.hijri.year}`;
         updateSalahTime(data.timings);
+        updateUI(); 
+        checkAutoOpen(); 
     } catch(e) { 
         document.getElementById('salahName').innerHTML = "No <br> Internet"; 
     }
@@ -179,7 +200,7 @@ function updateSalahTime(timings) {
         { name: 'Dhuhr', start: timings.Dhuhr, end: timings.Asr },
         { name: 'Asr', start: timings.Asr, end: timings.Maghrib },
         { name: 'Maghrib', start: timings.Maghrib, end: timings.Isha },
-        { name: 'Isha', start: timings.Isha, end: 'Midnight' }
+        { name: 'Isha', start: timings.Isha, end: '23:59' }
     ];
     let current = prayers[prayers.length - 1];
     for (let p of prayers) {
@@ -191,51 +212,76 @@ function updateSalahTime(timings) {
     document.getElementById('endTime').textContent = current.end;
 }
 
-// --- RAMADAN AMALS ---
-const amals = [
-    "Read Surah Al-Fatiha 5 times with translation.",
-    "Recite 'Rabbana atina fid-dunya hasanatan...' 10 times.",
-    "Read Surah Al-Ikhlas 20 times.",
-    "Recite 'Allahumma innaka 'afuwwun...' 33 times.",
-    "Read Surah Al-Baqarah (Ayat 1-20) slowly.",
-    "Recite 'Sayyidul Istighfar' once.",
-    "Read Surah Al-Kafirun before sleeping.",
-    "Recite 'Subhan-Allahi wa bihamdihi' 100 times.",
-    "Read Ayatul Kursi after every Salah.",
-    "Recite 'Rabbi ighfir li wa tub 'alayya' 100 times.",
-    "Read Surah Al-Mulk at night.",
-    "Recite 'La ilaha illa anta subhanaka...' 100 times.",
-    "Read Surah Ya-Sin.",
-    "Recite 'Hasbunallahu wa ni’mal wakil' 33 times.",
-    "Read Surah Al-Waqi'ah.",
-    "Recite the Dua for your parents.",
-    "Read Surah Ar-Rahman.",
-    "Recite 'Allahumma ajirni minan-nar' 7 times.",
-    "Read the last two verses of Surah Al-Baqarah.",
-    "Recite 'Radhitu billahi Rabban...' 3 times.",
-    "Read Surah Al-Kahf (Ayat 1-10).",
-    "Recite 'Subhan-Allahi wa bi-hamdihi...'",
-    "Read Surah Al-Qadr 5 times.",
-    "Recite 'La hawla wa la quwwata illa billah' 33 times.",
-    "Read Surah Ad-Duha.",
-    "Recite 'Bismillahil-ladhi la yadurru...' 3 times.",
-    "Read Surah Al-A'la.",
-    "Recite 'Allahumma inni as’aluka al-jannah' 3 times.",
-    "Read Surah Al-Inshirah 10 times.",
-    "Final Day: Read the 3 Quls 10 times each."
-];
+function getRamadanDay() {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    ramadanStart.setHours(0,0,0,0);
+    return Math.floor((today - ramadanStart) / 86400000) + 1;
+}
 
-const ramadanStart = new Date("2026-02-19");
-const today = new Date();
-const dayDiff = Math.floor((today - ramadanStart) / (1000 * 60 * 60 * 24)) + 1;
+function updateUI() {
+    const completed = JSON.parse(localStorage.getItem('completed_amals') || "[]");
+    document.getElementById('amalBadge').textContent = completed.length;
+    document.getElementById('statsText').textContent = `Completed: ${completed.length} / 30`;
+}
 
-document.getElementById('ramadanCard').onclick = () => {
+function markAsDone() {
+    const day = getRamadanDay();
+    if (day < 1 || day > 30) return;
+    let completed = JSON.parse(localStorage.getItem('completed_amals') || "[]");
+    if (!completed.includes(day)) {
+        completed.push(day);
+        localStorage.setItem('completed_amals', JSON.stringify(completed));
+        updateUI();
+        alert("Alhamdulillah! Progress saved.");
+        closeModal();
+    }
+}
+
+function resetProgress() {
+    if (confirm("This will clear all your saved Amal challenges. Continue?")) {
+        localStorage.removeItem('completed_amals');
+        sessionStorage.removeItem('opened_today');
+        updateUI();
+        closeModal();
+    }
+}
+
+function showAmalModal() {
+    const day = getRamadanDay();
     const modal = document.getElementById('ramadanModal');
-    document.getElementById('ramadanTitle').textContent = dayDiff > 0 ? `Ramadan Day ${dayDiff}` : "Coming Soon";
-    document.getElementById('ramadanAmal').textContent = dayDiff > 0 ? amals[(dayDiff-1) % 30] : "Prepare for Ramadan 2026!";
+    const btn = document.getElementById('doneBtn');
+    
+    if (day >= 1 && day <= 30) {
+        document.getElementById('ramadanTitle').textContent = `Ramadan Day ${day}`;
+        document.getElementById('ramadanAmal').textContent = amals[day - 1];
+        let completed = JSON.parse(localStorage.getItem('completed_amals') || "[]");
+        if(completed.includes(day)) {
+            btn.textContent = "Already Done Today ✓";
+            btn.style.background = "#ccc";
+            btn.disabled = true;
+        } else {
+            btn.textContent = "MashaAllah, Done!";
+            btn.style.background = "var(--primary)";
+            btn.disabled = false;
+        }
+    } else {
+        document.getElementById('ramadanTitle').textContent = "Ramadan Not Started";
+        document.getElementById('ramadanAmal').textContent = "The Daily Amal Challenge will begin on the 1st of Ramadan.";
+        btn.style.display = "none";
+    }
     modal.style.display = "flex";
-};
+}
 
+function checkAutoOpen() {
+    const day = getRamadanDay();
+    if (day >= 1 && day <= 30 && !sessionStorage.getItem('opened_today')) {
+        showAmalModal();
+        sessionStorage.setItem('opened_today', 'true');
+    }
+}
+
+document.getElementById('ramadanCard').onclick = showAmalModal;
 function closeModal() { document.getElementById('ramadanModal').style.display = 'none'; }
 
 initApp();
