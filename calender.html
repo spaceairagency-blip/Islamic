@@ -1,94 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<title>Ramadan Calendar 2026</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <title>Ramadan Calendar 2026 | Islam Topic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE VARIABLES === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --input-bg: #f1f5f9;
+        }
 
-<style>
-:root{
-  --bg:#020617;
-  --card:#0f172a;
-  --accent:#22c55e;
-  --muted:#94a3b8;
-}
-*{box-sizing:border-box;font-family:system-ui,-apple-system}
-body{
-  margin:0;
-  background:var(--bg);
-  color:white;
-}
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:#020617;
-  padding:14px;
-  text-align:center;
-  border-bottom:1px solid #1e293b;
-}
-header h1{
-  margin:0;
-  font-size:18px;
-}
-.controls{
-  padding:12px;
-  display:grid;
-  gap:10px;
-}
-input,button{
-  padding:12px;
-  font-size:15px;
-  border-radius:10px;
-  border:none;
-}
-input{
-  background:#0f172a;
-  color:white;
-}
-button{
-  background:var(--accent);
-  font-weight:700;
-  color:black;
-}
-.list{
-  padding:12px;
-  display:grid;
-  gap:12px;
-}
-.day{
-  background:var(--card);
-  border-radius:14px;
-  padding:14px;
-}
-.day h3{
-  margin:0 0 8px;
-  font-size:16px;
-}
-.row{
-  display:flex;
-  justify-content:space-between;
-  margin:6px 0;
-  font-size:14px;
-}
-.label{color:var(--muted)}
-.footer{
-  text-align:center;
-  padding:16px;
-  font-size:12px;
-  color:var(--muted);
-}
-        /* Header */
-        header{
-            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
-            padding: 15px 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--header-grad);
+            padding: 15px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        nav{
+        nav {
             max-width: 1100px;
             margin: auto;
             display: flex;
@@ -96,96 +61,211 @@ button{
             justify-content: space-between;
         }
 
-        .logo{
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #facc15;
-            text-align: center;
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.1rem; font-weight: 800; color: white; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
         }
 
-        /* Responsive */
-        @media (max-width: 600px){
-            .logo{
-                font-size: 20px;
-            }
+        /* Search Controls */
+        .controls {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            display: grid;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
         }
-</style>
+
+        input {
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        .fetch-btn {
+            background: var(--primary);
+            color: white;
+            font-weight: 700;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        /* Calendar List */
+        .list { display: grid; gap: 15px; }
+
+        .day-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-card.today {
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 15px rgba(0, 210, 133, 0.2);
+        }
+
+        .day-card.today::before {
+            content: "TODAY";
+            position: absolute;
+            top: 10px;
+            right: -25px;
+            background: var(--primary);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 900;
+            padding: 4px 30px;
+            transform: rotate(45deg);
+        }
+
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .day-num { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+        .greg-date { font-size: 0.8rem; color: var(--text-muted); }
+
+        .timing-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 10px;
+            background: var(--input-bg);
+            border-radius: 10px;
+        }
+
+        .time-label { font-size: 0.9rem; font-weight: 500; }
+        .time-val { font-weight: 700; color: var(--primary); }
+
+        .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.75rem; }
+
+        #loading { text-align: center; padding: 40px; display: none; }
+    </style>
 </head>
-
 <body>
 
-<a href="index.html" style="text-decoration: none;"><header>
-        <nav>
-            <h2 class="logo">
-                Islam | Topic
-            </h2>
-        </nav>
-    </header></a>
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Ramadan 2026</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
 
-<div class="controls">
-  <input id="city" placeholder="City (e.g. Dhaka)">
-  <input id="country" placeholder="Country (e.g. Bangladesh)">
-  <button onclick="loadRamadan()">Load Ramadan</button>
-</div>
+<div class="container">
+    <div class="controls">
+        <input id="city" placeholder="City (e.g. London)" value="Dhaka">
+        <input id="country" placeholder="Country (e.g. UK)" value="Bangladesh">
+        <button class="fetch-btn" onclick="loadRamadan()">
+            <i class="fa-solid fa-calendar-check"></i> Show Calendar
+        </button>
+    </div>
 
-<div id="list" class="list"></div>
+    <div id="loading"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p>Loading times...</p></div>
+    <div id="list" class="list"></div>
 
-<div class="footer">
-  Prayer times by Aladhan API
+    <div class="footer">
+       | ALL RIGHT RESERVED | MADE BY SAMIYYAN | &copy; 2026
+    </div>
 </div>
 
 <script>
-async function loadRamadan(){
-  const city = cityInput.value.trim();
-  const country = countryInput.value.trim();
-  if(!city || !country){
-    alert("Enter city & country");
-    return;
-  }
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-  list.innerHTML = "Loading...";
+    // === CALENDAR LOGIC ===
+    const list = document.getElementById("list");
+    const loading = document.getElementById("loading");
 
-  const url =
-    `https://api.aladhan.com/v1/hijriCalendarByCity?city=${city}&country=${country}&method=2&month=9&year=1447`;
+    async function loadRamadan() {
+        const city = document.getElementById("city").value.trim();
+        const country = document.getElementById("country").value.trim();
+        
+        if(!city || !country) return alert("Please enter both city and country.");
 
-  try{
-    const res = await fetch(url);
-    const json = await res.json();
-    list.innerHTML = "";
+        list.innerHTML = "";
+        loading.style.display = "block";
 
-    json.data.forEach((d,i)=>{
-      list.innerHTML += `
-        <div class="day">
-          <h3>Day ${i+1}</h3>
-          <div class="row">
-            <span class="label">Gregorian</span>
-            <span>${d.date.gregorian.date}</span>
-          </div>
-          <div class="row">
-            <span class="label">Hijri</span>
-            <span>${d.date.hijri.date}</span>
-          </div>
-          <div class="row">
-            <span class="label">Sehri (Fajr)</span>
-            <span>${d.timings.Fajr.replace(" (GMT)","")}</span>
-          </div>
-          <div class="row">
-            <span class="label">Iftar (Maghrib)</span>
-            <span>${d.timings.Maghrib.replace(" (GMT)","")}</span>
-          </div>
-        </div>
-      `;
-    });
+        // Ramadan 1447 starts approx Feb 18, 2026
+        // Hijri Month 9 (Ramadan) Year 1447
+        const url = `https://api.aladhan.com/v1/hijriCalendarByCity?city=${city}&country=${country}&method=2&month=09&year=1447`;
 
-  }catch{
-    list.innerHTML = "Failed to load data";
-  }
-}
+        try {
+            const res = await fetch(url);
+            const json = await res.json();
+            loading.style.display = "none";
 
-const cityInput = document.getElementById("city");
-const countryInput = document.getElementById("country");
-const list = document.getElementById("list");
+            const today = new Date().toLocaleDateString('en-GB');
+
+            json.data.forEach((d, i) => {
+                const gregDate = d.date.gregorian.date;
+                const isToday = (gregDate === today) ? 'today' : '';
+                
+                list.innerHTML += `
+                    <div class="day-card ${isToday}">
+                        <div class="day-header">
+                            <span class="day-num">Ramadan ${i+1}</span>
+                            <span class="greg-date">${d.date.gregorian.day}, ${d.date.gregorian.date}</span>
+                        </div>
+                        <div class="timing-row">
+                            <span class="time-label"><i class="fa-solid fa-moon"></i> Sehri Ends (Fajr)</span>
+                            <span class="time-val">${d.timings.Fajr.split(" ")[0]}</span>
+                        </div>
+                        <div class="timing-row">
+                            <span class="time-label"><i class="fa-solid fa-sun"></i> Iftar (Maghrib)</span>
+                            <span class="time-val">${d.timings.Maghrib.split(" ")[0]}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if(json.data.length === 0) list.innerHTML = "<p style='text-align:center'>No data found for this location.</p>";
+
+        } catch (err) {
+            loading.style.display = "none";
+            list.innerHTML = "<p style='color:red; text-align:center'>Network error. Please try again.</p>";
+        }
+    }
+
+    // Auto-load if city exists
+    window.onload = () => { if(document.getElementById("city").value) loadRamadan(); };
 </script>
 
 </body>
