@@ -1,80 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salah</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salah Tracker | Islam Topic</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE VARIABLES === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --item-bg: #f1f5f9;
+        }
 
-<style>
-*{box-sizing:border-box;font-family:Arial}
-body{
-    margin:0;
-    background:#0f172a;
-    color:#fff;
-    display:flex;
-    justify-content:center;
-}
-.app{
-    width:100%;
-    max-width:420px;
-    padding:15px;
-}
-h2{text-align:center}
-.card{
-    background:#1e293b;
-    padding:15px;
-    border-radius:14px;
-    margin-bottom:15px;
-}
-.salah{
-    display:flex;
-    justify-content:space-between;
-    margin-bottom:8px;
-    background:#0f172a;
-    padding:10px;
-    border-radius:8px;
-}
-input{transform:scale(1.3)}
-.progress-bar{
-    background:#334155;
-    height:10px;
-    border-radius:10px;
-    overflow:hidden;
-}
-.progress{
-    height:100%;
-    width:0%;
-    background:#22c55e;
-}
-button{
-    width:100%;
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    margin-top:8px;
-    font-size:15px;
-    cursor:pointer;
-}
-.save{background:#22c55e;color:#000}
-.clear{background:#ef4444;color:#fff}
-.small{font-size:13px;color:#cbd5e1}
-.history div{
-    background:#0f172a;
-    padding:8px;
-    border-radius:8px;
-    margin-bottom:6px;
-    font-size:13px;
-}
-header{
-            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
-            padding: 15px 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --item-bg: rgba(15, 23, 42, 0.5);
+        }
+
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1); --item-bg: rgba(19, 12, 37, 0.5);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --item-bg: rgba(0, 0, 0, 0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: var(--header-grad);
+            padding: 15px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        nav{
+        nav {
             max-width: 1100px;
             margin: auto;
             display: flex;
@@ -82,149 +62,282 @@ header{
             justify-content: space-between;
         }
 
-        .logo{
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #facc15;
-            text-align: center;
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
         }
 
-        /* Responsive */
-        @media (max-width: 600px){
-            .logo{
-                font-size: 20px;
-            }
+        .card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
-</style>
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .small-date { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; }
+
+        /* Salah Items */
+        .salah-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: var(--item-bg);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .salah-row:hover { border: 1px solid var(--primary); }
+
+        .salah-row span { font-weight: 600; }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        /* Progress Styling */
+        .progress-container { margin: 20px 0; }
+        .progress-bar {
+            background: var(--item-bg);
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .percent-text {
+            display: block;
+            text-align: right;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        /* Buttons */
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .save-btn { background: var(--primary); color: white; }
+        .clear-btn { background: #ef4444; color: white; opacity: 0.8; }
+        button:active { transform: scale(0.95); }
+
+        /* History */
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+        .history-item:last-child { border: none; }
+        .badge {
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            background: var(--primary);
+            color: white;
+        }
+    </style>
 </head>
-
 <body>
-<div class="app">
-<a href="index.html" style="text-decoration: none;"><header>
-        <nav>
-            <h2 class="logo">
-                Islam | Topic
-            </h2>
-        </nav>
-    </header></a>
-<h2>🕌 Salah</h2>
 
-<!-- TODAY SALAH -->
-<div class="card">
-    <b>Today's Salah</b>
-    <div id="date" class="small"></div><br>
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Salah Tracker</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
 
-    <div class="salah"><span>Fajr</span><input type="checkbox" class="p"></div>
-    <div class="salah"><span>Dhuhr</span><input type="checkbox" class="p"></div>
-    <div class="salah"><span>Asr</span><input type="checkbox" class="p"></div>
-    <div class="salah"><span>Maghrib</span><input type="checkbox" class="p"></div>
-    <div class="salah"><span>Isha</span><input type="checkbox" class="p"></div>
+<div class="container">
+    <div class="card">
+        <div class="card-title">
+            <span>Daily Prayers</span>
+            <span id="date" class="small-date"></span>
+        </div>
 
-    <div class="progress-bar"><div class="progress" id="dayBar"></div></div>
-    <div id="dayPercent" class="small">0%</div>
+        <div class="salah-row" onclick="this.querySelector('input').click()">
+            <span>Fajr</span><input type="checkbox" class="prayer-check">
+        </div>
+        <div class="salah-row" onclick="this.querySelector('input').click()">
+            <span>Dhuhr</span><input type="checkbox" class="prayer-check">
+        </div>
+        <div class="salah-row" onclick="this.querySelector('input').click()">
+            <span>Asr</span><input type="checkbox" class="prayer-check">
+        </div>
+        <div class="salah-row" onclick="this.querySelector('input').click()">
+            <span>Maghrib</span><input type="checkbox" class="prayer-check">
+        </div>
+        <div class="salah-row" onclick="this.querySelector('input').click()">
+            <span>Isha</span><input type="checkbox" class="prayer-check">
+        </div>
 
-    <button class="save" onclick="saveDay()">Save</button>
-    <button class="clear" onclick="clearDay()">Clear</button>
-</div>
+        <div class="progress-container">
+            <div class="progress-bar"><div class="progress-fill" id="dayBar"></div></div>
+            <span id="dayPercent" class="percent-text">0% Completed</span>
+        </div>
 
-<!-- MONTHLY REPORT -->
-<div class="card">
-    <b>📊 Monthly Report</b>
-    <div class="progress-bar"><div class="progress" id="monthBar"></div></div>
-    <div id="monthPercent" class="small"></div>
-</div>
+        <div class="btn-group">
+            <button class="save-btn" onclick="saveDay()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+            <button class="clear-btn" onclick="clearDay()"><i class="fa-solid fa-trash"></i> Reset</button>
+        </div>
+    </div>
 
-<!-- HISTORY -->
-<div class="card">
-    <b>📅 Previous Days</b>
-    <div class="history" id="history"></div>
-</div>
+    <div class="card">
+        <div class="card-title">📊 Monthly consistency</div>
+        <div class="progress-bar"><div class="progress-fill" id="monthBar"></div></div>
+        <span id="monthPercent" class="percent-text">0% Overall</span>
+    </div>
 
-<!-- NOTIFICATION -->
-<!-- <div class="card">
-    <b>🔔 Prayer Reminder</b>
-    <button onclick="enableNotification()">Enable Notification</button>
-    <div class="small">Reminder every day at Maghrib (demo)</div>
-</div> -->
-
+    <div class="card">
+        <div class="card-title">📅 Previous Days</div>
+        <div class="history-list" id="history"></div>
+    </div>
 </div>
 
 <script>
-const prayers=document.querySelectorAll(".p");
-const today=new Date();
-const key=today.toISOString().slice(0,10);
-document.getElementById("date").innerText=key;
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-function updateDay(){
-    let c=0;
-    prayers.forEach(p=>p.checked && c++);
-    let per=Math.round((c/5)*100);
-    dayBar.style.width=per+"%";
-    dayPercent.innerText=per+"% Completed";
-}
-prayers.forEach(p=>p.onchange=updateDay);
+    // === SALAH LOGIC ===
+    const prayers = document.querySelectorAll(".prayer-check");
+    const today = new Date();
+    const key = today.toISOString().slice(0, 10);
+    document.getElementById("date").innerText = today.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 
-function saveDay(){
-    const data=[...prayers].map(p=>p.checked);
-    localStorage.setItem("salah-"+key,JSON.stringify(data));
+    // Prevent row click from double-triggering checkbox
+    document.querySelectorAll('.salah-row input').forEach(input => {
+        input.onclick = (e) => e.stopPropagation();
+    });
+
+    function updateDayDisplay() {
+        let count = 0;
+        prayers.forEach(p => p.checked && count++);
+        let per = Math.round((count / 5) * 100);
+        const dayBar = document.getElementById("dayBar");
+        dayBar.style.width = per + "%";
+        document.getElementById("dayPercent").innerText = per + "% Completed";
+        
+        // Haptic feedback for completing all
+        if(per === 100 && navigator.vibrate) navigator.vibrate([50, 30, 50]);
+    }
+    
+    prayers.forEach(p => p.onchange = updateDayDisplay);
+
+    function saveDay() {
+        const data = [...prayers].map(p => p.checked);
+        localStorage.setItem("salah-" + key, JSON.stringify(data));
+        loadHistory();
+        loadMonthly();
+        alert("Progress Saved! 🤲");
+    }
+
+    function clearDay() {
+        if(confirm("Clear today's progress?")) {
+            prayers.forEach(p => p.checked = false);
+            updateDayDisplay();
+            localStorage.removeItem("salah-" + key);
+            loadMonthly();
+        }
+    }
+
+    function loadToday() {
+        const d = localStorage.getItem("salah-" + key);
+        if (d) {
+            JSON.parse(d).forEach((v, i) => prayers[i].checked = v);
+            updateDayDisplay();
+        }
+    }
+
+    function loadHistory() {
+        const historyDiv = document.getElementById("history");
+        historyDiv.innerHTML = "";
+        Object.keys(localStorage)
+            .filter(k => k.startsWith("salah-"))
+            .sort().reverse()
+            .slice(0, 7) // Show last 7 days
+            .forEach(k => {
+                const arr = JSON.parse(localStorage[k]);
+                const per = Math.round(arr.filter(v => v).length / 5 * 100);
+                const dateStr = k.replace("salah-", "");
+                historyDiv.innerHTML += `
+                    <div class="history-item">
+                        <span>${dateStr}</span>
+                        <span class="badge">${per}%</span>
+                    </div>`;
+            });
+    }
+
+    function loadMonthly() {
+        let total = 0, count = 0;
+        Object.keys(localStorage)
+            .filter(k => k.startsWith("salah-"))
+            .forEach(k => {
+                const arr = JSON.parse(localStorage[k]);
+                total += arr.filter(v => v).length;
+                count += 5;
+            });
+        let per = count ? Math.round(total / count * 100) : 0;
+        document.getElementById("monthBar").style.width = per + "%";
+        document.getElementById("monthPercent").innerText = per + "% Total Consistency";
+    }
+
+    // Initialize
+    loadToday();
     loadHistory();
     loadMonthly();
-}
-
-function clearDay(){
-    prayers.forEach(p=>p.checked=false);
-    updateDay();
-    localStorage.removeItem("salah-"+key);
-}
-
-(function loadToday(){
-    const d=localStorage.getItem("salah-"+key);
-    if(d){
-        JSON.parse(d).forEach((v,i)=>prayers[i].checked=v);
-        updateDay();
-    }
-})();
-
-function loadHistory(){
-    history.innerHTML="";
-    Object.keys(localStorage)
-    .filter(k=>k.startsWith("salah-"))
-    .sort().reverse()
-    .forEach(k=>{
-        const arr=JSON.parse(localStorage[k]);
-        const per=Math.round(arr.filter(v=>v).length/5*100);
-        history.innerHTML+=`<div>${k.replace("salah-","")} → ${per}%</div>`;
-    });
-}
-loadHistory();
-
-function loadMonthly(){
-    let total=0,count=0;
-    Object.keys(localStorage)
-    .filter(k=>k.startsWith("salah-"))
-    .forEach(k=>{
-        const arr=JSON.parse(localStorage[k]);
-        total+=arr.filter(v=>v).length;
-        count+=5;
-    });
-    let per=count?Math.round(total/count*100):0;
-    monthBar.style.width=per+"%";
-    monthPercent.innerText=per+"% Monthly Salah";
-}
-loadMonthly();
-
-// /* NOTIFICATION */
-// function enableNotification(){
-//     Notification.requestPermission().then(p=>{
-//         if(p==="granted"){
-//             setInterval(()=>{
-//                 new Notification("🕌 Maghrib Prayer Time",{body:"Don't forget your Salah"});
-//             },86400000);
-//             alert("Notification Enabled ✅");
-//         }
-//     });
-// }
 </script>
+
 </body>
 </html>
