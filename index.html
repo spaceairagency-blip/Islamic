@@ -1,238 +1,533 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Islam | Election Special</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <style>
-        /* === Reset & Base === */
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background:#0f172a; color:white; overflow-x: hidden; }
 
-        /* === Header === */
-        header { 
-            background: rgba(15,23,42,0.9); 
-            backdrop-filter:blur(10px); 
-            padding:20px; 
-            box-shadow:0 4px 30px rgba(0,0,0,0.3); 
-            position: sticky; 
-            top:0; 
-            border-bottom:1px solid rgba(255,255,255,0.1);
-            z-index: 1000;
-        }
-        .logo { font-size:1.5rem; font-weight:800; letter-spacing:2px; color:#facc15; text-align:center; text-transform:uppercase; }
+<meta charset="UTF-8">
 
-        /* === Election Special Banner === */
-        .election-card {
-            max-width: 500px;
-            margin: 30px auto 10px auto;
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
-            border: 2px solid #facc15;
-            box-shadow: 0 0 30px rgba(250, 204, 21, 0.2);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .live-tag {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: #ef4444;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 4px 10px;
-            border-radius: 50px;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .election-card h2 { color: #facc15; font-size: 1.4rem; margin: 10px 0; }
-        .election-card p { color: #94a3b8; font-size: 0.9rem; line-height: 1.5; }
-        .vote-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 25px;
-            background: #facc15;
-            color: #0f172a;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 0.9rem;
-            transition: 0.3s;
-        }
-        .vote-btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(250, 204, 21, 0.4); }
+<title>Islamic App - Pro Flight Transition</title>
 
-        /* === Timer Banner === */
-        .update {
-            max-width: 500px;
-            margin: 15px auto;
-            padding: 15px;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .date-timer { font-size: 1.5rem; font-weight: 800; color: #facc15; font-family: 'Courier New', monospace; }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-        /* === Grid & Cards === */
-        .container { max-width:1200px; margin:20px auto; padding:0 20px; }
-        .cards-grid { 
-            display:grid; 
-            grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); 
-            gap:20px; 
-            justify-items:center; 
-        }
-        .card { 
-            text-decoration:none; color:white; background: rgba(30,41,59,0.7); 
-            width:100%; max-width:180px; aspect-ratio:1/1; 
-            display:flex; flex-direction:column; justify-content:center; align-items:center; 
-            border-radius:24px; border:1px solid rgba(255,255,255,0.1); 
-            position:relative; transition: all 0.3s ease;
-            cursor:pointer; 
-        }
-        .card i { font-size:2rem; margin-bottom:12px; color:#facc15; }
-        .card h3 { font-size:0.85rem; font-weight:600; text-transform:uppercase; letter-spacing:1px; }
-        .card:hover { transform: translateY(-5px); border-color: #facc15; background: rgba(51,65,85,0.9); }
-        
-        /* === Badges === */
-        .new-badge { 
-            position:absolute; top:-5px; right:-5px; background:#ef4444; 
-            color:white; font-size:9px; padding:4px 10px; border-radius:50px; 
-        }
+<style>
 
-        /* === Modal === */
-        .modal { position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); display:none; justify-content:center; align-items:center; z-index:2000; padding:20px; }
-        .modal-content { background:#1e293b; padding:40px 30px; border-radius:24px; width:100%; max-width:400px; text-align:center; border:1px solid rgba(250,204,21,0.3); position:relative; }
-        .modal-close { position:absolute; top:20px; right:20px; font-size:24px; color:#94a3b8; cursor:pointer; }
+/* === THEME VARIABLES === */
 
-        footer { text-align:center; padding:40px 20px; color:#94a3b8; font-size:0.8rem; }
+:root {
 
-        @media (max-width:480px){ 
-            .cards-grid{grid-template-columns:repeat(2,1fr); gap:12px;} 
-            .election-card, .update { width: 95%; }
-        }
-    </style>
+    --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+
+    --text-dark: #1e293b; --text-muted: #64748b; --icon-bg: #ebfaf3;
+
+}
+
+[data-theme="midnight"] { --primary: #38bdf8; --primary-dark: #0284c7; --icon-bg: #f0f9ff; }
+
+[data-theme="royal"] { --primary: #a78bfa; --primary-dark: #7c3aed; --icon-bg: #f5f3ff; }
+
+[data-theme="gold"] { --primary: #facc15; --primary-dark: #ca8a04; --icon-bg: #fefce8; }
+
+
+
+/* === BASE STYLES === */
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s ease; }
+
+body { background: var(--bg); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
+
+
+
+/* === PRO PLANE & EARTH TRANSITION === */
+
+#plane-overlay {
+
+    position: fixed; inset: 0; background: var(--primary); z-index: 9999;
+
+    display: none; justify-content: center; align-items: center; overflow: hidden;
+
+}
+
+
+
+/* Background Atmosphere Glow */
+
+.atmosphere {
+
+    position: absolute; width: 300px; height: 300px;
+
+    background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+
+    border-radius: 50%;
+
+}
+
+
+
+.earth-container { position: relative; display: flex; justify-content: center; align-items: center; }
+
+
+
+.rotating-earth {
+
+    font-size: 9rem; color: rgba(255, 255, 255, 0.4);
+
+    animation: rotateEarth 10s linear infinite;
+
+    filter: drop-shadow(0 0 20px rgba(0,0,0,0.1));
+
+}
+
+
+
+.traveling-plane-wrapper {
+
+    position: absolute;
+
+    animation: flightPath 2s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+
+}
+
+
+
+.traveling-plane {
+
+    font-size: 3.5rem; color: white;
+
+    text-shadow: 5px 15px 15px rgba(0,0,0,0.2);
+
+    animation: planeWobble 0.5s ease-in-out infinite alternate;
+
+}
+
+
+
+/* Clouds for Depth */
+
+.cloud {
+
+    position: absolute; background: white; opacity: 0.3; border-radius: 50px;
+
+}
+
+.c1 { width: 100px; height: 30px; top: 20%; left: -150px; animation: cloudFlow 2s linear forwards; }
+
+.c2 { width: 150px; height: 40px; top: 60%; left: -200px; animation: cloudFlow 1.5s linear 0.2s forwards; }
+
+
+
+@keyframes rotateEarth { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+
+
+@keyframes flightPath {
+
+    0% { transform: translate(-150vw, 100vh) rotate(-20deg) scale(0.5); opacity: 0; }
+
+    30% { opacity: 1; }
+
+    50% { transform: translate(0, 0) rotate(-10deg) scale(1.2); }
+
+    70% { opacity: 1; }
+
+    100% { transform: translate(150vw, -100vh) rotate(0deg) scale(0.5); opacity: 0; }
+
+}
+
+
+
+@keyframes planeWobble {
+
+    from { transform: rotate(-2deg) translateY(0); }
+
+    to { transform: rotate(2deg) translateY(-5px); }
+
+}
+
+
+
+@keyframes cloudFlow {
+
+    from { transform: translateX(0); }
+
+    to { transform: translateX(150vw); }
+
+}
+
+
+
+/* === HEADER & MENU === */
+
+.header-hero {
+
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+
+    padding: 25px 20px 100px; color: white; text-align: center; position: relative;
+
+}
+
+.top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+
+.theme-dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; display: inline-block; margin: 0 4px; }
+
+#salahName { font-size: 2.8rem; font-weight: 800; text-transform: uppercase; margin-top: 10px; }
+
+.times-row { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+
+.time-box { background: rgba(255, 255, 255, 0.2); padding: 12px 22px; border-radius: 20px; min-width: 140px; }
+
+.menu-sheet { background: white; margin-top: -45px; border-radius: 45px 45px 0 0; padding: 45px 20px; position: relative; z-index: 10; }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px 15px; max-width: 600px; margin: 0 auto; }
+
+.card { text-decoration: none; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+
+.card i { width: 75px; height: 75px; background: var(--icon-bg); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--primary-dark); font-size: 1.8rem; margin-bottom: 12px; }
+
+.card h3 { color: var(--text-dark); font-size: 0.8rem; font-weight: 600; text-align: center; }
+
+
+
+/* === MODAL === */
+
+.modal { position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); display:none; justify-content:center; align-items:center; z-index:2000; }
+
+.modal-content { background:white; padding:40px 30px; border-radius:32px; width:90%; max-width:400px; text-align:center; }
+
+
+
+footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.8rem; }
+
+</style>
+
 </head>
+
 <body>
 
-<header>
-    <div class="logo">Islam | Topic</div>
-</header>
 
-<div class="election-card">
-    <div class="live-tag">TODAY</div>
-    <a href="vote.html">Go to the page</a>
-    <i class="fa-solid fa-check-to-slot" style="font-size: 2rem; color: #facc15;"></i>
-    <h2>নির্বাচন ও গণভোট ২০২৬</h2>
-    <p>আজ ১২ ফেব্রুয়ারি। আপনার ভোট একটি পবিত্র আমানত। সৎ ও যোগ্য নেতৃত্ব নির্বাচনে আপনার নাগরিক দায়িত্ব পালন করুন।</p>
-    <button onclick="showElectionMsg()" class="vote-btn">বিস্তারিত বার্তা</button>
+
+<div id="plane-overlay">
+
+    <div class="atmosphere"></div>
+
+    <div class="cloud c1"></div>
+
+    <div class="cloud c2"></div>
+
+    <div class="earth-container">
+
+        <i class="fa-solid fa-earth-americas rotating-earth"></i>
+
+        <div class="traveling-plane-wrapper">
+
+            <i class="fa-solid fa-plane traveling-plane"></i>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="update">
-    <p style="font-size: 0.7rem; letter-spacing: 2px; color: #94a3b8;">NEXT UPDATE IN</p>
-    <div class="date-timer" id="liveTimer">00d : 00h : 00m : 00s</div>
+
+
+<div class="header-hero">
+
+    <div class="top-bar">
+
+        <div class="theme-selector">
+
+            <div class="theme-dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+
+            <div class="theme-dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+
+            <div class="theme-dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+
+            <div class="theme-dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+
+        </div>
+
+        <div id="hijriDisplay">Loading Date...</div>
+
+    </div>
+
+    <h1 id="salahName">Loading...</h1>
+
+    <p>Current Prayer</p>
+
+    <div class="times-row">
+
+        <div class="time-box"><span>Start</span><br><b id="startTime">--:--</b></div>
+
+        <div class="time-box"><span>End</span><br><b id="endTime">--:--</b></div>
+
+    </div>
+
 </div>
 
-<div class="container">
-    <div class="cards-grid">
-        <a href="99name.html" class="card"><div class="new-badge">NEW</div><i class="fa-solid fa-star-and-crescent"></i><h3>99 Names</h3></a>
-        <div class="card" id="ramadanCard"><div class="new-badge">LIVE</div><i class="fa-solid fa-moon"></i><h3>Ramadan</h3></div>
-        <a href="ramadan.html" class="card"><i class="fa-solid fa-book-quran"></i><h3>Features</h3></a>
-        <a href="quran.html" class="card"><i class="fa-solid fa-book-open"></i><h3>Quran</h3></a>
+
+
+<div class="menu-sheet">
+
+    <div class="grid">
+
+        <a href="99name.html" class="card"><i class="fa-solid fa-star-and-crescent"></i><h3>99 Names</h3></a>
+
+        <div class="card" id="ramadanCard"><i class="fa-solid fa-moon"></i><h3>Ramadan <br>Amals</h3></div>
+
+        <a href="quran.html" class="card"><i class="fa-solid fa-book-quran"></i><h3>Quran</h3></a>
+
+        <a href="weather.html" class="card"><i class="fa-solid fa-trophy"></i><h3>Quiz</h3></a>
+
+        <a href="ramadan.html" class="card"><i class="fa-solid fa-book-quran"></i><h3>Ramadan</h3></a>
+
         <a href="hadith.html" class="card"><i class="fa-solid fa-mosque"></i><h3>Hadith</h3></a>
-        <a href="salah-time.html" class="card"><i class="fa-solid fa-clock"></i><h3>Salah</h3></a>
+
+        <a href="salah-time.html" class="card"><i class="fa-solid fa-clock"></i><h3>Salah Time</h3></a>
+
         <a href="zakat.html" class="card"><i class="fa-solid fa-hand-holding-dollar"></i><h3>Zakat</h3></a>
-        <a href="hajj.html" class="card"><i class="fa-solid fa-kaaba"></i><h3>Hajj</h3></a>
+
+        <a href="hajj.html" class="card"><i class="fa-solid fa-kaaba"></i><h3>Hajj & Umrah</h3></a>
+
         <a href="tasbih.html" class="card"><i class="fa-solid fa-ellipsis-h"></i><h3>Tasbih</h3></a>
+
         <a href="dua.html" class="card"><i class="fa-solid fa-hands-praying"></i><h3>Dua</h3></a>
+
         <a href="sunnah.html" class="card"><i class="fa-solid fa-heart"></i><h3>Sunnah</h3></a>
-        <a href="names.html" class="card"><i class="fa-solid fa-baby"></i><h3>Names</h3></a>
+
+        <a href="names.html" class="card"><i class="fa-solid fa-baby"></i><h3>Baby Names</h3></a>
+
+        <a href="salah.html" class="card"><i class="fa-solid fa-calendar-day"></i><h3>Salah</h3></a>
+
+        <a href="animation.html" class="card"><i class="fa-solid fa-calendar-day"></i><h3>Eid</h3></a>
+
+        <a href="problem.html" class="card"><i class="fa-solid fa-circle-exclamation"></i><h3>Problem?</h3></a>
+
+        <a href="feautures.html" class="card"><i class="fa-solid fa-arrows-rotate"></i><h3>Features</h3></a>
+
     </div>
+
 </div>
 
-<div class="modal" id="infoModal">
+
+
+<div class="modal" id="ramadanModal">
+
     <div class="modal-content">
-        <span class="modal-close" id="modalClose">&times;</span>
-        <div id="modalIcon"></div>
-        <h2 id="modalTitle" style="color:#facc15; margin: 15px 0;"></h2>
-        <p id="modalBody" style="font-size:1rem; line-height:1.6; color: #e2e8f0;"></p>
+
+        <h2 id="ramadanTitle" style="color:var(--primary-dark)">Ramadan Day</h2>
+
+        <p id="ramadanAmal" style="margin-top:20px; font-size:1.1rem; line-height:1.5;"></p>
+
+        <button onclick="closeModal()" style="margin-top:20px; padding:10px 20px; border:none; border-radius:10px; background:var(--primary); color:white; cursor:pointer;">Close</button>
+
     </div>
+
 </div>
 
-<footer>
-    <p>&copy; 2026 | Developed with Heart by Samiyyan</p>
-</footer>
+
+
+<footer>© 2026 | MADE BY SAMIYYAN</footer>
+
+
 
 <script>
-    // === Timer Script ===
-    function updateTimer() {
-        const target = new Date("February 13, 2026 00:00:00").getTime();
-        const now = new Date().getTime();
-        const diff = target - now;
 
-        if (diff <= 0) {
-            document.getElementById("liveTimer").innerText = "UPDATE LIVE!";
-            return;
+// --- THEME & TRANSITION ---
+
+function setTheme(t) {
+
+    document.documentElement.setAttribute('data-theme', t);
+
+    localStorage.setItem('user_theme_pref', t);
+
+}
+
+setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
+
+
+
+document.querySelectorAll('.card').forEach(card => {
+
+    card.addEventListener('click', function(e) {
+
+        if (this.tagName === 'A') {
+
+            e.preventDefault();
+
+            const destination = this.href;
+
+            const overlay = document.getElementById('plane-overlay');
+
+            overlay.style.display = 'flex';
+
+            setTimeout(() => { window.location.href = destination; }, 2000);
+
         }
 
-        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((diff % (1000 * 60)) / 1000);
+    });
 
-        document.getElementById("liveTimer").innerText = 
-            `${d}d : ${h.toString().padStart(2, '0')}h : ${m.toString().padStart(2, '0')}m : ${s.toString().padStart(2, '0')}s`;
-    }
-    setInterval(updateTimer, 1000);
-    updateTimer();
+});
 
-    // === Modal Logic ===
-    const modal = document.getElementById("infoModal");
-    const closeBtn = document.getElementById("modalClose");
 
-    function showElectionMsg() {
-        document.getElementById("modalIcon").innerHTML = '<i class="fa-solid fa-bullhorn" style="font-size:3rem; color:#facc15;"></i>';
-        document.getElementById("modalTitle").innerText = "নির্বাচনী বার্তা";
-        document.getElementById("modalBody").innerText = "ইসলামে নেতৃত্ব নির্বাচন একটি গুরুত্বপূর্ণ আমানত। আজ আপনার ভোটাধিকার প্রয়োগ করুন এবং দেশের সমৃদ্ধিতে অংশগ্রহণ করুন। মিথ্যা বা প্রলোভনে পা না দিয়ে যোগ্য ব্যক্তিকে বেছে নিন।";
-        modal.style.display = "flex";
-    }
 
-    // === Ramadan Logic ===
-    const amals = [
-        "Surah Challenge: Read Surah Al-Fatiha 5 times with translation.",
-        "Dua Challenge: Recite 'Rabbana atina fid-dunya hasanatan...' 10 times.",
-        "Surah Challenge: Read Surah Al-Ikhlas 20 times.",
-        "Dua Challenge: Recite 'Allahumma innaka 'afuwwun...' (Dua for Laylatul Qadr).",
-        "Surah Challenge: Read Surah Al-Baqarah (Ayat 1-20) slowly."
-        // ... (বাকি আমলগুলো আগের মতোই থাকবে)
+// --- PRAYER ENGINE ---
+
+async function initApp() {
+
+    try {
+
+        const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=1');
+
+        const data = (await res.json()).data;
+
+        document.getElementById('hijriDisplay').textContent = `${data.date.hijri.day} ${data.date.hijri.month.en} ${data.date.hijri.year}`;
+
+        updateSalahTime(data.timings);
+
+    } catch(e) { document.getElementById('salahName').innerHTML = "No <br> Internet"; }
+
+}
+
+
+
+function updateSalahTime(timings) {
+
+    const now = new Date();
+
+    const currentMin = now.getHours() * 60 + now.getMinutes();
+
+    const prayers = [
+
+        { name: 'Fajr', start: timings.Fajr, end: timings.Sunrise },
+
+        { name: 'Dhuhr', start: timings.Dhuhr, end: timings.Asr },
+
+        { name: 'Asr', start: timings.Asr, end: timings.Maghrib },
+
+        { name: 'Maghrib', start: timings.Maghrib, end: timings.Isha },
+
+        { name: 'Isha', start: timings.Isha, end: 'N/A' }
+
     ];
 
-    document.getElementById("ramadanCard").onclick = () => {
-        const ramadanStart = new Date("2026-02-19");
-        const today = new Date();
-        const dayDiff = Math.floor((today - ramadanStart) / (1000 * 60 * 60 * 24)) + 1;
+    let current = prayers[prayers.length - 1];
 
-        document.getElementById("modalIcon").innerHTML = '<i class="fa-solid fa-calendar-check" style="font-size:3rem; color:#facc15;"></i>';
-        
-        if (dayDiff >= 1 && dayDiff <= 30) {
-            document.getElementById("modalTitle").innerText = `Ramadan Day ${dayDiff}`;
-            document.getElementById("modalBody").innerText = amals[dayDiff - 1] || "Continue your good deeds!";
-        } else {
-            document.getElementById("modalTitle").innerText = "Ramadan Countdown";
-            document.getElementById("modalBody").innerText = "রমজান শুরু হতে আর মাত্র কয়েক দিন বাকি (১৯ ফেব্রুয়ারি)। ইনশাআল্লাহ্, আমরা প্রস্তুত হচ্ছি!";
-        }
-        modal.style.display = "flex";
-    };
+    for (let p of prayers) {
 
-    closeBtn.onclick = () => modal.style.display = "none";
-    window.onclick = (e) => { if (e.target === modal) modal.style.display = "none"; };
+        const [h, m] = p.start.split(':').map(Number);
+
+        if (currentMin >= (h * 60 + m)) current = p;
+
+    }
+
+    document.getElementById('salahName').textContent = current.name;
+
+    document.getElementById('startTime').textContent = current.start;
+
+    document.getElementById('endTime').textContent = current.end;
+
+}
+
+
+
+// --- RAMADAN LOGIC ---
+
+const amals = [
+
+    "Read Surah Al-Fatiha 5 times with translation.",
+
+    "Recite 'Rabbana atina fid-dunya hasanatan...' 10 times.",
+
+    "Read Surah Al-Ikhlas 20 times.",
+
+    "Recite 'Allahumma innaka 'afuwwun...' 33 times.",
+
+    "Read Surah Al-Baqarah (Ayat 1-20) slowly.",
+
+    "Recite 'Sayyidul Istighfar' once.",
+
+    "Read Surah Al-Kafirun before sleeping.",
+
+    "Recite 'Subhan-Allahi wa bihamdihi' 100 times.",
+
+    "Read Ayatul Kursi after every Salah.",
+
+    "Recite 'Rabbi ighfir li wa tub 'alayya' 100 times.",
+
+    "Read Surah Al-Mulk at night.",
+
+    "Recite 'La ilaha illa anta subhanaka...' 100 times.",
+
+    "Read Surah Ya-Sin.",
+
+    "Recite 'Hasbunallahu wa ni’mal wakil' 33 times.",
+
+    "Read Surah Al-Waqi'ah.",
+
+    "Recite the Dua for your parents.",
+
+    "Read Surah Ar-Rahman.",
+
+    "Recite 'Allahumma ajirni minan-nar' 7 times.",
+
+    "Read the last two verses of Surah Al-Baqarah.",
+
+    "Recite 'Radhitu billahi Rabban...' 3 times.",
+
+    "Read Surah Al-Kahf (Ayat 1-10).",
+
+    "Recite 'Subhan-Allahi wa bi-hamdihi...'",
+
+    "Read Surah Al-Qadr 5 times.",
+
+    "Recite 'La hawla wa la quwwata illa billah' 33 times.",
+
+    "Read Surah Ad-Duha.",
+
+    "Recite 'Bismillahil-ladhi la yadurru...' 3 times.",
+
+    "Read Surah Al-A'la.",
+
+    "Recite 'Allahumma inni as’aluka al-jannah' 3 times.",
+
+    "Read Surah Al-Inshirah 10 times.",
+
+    "Final Day: Read the 3 Quls 10 times each."
+
+];
+
+
+
+const ramadanStart = new Date("2026-02-19");
+
+const dayDiff = Math.floor((new Date() - ramadanStart) / (1000 * 60 * 60 * 24)) + 1;
+
+
+
+document.getElementById('ramadanCard').onclick = () => {
+
+    const modal = document.getElementById('ramadanModal');
+
+    document.getElementById('ramadanTitle').textContent = dayDiff > 0 ? `Ramadan Day ${dayDiff}` : "Coming Soon";
+
+    document.getElementById('ramadanAmal').textContent = dayDiff > 0 ? amals[(dayDiff-1) % 30] : "Prepare for Ramadan 2026!";
+
+    modal.style.display = "flex";
+
+};
+
+
+
+function closeModal() { document.getElementById('ramadanModal').style.display = 'none'; }
+
+
+
+initApp();
+
 </script>
 
 </body>
-</html>
 
+</html>
