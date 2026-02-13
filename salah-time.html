@@ -1,72 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salah Time</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salah Time | Prayer Schedule</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE VARIABLES === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --item-bg: #f1f5f9; --border: rgba(0, 0, 0, 0.05);
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-body{
-    background:linear-gradient(135deg,#0f172a,#020617);
-    color:#fff;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-.container{
-    width:95%;
-    max-width:420px;
-    background:#020617;
-    border-radius:15px;
-    padding:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,.4);
-}
-h1{
-    text-align:center;
-    margin-bottom:10px;
-    font-size:24px;
-}
-.location{
-    text-align:center;
-    opacity:.8;
-    margin-bottom:20px;
-    font-size:14px;
-}
-.prayer{
-    display:flex;
-    justify-content:space-between;
-    padding:12px 15px;
-    background:#0f172a;
-    margin-bottom:10px;
-    border-radius:10px;
-    font-size:16px;
-}
-.prayer span:last-child{
-    font-weight:bold;
-}
-.footer{
-    text-align:center;
-    margin-top:10px;
-    font-size:12px;
-    opacity:.6;
-}
-header{
-            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
-            padding: 15px 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --item-bg: rgba(255,255,255,0.05); --border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --item-bg: rgba(255,255,255,0.05); --border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --item-bg: rgba(255,255,255,0.05); --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        body { background-color: var(--bg); color: var(--text-dark); font-family: 'Segoe UI', sans-serif; min-height: 100vh; }
+
+        /* Header */
+        header {
+            background: var(--header-grad);
+            padding: 15px 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        nav{
+        nav {
             max-width: 1100px;
             margin: auto;
             display: flex;
@@ -74,57 +56,140 @@ header{
             justify-content: space-between;
         }
 
-        .logo{
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #facc15;
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        /* Container */
+        .main-content {
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid var(--border);
+        }
+
+        .location {
             text-align: center;
+            margin-bottom: 25px;
         }
 
-        /* Responsive */
-        @media (max-width: 600px){
-            .logo{
-                font-size: 20px;
-            }
+        .location h3 { font-size: 1.4rem; color: var(--primary); margin-bottom: 5px; }
+        .location p { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+
+        .prayer-list { display: flex; flex-direction: column; gap: 12px; }
+
+        .prayer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: var(--item-bg);
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 1px solid transparent;
         }
-</style>
+
+        .prayer i { margin-right: 10px; color: var(--primary); min-width: 25px; }
+        .time { color: var(--primary); font-family: monospace; font-size: 1.1rem; }
+
+        /* Highlight Current Prayer Style (Optional future addition) */
+        .active-prayer {
+            border-color: var(--primary);
+            background: rgba(var(--primary), 0.1);
+            transform: scale(1.02);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
 <body>
-<div class="container">
-    <a href="index.html" style="text-decoration: none; color: white;">Home <h1><h1>🕌 Salah Time</h1></h1></a>
-    <div class="location" id="location">Loading...</div>
 
-    <div class="prayer"><span>Fajr</span><span id="fajr">--</span></div>
-    <div class="prayer"><span>Dhuhr</span><span id="dhuhr">--</span></div>
-    <div class="prayer"><span>Asr</span><span id="asr">--</span></div>
-    <div class="prayer"><span>Maghrib</span><span id="maghrib">--</span></div>
-    <div class="prayer"><span>Isha</span><span id="isha">--</span></div>
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Salah Tracker</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
 
-    <div class="footer">All Right Reserved | Made By Samiyyan</div>
+<div class="main-content">
+    <div class="container">
+        <div class="location">
+            <h3 id="cityName">Dhaka</h3>
+            <p id="dateToday">Loading date...</p>
+        </div>
+
+        <div class="prayer-list">
+            <div class="prayer"><div class="left"><i class="fa-solid fa-cloud-sun"></i> Fajr</div><span class="time" id="fajr">--:--</span></div>
+            <div class="prayer"><div class="left"><i class="fa-solid fa-sun"></i> Dhuhr</div><span class="time" id="dhuhr">--:--</span></div>
+            <div class="prayer"><div class="left"><i class="fa-solid fa-cloud-meatball"></i> Asr</div><span class="time" id="asr">--:--</span></div>
+            <div class="prayer"><div class="left"><i class="fa-solid fa-mountain-sun"></i> Maghrib</div><span class="time" id="maghrib">--:--</span></div>
+            <div class="prayer"><div class="left"><i class="fa-solid fa-moon"></i> Isha</div><span class="time" id="isha">--:--</span></div>
+        </div>
+
+        <div class="footer">All Rights Reserved | Made By Samiyyan</div>
+    </div>
 </div>
-<br>
+
 <script>
-// Change city & country if needed
-const city = "Dhaka";
-const country = "Bangladesh";
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=1`)
-.then(res => res.json())
-.then(data => {
-    const t = data.data.timings;
+    // === PRAYER TIMES LOGIC ===
+    const city = "Dhaka";
+    const country = "Bangladesh";
 
-    document.getElementById("location").innerText =
-        `${city}, ${country} | ${data.data.date.readable}`;
+    fetch(`https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=1`)
+    .then(res => res.json())
+    .then(data => {
+        const t = data.data.timings;
+        const d = data.data.date;
 
-    document.getElementById("fajr").innerText = t.Fajr;
-    document.getElementById("dhuhr").innerText = t.Dhuhr;
-    document.getElementById("asr").innerText = t.Asr;
-    document.getElementById("maghrib").innerText = t.Maghrib;
-    document.getElementById("isha").innerText = t.Isha;
-})
-.catch(()=>{
-    document.getElementById("location").innerText = "Failed to load prayer times";
-});
+        document.getElementById("cityName").innerText = `${city}, ${country}`;
+        document.getElementById("dateToday").innerText = `${d.readable} | ${d.hijri.day} ${d.hijri.month.en}`;
+
+        document.getElementById("fajr").innerText = formatTime(t.Fajr);
+        document.getElementById("dhuhr").innerText = formatTime(t.Dhuhr);
+        document.getElementById("asr").innerText = formatTime(t.Asr);
+        document.getElementById("maghrib").innerText = formatTime(t.Maghrib);
+        document.getElementById("isha").innerText = formatTime(t.Isha);
+    })
+    .catch(() => {
+        document.getElementById("dateToday").innerText = "Failed to load times";
+    });
+
+    // Simple function to make 24h time look nice
+    function formatTime(time) {
+        return time; 
+    }
 </script>
 
 </body>
