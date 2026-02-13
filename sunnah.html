@@ -3,186 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Sunnah | Islam Topic</title>
+    <title>Daily Sunnah | Expanded</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
+        /* === THEME ENGINE VARIABLES === */
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --accent: #facc15;
-            --text-main: #ffffff;
-            --text-dim: #94a3b8;
-            --success: #4ade80;
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --item-bg: #f1f5f9; --success: #22c55e;
         }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 20px;
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --item-bg: rgba(255,255,255,0.05);
         }
 
-        .container {
-            max-width: 600px;
-            margin: 40px auto;
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1); --item-bg: rgba(255,255,255,0.05);
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        
+        body { background-color: var(--bg); color: var(--text-dark); font-family: 'Segoe UI', sans-serif; min-height: 100vh; padding-bottom: 40px; }
 
-        .header i { font-size: 3rem; color: var(--accent); margin-bottom: 10px; }
+        header { background: var(--header-grad); padding: 15px 20px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); }
+        nav { max-width: 1100px; margin: auto; display: flex; align-items: center; justify-content: space-between; }
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; }
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
 
-        /* Sunnah Card */
-        .sunnah-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            padding: 25px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 20px;
-        }
+        .container { max-width: 600px; margin: 30px auto; padding: 0 20px; }
 
-        .category-title {
-            color: var(--accent);
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
+        /* Progress Bar */
+        .progress-container { background: var(--card-bg); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.85rem; font-weight: 600; }
+        .bar-bg { background: var(--item-bg); height: 8px; border-radius: 10px; overflow: hidden; }
+        .bar-fill { background: var(--primary); height: 100%; width: 0%; transition: width 0.5s ease-out; }
 
-        .habit-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+        .random-box { background: var(--card-bg); padding: 25px; border-radius: 20px; border: 2px dashed var(--primary); text-align: center; margin-bottom: 30px; }
+        #randomSunnah { font-size: 1.1rem; font-style: italic; line-height: 1.5; }
 
-        .habit-item:hover { background: rgba(250, 204, 21, 0.05); }
+        .sunnah-card { background: var(--card-bg); padding: 25px; border-radius: 24px; border: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .category-title { color: var(--primary); font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 
-        .checkbox {
-            width: 22px;
-            height: 22px;
-            border: 2px solid var(--accent);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
-        }
+        .habit-item { display: flex; align-items: center; gap: 15px; padding: 14px; background: var(--item-bg); border-radius: 15px; margin-bottom: 12px; cursor: pointer; border: 1px solid transparent; }
+        .habit-item:hover { border-color: var(--primary); }
+        .checkbox { width: 24px; height: 24px; border: 2.5px solid var(--primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .habit-item.checked .checkbox { background: var(--success); border-color: var(--success); }
+        .habit-item.checked .checkbox::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 12px; color: white; }
+        .habit-item.checked span { text-decoration: line-through; opacity: 0.5; }
 
-        .habit-item.checked .checkbox {
-            background: var(--success);
-            border-color: var(--success);
-        }
-
-        .habit-item.checked .checkbox::after {
-            content: '\f00c';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 12px;
-            color: #000;
-        }
-
-        .habit-item.checked span {
-            text-decoration: line-through;
-            opacity: 0.5;
-        }
-
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: var(--text-dim);
-            text-decoration: none;
-        }
-
-        .random-box {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px dashed var(--accent);
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Portal</a>
+<header>
+    <nav>
+        <a href="#" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Sunnah Tracker</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+        </div>
+    </nav>
+</header>
 
-    <div class="header">
-        <i class="fa-solid fa-heart"></i>
-        <h1>The Sunnah Way</h1>
-        <p style="color: var(--text-dim)">Follow the beautiful lifestyle of Prophet Muhammad (PBUH)</p>
+<div class="container">
+    <div class="progress-container">
+        <div class="progress-label">
+            <span>Daily Progress</span>
+            <span id="progressPercent">0%</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="progressBar"></div></div>
     </div>
 
     <div class="random-box">
-        <h3 style="color: var(--accent); font-size: 0.9rem; margin-bottom: 8px;">SUNNAH OF THE MOMENT</h3>
-        <p id="randomSunnah" style="font-style: italic;">"Smiling at your brother is an act of charity."</p>
+        <h3>Sunnah of the Moment</h3>
+        <p id="randomSunnah">"Assalamu Alaikum"</p>
     </div>
 
-    <div class="sunnah-card">
-        <div class="category-title"><i class="fa-solid fa-sun"></i> Morning Sunnahs</div>
-        <div class="habit-item" onclick="toggleHabit(this)">
-            <div class="checkbox"></div>
-            <span>Waking up and rubbing the face to remove sleep.</span>
+    <div id="sunnahLists">
         </div>
-        <div class="habit-item" onclick="toggleHabit(this)">
-            <div class="checkbox"></div>
-            <span>Reciting the Dua after waking up.</span>
-        </div>
-        <div class="habit-item" onclick="toggleHabit(this)">
-            <div class="checkbox"></div>
-            <span>Using the Miswak (Siwak) for oral hygiene.</span>
-        </div>
-    </div>
-
-    <div class="sunnah-card">
-        <div class="category-title"><i class="fa-solid fa-utensils"></i> Eating & Drinking</div>
-        <div class="habit-item" onclick="toggleHabit(this)">
-            <div class="checkbox"></div>
-            <span>Saying 'Bismillah' before starting.</span>
-        </div>
-        <div class="habit-item" onclick="toggleHabit(this)">
-            <div class="checkbox"></div>
-            <span>Eating with the right hand.</span>
-        </div>
-        <div class="habit-item" onclick="toggleHabit(this)">
-            <div class="checkbox"></div>
-            <span>Sitting down while drinking water.</span>
-        </div>
-    </div>
 </div>
 
+<footer>All Rights Reserved | Made By Samiyyan</footer>
+
 <script>
-    const randomSunnahs = [
-        "Greeting others with 'Assalamu Alaikum'.",
-        "Entering the Masjid with the right foot.",
-        "Wearing perfume (for men) and staying clean.",
-        "Visiting the sick and making Dua for them.",
-        "Shaking hands when meeting someone.",
-        "Sleeping on the right side.",
-        "Speaking only good or remaining silent."
-    ];
+    // 1. DATA OBJECT (Increased Sunnahs)
+    const sunnahData = {
+        categories: [
+            {
+                name: "Morning & Awakening",
+                icon: "fa-sun",
+                items: [
+                    {id: "m1", text: "Rubbing the face to remove sleep."},
+                    {id: "m2", text: "Reciting: 'Alhamdulillahilladhi ahyana...'"},
+                    {id: "m3", text: "Using the Miswak immediately."},
+                    {id: "m4", text: "Washing hands three times after waking."}
+                ]
+            },
+            {
+                name: "Food & Drink",
+                icon: "fa-utensils",
+                items: [
+                    {id: "e1", text: "Saying 'Bismillah' at the start."},
+                    {id: "e2", text: "Eating with the right hand."},
+                    {id: "e3", text: "Sitting down while drinking."},
+                    {id: "e4", text: "Licking the fingers (sunnah of not wasting)."},
+                    {id: "e5", text: "Drinking in three breaths/gulps."}
+                ]
+            },
+            {
+                name: "Social Manners",
+                icon: "fa-handshake",
+                items: [
+                    {id: "s1", text: "Smiling at others."},
+                    {id: "s2", text: "Being the first to say 'Salam'."},
+                    {id: "s3", text: "Visiting the sick."},
+                    {id: "s4", text: "Shaking hands when meeting."}
+                ]
+            },
+            {
+                name: "Before Sleep",
+                icon: "fa-moon",
+                items: [
+                    {id: "n1", text: "Performing Wudu before bed."},
+                    {id: "n2", text: "Dusting the bed three times."},
+                    {id: "n3", text: "Sleeping on the right side."},
+                    {id: "n4", text: "Reciting Ayatul Kursi."}
+                ]
+            }
+        ],
+        quotes: [
+            "Greeting others is an act of peace.",
+            "The best of you are those with best character.",
+            "Cleanliness is half of faith.",
+            "Lowering your gaze is a beauty of the soul.",
+            "Be kind to neighbors and guests."
+        ]
+    };
 
-    // Show a random sunnah on load
-    document.getElementById('randomSunnah').innerText = `"${randomSunnahs[Math.floor(Math.random() * randomSunnahs.length)]}"`;
+    // 2. FETCH API SIMULATION
+    // This converts the object into a URL-like format so fetch can read it
+    const dataUrl = "data:application/json;base64," + btoa(JSON.stringify(sunnahData));
 
-    function toggleHabit(element) {
-        element.classList.toggle('checked');
-        
-        // Add a small vibration for satisfaction if on mobile
-        if (navigator.vibrate) navigator.vibrate(20);
+    async function initialize() {
+        try {
+            const response = await fetch(dataUrl);
+            const data = await response.json();
+            
+            // Render Random Quote
+            document.getElementById('randomSunnah').innerText = `"${data.quotes[Math.floor(Math.random() * data.quotes.length)]}"`;
+
+            // Render Lists
+            const saved = JSON.parse(localStorage.getItem('sunnah_progress') || '{}');
+            const listContainer = document.getElementById('sunnahLists');
+            
+            listContainer.innerHTML = data.categories.map(cat => `
+                <div class="sunnah-card">
+                    <div class="category-title"><i class="fa-solid ${cat.icon}"></i> ${cat.name}</div>
+                    ${cat.items.map(item => `
+                        <div class="habit-item ${saved[item.id] ? 'checked' : ''}" 
+                             data-id="${item.id}" onclick="toggleHabit(this)">
+                            <div class="checkbox"></div>
+                            <span>${item.text}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+
+            updateProgress();
+        } catch (e) { console.error("Load Error", e); }
     }
+
+    function toggleHabit(el) {
+        el.classList.toggle('checked');
+        const saved = JSON.parse(localStorage.getItem('sunnah_progress') || '{}');
+        saved[el.dataset.id] = el.classList.contains('checked');
+        localStorage.setItem('sunnah_progress', JSON.stringify(saved));
+        updateProgress();
+        if (navigator.vibrate) navigator.vibrate(15);
+    }
+
+    function updateProgress() {
+        const total = document.querySelectorAll('.habit-item').length;
+        const checked = document.querySelectorAll('.habit-item.checked').length;
+        const percent = Math.round((checked / total) * 100) || 0;
+        document.getElementById('progressBar').style.width = percent + "%";
+        document.getElementById('progressPercent').innerText = percent + "%";
+    }
+
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+
+    // Run on start
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
+    initialize();
 </script>
 
 </body>
