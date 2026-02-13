@@ -3,32 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramadan | Topic</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Ramadan | Topic Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-         *{
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
+        /* === THEME ENGINE VARIABLES === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --text-dark: #1e293b; --text-muted: #64748b; --icon-bg: #ebfaf3;
+            --border: rgba(0, 0, 0, 0.05);
         }
 
-        body{
-            background: #0f172a;
-            color: #ffffff;
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --text-dark: #f8fafc; --text-muted: #94a3b8; --icon-bg: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
         }
 
-        /* Header */
-        header{
-            background: linear-gradient(135deg, #06385f9b, #0a022c5b);
-            padding: 15px 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.414);
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --text-dark: #ffffff; --text-muted: #c4b5fd; --icon-bg: rgba(45, 27, 78, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --text-dark: #ffffff; --text-muted: #d6d3d1; --icon-bg: rgba(68, 64, 60, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: 0.3s ease; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* Toolbar / Header */
+        header {
+            background: var(--header-grad);
+            padding: 20px;
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        nav{
+        nav {
             max-width: 1100px;
             margin: auto;
             display: flex;
@@ -36,89 +61,120 @@
             justify-content: space-between;
         }
 
-        .logo{
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #facc15;
-            text-align: center;
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.3rem; font-weight: 800; color: white; letter-spacing: 1px; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        /* Grid Layout */
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
-        /* Responsive */
-        @media (max-width: 600px){
-            .logo{
-                font-size: 20px;
-            }
-        }
-        .cards{
+        .cards-grid {
             display: grid;
-            margin: 50px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
-        .card{
-            height: 150px;
-            width: 150px;
-            background-color: #052543f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            border-radius: 20px;
-            box-shadow: 0 0 0 10px rgba(0, 0, 0, .5);
-            margin: 50px;
-        }
-        .card span{
-            font-size: 50px;
-        }
-        .card a{
+
+        .card {
+            background: var(--icon-bg);
+            border: 1px solid var(--border);
             text-decoration: none;
-            color: white;
+            padding: 30px 15px;
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.03);
         }
-        .fa-book-quran{
-            font-size: 50px;
-            margin: 10px;
+
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card:active { transform: scale(0.95); }
+
+        .card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            line-height: 1.2;
+            font-weight: 700;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 400px) {
+            .cards-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <a href="index.html" style="text-decoration: none;"><header>
-        <nav>
-            <h2 class="logo">
-                Ramadan | Topic
-            </h2>
-        </nav>
-    </header></a>
-    <div class="cards">
-        <div class="card">
-            <a href="calender.html">
-            <span>&#128197;</span>
-            <a href="calender.html"><h3>RAMADAN </h3></a>
-            <a href="calender.html"><h3>Calender</h3></a>
-            </a>
+
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Ramadan</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
         </div>
-        <div class="card">
-            <a href="dua-ramadan.html">
-                <span><i class="fas fa-hands-praying"></i></span>
-            <a href="dua-ramadan.html"><h3>Dua Of </h3></a>
-            <a href="dua-ramadan.html"><h3>Ramadan</h3></a>
-            </a>
-        </div>
-        <div class="card">
-            <a href="sf-time.html">
-                <span>&#x23F2;</span>
-            <a href="sf-time.html"><h3>Seheri and </h3></a>
-            <a href="sf-time.html"> <h3>Iftar Time</h3></a>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="cards-grid">
+        <a href="calender.html" class="card">
+            <i class="fa-solid fa-calendar-days"></i>
+            <h3>Ramadan<br>Calendar</h3>
         </a>
-        </div>
-        <div class="card">
-            <a href="nt.html">
-                <span>&#x23F0;</span>
-            <a href="nt.html"><h3>Alarm</h3></a>
-            </a>
-        </div>
+
+        <a href="dua-ramadan.html" class="card">
+            <i class="fa-solid fa-hands-praying"></i>
+            <h3>Dua of<br>Ramadan</h3>
+        </a>
+
+        <a href="sf-time.html" class="card">
+            <i class="fa-solid fa-clock"></i>
+            <h3>Sehri &<br>Iftar Time</h3>
+        </a>
+
+        <a href="recipe.html" class="card">
+            <i class="fa-solid fa-video"></i>
+            <h3>Ramadan<br>Vlogs</h3>
+        </a>
     </div>
-    <footer>
-        <span style="margin: 20px;">All right reserved | Made By Samiyyan</span>
-    </footer>
-    <br><br>
+</div>
+
+<footer>
+    <span>All rights reserved | Made By Samiyyan</span>
+</footer>
+
+<script>
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+
+    // Sync theme with localStorage
+    const savedTheme = localStorage.getItem('user_theme_pref') || 'emerald';
+    setTheme(savedTheme);
+</script>
+
 </body>
 </html>
