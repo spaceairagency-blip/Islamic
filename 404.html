@@ -1,1 +1,126 @@
-<h1>This page dosent exists</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page not found</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        /* === THEME ENGINE VARIABLES === */
+        :root {
+            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --header-grad: linear-gradient(135deg, #00d285, #00b570);
+            --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
+            --border: rgba(0, 0, 0, 0.05); --screen-bg: #1e293b;
+        }
+
+        [data-theme="midnight"] {
+            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --header-grad: linear-gradient(135deg, #1e293b, #334155);
+            --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1); --screen-bg: #020617;
+        }
+
+        [data-theme="royal"] {
+            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
+            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
+            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
+            --border: rgba(255, 255, 255, 0.1); --screen-bg: #130c25;
+        }
+
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --screen-bg: #000000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-dark);
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: var(--header-grad);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        nav {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
+        .logo { font-size: 1.2rem; font-weight: 800; color: white; }
+
+        .theme-dots { display: flex; gap: 8px; }
+        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+        main{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+        main {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+        <h2 class="logo">Page Not Found</h2>
+        <div class="theme-dots">
+            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="main-404">
+        <div class="number">
+            <img src="image-removebg-preview.png" height="100px">
+        </div>
+        <div class="text">
+            <h2 style="font-weight: 20;">Page not found</h2>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="para">
+            <h4 style="font-weight: 100;">The page you’re looking for might have <br> been moved or no longer  exists.</h4>
+        </div>
+    </div> 
+</main>    
+<script>
+    // === THEME ENGINE ===
+    function setTheme(t) {
+        document.documentElement.setAttribute('data-theme', t);
+        localStorage.setItem('user_theme_pref', t);
+    }
+    setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
+</script>
+
+</body>
+</html>
