@@ -61,7 +61,6 @@
             justify-content: space-between;
         }
 
-        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
         .logo { font-size: 1.1rem; font-weight: 800; color: white; }
 
         .theme-dots { display: flex; gap: 8px; }
@@ -73,11 +72,24 @@
             padding: 20px;
         }
 
-        /* City Selector */
-        .select-box {
-            position: relative;
-            margin-bottom: 25px;
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 15px 0 10px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .select-box { position: relative; margin-bottom: 20px; }
 
         select {
             width: 100%;
@@ -90,73 +102,57 @@
             font-weight: 600;
             appearance: none;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .select-box::after {
-            content: '\f107';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--primary);
-        }
-
-        /* Time Cards */
         .card {
             background: var(--card-bg);
-            padding: 25px;
+            padding: 20px;
             border-radius: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
         }
 
         .label {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .time {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
             color: var(--primary);
-            margin: 5px 0;
         }
 
         .countdown {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--primary-dark);
             background: var(--input-bg);
             display: inline-block;
             padding: 4px 12px;
             border-radius: 50px;
-            margin-top: 10px;
+            margin-top: 8px;
             font-weight: 700;
         }
 
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-muted);
-            font-size: 0.8rem;
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
+
+        .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
 <header>
     <nav>
-        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <h2 class="logo">সেহরি ও ইফতার</h2>
+        <h2 class="logo"><i class="fa-solid fa-kaaba"></i> সেহরি ও ইফতার ২০২৬</h2>
         <div class="theme-dots">
             <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
             <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
@@ -180,25 +176,38 @@
         </select>
     </div>
 
-    <div class="card">
-        <div class="label"><i class="fa-solid fa-moon"></i> আজকের সেহরি শেষ</div>
-        <div id="sehri" class="time">--:--</div>
-        <div id="sehriCount" class="countdown">পরবর্তী সেহরি লোড হচ্ছে...</div>
+    <div class="section-title">আজকের সময়সূচী</div>
+    <div class="grid">
+        <div class="card">
+            <div class="label">সেহরি শেষ</div>
+            <div id="sehriToday" class="time">--:--</div>
+            <div id="sehriCount" class="countdown">...</div>
+        </div>
+        <div class="card">
+            <div class="label">ইফতার শুরু</div>
+            <div id="iftarToday" class="time">--:--</div>
+            <div id="iftarCount" class="countdown">...</div>
+        </div>
     </div>
 
-    <div class="card">
-        <div class="label"><i class="fa-solid fa-sun"></i> আজকের ইফতার</div>
-        <div id="iftar" class="time">--:--</div>
-        <div id="iftarCount" class="countdown">ইফতারের সময় লোড হচ্ছে...</div>
+    <div class="section-title">আগামীকালের সময়সূচী</div>
+    <div class="grid">
+        <div class="card" style="opacity: 0.9;">
+            <div class="label">সেহরি শেষ</div>
+            <div id="sehriTomorrow" class="time" style="font-size: 1.5rem;">--:--</div>
+        </div>
+        <div class="card" style="opacity: 0.9;">
+            <div class="label">ইফতার শুরু</div>
+            <div id="iftarTomorrow" class="time" style="font-size: 1.5rem;">--:--</div>
+        </div>
     </div>
 
     <div class="footer">
-        All rights reserved | Made By Samiyyan
+        © 2026 | All rights reserved | Made By Samiyyan
     </div>
 </div>
 
 <script>
-    // === THEME ENGINE ===
     function setTheme(t) {
         document.documentElement.setAttribute('data-theme', t);
         localStorage.setItem('user_theme_pref', t);
@@ -206,26 +215,42 @@
     setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
     const citySelect = document.getElementById("city");
-    const sehriEl = document.getElementById("sehri");
-    const iftarEl = document.getElementById("iftar");
-    let currentTimings = {};
+    let timingsToday = {};
+    let timingsTomorrow = {};
 
-    async function loadTimes(city) {
+    async function loadAllTimes(city) {
         const today = new Date();
-        const date = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-        const url = `https://api.aladhan.com/v1/timingsByCity/${date}?city=${city}&country=Bangladesh&method=1`;
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+
+        const dateToday = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+        const dateTomorrow = `${tomorrow.getDate()}-${tomorrow.getMonth() + 1}-${tomorrow.getFullYear()}`;
 
         try {
-            const res = await fetch(url);
-            const data = await res.json();
-            currentTimings = data.data.timings;
+            // Load Today
+            const resT = await fetch(`https://api.aladhan.com/v1/timingsByCity/${dateToday}?city=${city}&country=Bangladesh&method=1`);
+            const dataT = await resT.json();
+            timingsToday = dataT.data.timings;
 
-            sehriEl.textContent = formatTime(currentTimings.Fajr);
-            iftarEl.textContent = formatTime(currentTimings.Maghrib);
-            startCountdown();
+            // Load Tomorrow
+            const resM = await fetch(`https://api.aladhan.com/v1/timingsByCity/${dateTomorrow}?city=${city}&country=Bangladesh&method=1`);
+            const dataM = await resM.json();
+            timingsTomorrow = dataM.data.timings;
+
+            updateUI();
         } catch (e) {
             console.error("Error loading times");
         }
+    }
+
+    function updateUI() {
+        document.getElementById("sehriToday").textContent = formatTime(timingsToday.Fajr);
+        document.getElementById("iftarToday").textContent = formatTime(timingsToday.Maghrib);
+        
+        document.getElementById("sehriTomorrow").textContent = formatTime(timingsTomorrow.Fajr);
+        document.getElementById("iftarTomorrow").textContent = formatTime(timingsTomorrow.Maghrib);
+        
+        startCountdown();
     }
 
     function formatTime(time24) {
@@ -237,10 +262,10 @@
     }
 
     function startCountdown() {
+        // Clear any existing interval if needed, though simpler to just let it run
         setInterval(() => {
-            const now = new Date();
-            updateTimer(currentTimings.Fajr, "sehriCount", "সেহরি শেষ হতে বাকি: ");
-            updateTimer(currentTimings.Maghrib, "iftarCount", "ইফতার হতে বাকি: ");
+            updateTimer(timingsToday.Fajr, "sehriCount", "বাকি: ");
+            updateTimer(timingsToday.Maghrib, "iftarCount", "বাকি: ");
         }, 1000);
     }
 
@@ -252,8 +277,9 @@
         target.setHours(hrs, mins, 0);
 
         let diff = target - now;
+        
         if (diff < 0) {
-            document.getElementById(elementId).textContent = "সময় অতিক্রান্ত";
+            document.getElementById(elementId).textContent = "সময় শেষ";
             return;
         }
 
@@ -261,11 +287,15 @@
         const m = Math.floor((diff % 3600000) / 60000);
         const s = Math.floor((diff % 60000) / 1000);
 
-        document.getElementById(elementId).textContent = `${label} ${h}ঘণ্টা ${m}মিনিট ${s}সেকেন্ড`;
+        let timeStr = "";
+        if(h > 0) timeStr += `${h}ঘ: `;
+        timeStr += `${m}মি: ${s}সে`;
+
+        document.getElementById(elementId).textContent = label + timeStr;
     }
 
-    citySelect.addEventListener("change", () => loadTimes(citySelect.value));
-    loadTimes(citySelect.value);
+    citySelect.addEventListener("change", () => loadAllTimes(citySelect.value));
+    loadAllTimes(citySelect.value);
 </script>
 
 </body>
