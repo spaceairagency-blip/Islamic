@@ -19,6 +19,21 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; transition: background 0.3s ease; }
         body { background: var(--bg); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; }
 
+        /* === RAMADAN COUNTDOWN STYLES === */
+        #ramadan-countdown-banner {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 12px;
+            margin: 15px auto;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            max-width: 280px;
+            display: none;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .timer-text { color: #fff; font-family: monospace; font-size: 1.1rem; display: block; margin-top: 4px; }
+
         /* === MEDINA POP-OUT TRANSITION === */
         #transition-overlay {
             position: fixed; inset: 0; background: rgba(255, 255, 255, 0.95); z-index: 9999;
@@ -56,7 +71,6 @@
         .card i { width: 75px; height: 75px; background: var(--icon-bg); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--primary-dark); font-size: 1.8rem; margin-bottom: 12px; }
         .card h3 { color: var(--text-dark); font-size: 0.8rem; font-weight: 600; text-align: center; }
 
-        /* Badge for the Amal Tracker */
         .badge-count { position: absolute; top: -5px; right: 5px; background: #ff4757; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 12px; border: 2px solid white; font-weight: bold; z-index: 5; }
 
         /* === MODAL === */
@@ -67,14 +81,6 @@
         .btn-clear { color: #ff4757; font-size: 0.75rem; cursor: pointer; margin-top: 25px; display: block; text-decoration: underline; font-weight: bold; padding-top: 15px; border-top: 1px solid #eee; }
 
         footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.8rem; }
-    
-        /* .header-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.6)),
-    url('https://images.unsplash.com/photo-1584551246679-0daf3d275d0f');
-    background-size: cover;
-    background-position: center;
-} */
-
     </style>
 </head>
 <body>
@@ -94,6 +100,12 @@
         </div>
         <div id="hijriDisplay">Loading Date...</div>
     </div>
+    
+    <div id="ramadan-countdown-banner">
+        🌙 RAMADAN ANNOUNCEMENT IN:
+        <span id="countdown-timer" class="timer-text">00:00:00</span>
+    </div>
+
     <h1 id="salahName">Loading...</h1>
     <p>Current Prayer</p>
     <div class="times-row">
@@ -105,14 +117,11 @@
 <div class="menu-sheet">
     <div class="grid">
         <a href="99name.html" class="card"><i class="fa-solid fa-star-and-crescent"></i><h3>99 Names</h3></a>
-        
         <div class="card" id="ramadanCard">
             <span class="badge-count" id="amalBadge">0</span>
             <i class="fa-solid fa-moon"></i>
             <h3>Ramadan <br>Amals</h3>
         </div>
-        <a href="cel.html" class="card"><i class="fa-solid fa-burst"></i><h3>RAMADAN <br> CELEBRATION</h3></a>
-
         <a href="quran.html" class="card"><i class="fa-solid fa-book-quran"></i><h3>Quran</h3></a>
         <a href="weather.html" class="card"><i class="fa-solid fa-trophy"></i><h3>Quiz</h3></a>
         <a href="ramadan.html" class="card"><i class="fa-solid fa-mosque"></i><h3>Ramadan</h3></a>
@@ -135,12 +144,9 @@
     <div class="modal-content">
         <h2 id="ramadanTitle" style="color:var(--primary-dark)">Ramadan Day</h2>
         <p id="ramadanAmal" style="margin-top:20px; font-size:1.1rem; line-height:1.5; color: #333;"></p>
-        
         <div id="statsText" style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); font-weight: bold;">Completed: 0 / 30</div>
-        
         <button id="doneBtn" class="btn-done" onclick="markAsDone()">MashaAllah, Done!</button>
         <button onclick="closeModal()" style="margin-top:15px; background:none; border:none; color:var(--text-muted); cursor:pointer; text-decoration: underline;">Close</button>
-        
         <span class="btn-clear" onclick="resetProgress()">CLEAR ALL PROGRESS</span>
     </div>
 </div>
@@ -149,7 +155,9 @@
 
 <script>
 // --- CONFIG & DATA ---
-const ramadanStart = new Date("2026-02-19"); 
+const ramadanStart = new Date("2026-02-19T00:00:00"); 
+const targetNotification = new Date("2026-02-18T18:00:00"); // 6:00 PM the day before
+
 const amals = [
     "Read Surah Al-Fatiha 5 times with translation.", "Recite 'Rabbana atina...' 10 times.",
     "Read Surah Al-Ikhlas 20 times.", "Recite 'Allahumma innaka 'afuwwun...' 33 times.",
@@ -167,6 +175,41 @@ const amals = [
     "Read Surah Al-A'la.", "Recite 'Allahumma inni as’aluka al-jannah' 3x.",
     "Read Surah Al-Inshirah 10 times.", "Final Day: Read 3 Quls 10 times each."
 ];
+
+// --- COUNTDOWN ENGINE ---
+function initCountdown() {
+    const banner = document.getElementById('ramadan-countdown-banner');
+    const timerText = document.getElementById('countdown-timer');
+
+    const updateTimer = setInterval(() => {
+        const now = new Date();
+        const diff = targetNotification - now;
+
+        if (diff > 0) {
+            banner.style.display = 'block';
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+            timerText.textContent = `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        } else {
+            banner.style.display = 'none';
+            if (!localStorage.getItem('ramadan_announced')) {
+                showAnnouncementPopup();
+                localStorage.setItem('ramadan_announced', 'true');
+            }
+            clearInterval(updateTimer);
+        }
+    }, 1000);
+}
+
+function showAnnouncementPopup() {
+    const modal = document.getElementById('ramadanModal');
+    document.getElementById('ramadanTitle').textContent = "Ramadan Mubarak! 🌙";
+    document.getElementById('ramadanAmal').innerHTML = "Ramadan starts tomorrow! <br><br>First Taraweeh is tonight. May Allah accept our fasts and prayers.";
+    document.getElementById('doneBtn').textContent = "Ameen!";
+    document.getElementById('doneBtn').onclick = closeModal;
+    modal.style.display = "flex";
+}
 
 // --- THEME & TRANSITION ---
 function setTheme(t) {
@@ -189,13 +232,18 @@ document.querySelectorAll('.card').forEach(card => {
 
 // --- PRAYER & PROGRESS ENGINE ---
 async function initApp() {
+    initCountdown();
     try {
         const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Dhaka&country=Bangladesh&method=1');
         const data = (await res.json()).data;
         document.getElementById('hijriDisplay').textContent = `${data.date.hijri.day} ${data.date.hijri.month.en} ${data.date.hijri.year}`;
         updateSalahTime(data.timings);
         updateUI(); 
-        checkAutoOpen(); 
+        
+        // Only show daily amal if the big announcement isn't active
+        if (new Date() >= ramadanStart || new Date() < targetNotification) {
+            checkAutoOpen(); 
+        }
     } catch(e) { 
         document.getElementById('salahName').innerHTML = "No <br> Internet"; 
     }
@@ -224,8 +272,9 @@ function updateSalahTime(timings) {
 function getRamadanDay() {
     const today = new Date();
     today.setHours(0,0,0,0);
-    ramadanStart.setHours(0,0,0,0);
-    return Math.floor((today - ramadanStart) / 86400000) + 1;
+    const rs = new Date(ramadanStart);
+    rs.setHours(0,0,0,0);
+    return Math.floor((today - rs) / 86400000) + 1;
 }
 
 function updateUI() {
@@ -236,7 +285,7 @@ function updateUI() {
 
 function markAsDone() {
     const day = getRamadanDay();
-    if (day < 1 || day > 30) return;
+    if (day < 1 || day > 30) { closeModal(); return; }
     let completed = JSON.parse(localStorage.getItem('completed_amals') || "[]");
     if (!completed.includes(day)) {
         completed.push(day);
@@ -250,6 +299,7 @@ function markAsDone() {
 function resetProgress() {
     if (confirm("This will clear all your saved Amal challenges. Continue?")) {
         localStorage.removeItem('completed_amals');
+        localStorage.removeItem('ramadan_announced');
         sessionStorage.removeItem('opened_today');
         updateUI();
         closeModal();
@@ -261,6 +311,9 @@ function showAmalModal() {
     const modal = document.getElementById('ramadanModal');
     const btn = document.getElementById('doneBtn');
     
+    // Reset button behavior from announcement mode
+    btn.onclick = markAsDone;
+
     if (day >= 1 && day <= 30) {
         document.getElementById('ramadanTitle').textContent = `Ramadan Day ${day}`;
         document.getElementById('ramadanAmal').textContent = amals[day - 1];
