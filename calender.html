@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title>Ramadan Calendar 2026 | Islam Topic</title>
+    <title>Ramadan Calendar 2026 | Bangladesh</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
         /* === THEME ENGINE VARIABLES === */
@@ -95,8 +95,6 @@
             outline: none;
         }
 
-        input:focus { border-color: var(--primary); }
-
         .fetch-btn {
             background: var(--primary);
             color: white;
@@ -174,8 +172,8 @@
 
 <header>
     <nav>
-        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        <h2 class="logo">Ramadan 2026</h2>
+        <a href="#" class="back-btn"><i class="fa-solid fa-moon"></i></a>
+        <h2 class="logo">Ramadan 2026 Bangladesh</h2>
         <div class="theme-dots">
             <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
             <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
@@ -187,18 +185,17 @@
 
 <div class="container">
     <div class="controls">
-        <input id="city" placeholder="City (e.g. London)" value="Dhaka">
-        <input id="country" placeholder="Country (e.g. UK)" value="Bangladesh">
+        <input id="city" placeholder="City" value="Dhaka" readonly>
         <button class="fetch-btn" onclick="loadRamadan()">
-            <i class="fa-solid fa-calendar-check"></i> Show Calendar
+            <i class="fa-solid fa-calendar-days"></i> Refresh Calendar
         </button>
     </div>
 
-    <div id="loading"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p>Loading times...</p></div>
+    <div id="loading"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p>Syncing Times...</p></div>
     <div id="list" class="list"></div>
 
     <div class="footer">
-       | ALL RIGHT RESERVED | MADE BY SAMIYYAN | &copy; 2026
+       | ALL RIGHTS RESERVED | MADE BY SAMIYYAN | &copy; 2026
     </div>
 </div>
 
@@ -210,62 +207,63 @@
     }
     setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-    // === CALENDAR LOGIC ===
-    const list = document.getElementById("list");
-    const loading = document.getElementById("loading");
+    // === RAMADAN DATA 2026 (DHAKA) ===
+    const ramadanData = [
+        { d: "19 Feb", s: "5:13", i: "5:56" }, { d: "20 Feb", s: "5:12", i: "5:57" },
+        { d: "21 Feb", s: "5:12", i: "5:57" }, { d: "22 Feb", s: "5:11", i: "5:58" },
+        { d: "23 Feb", s: "5:10", i: "5:58" }, { d: "24 Feb", s: "5:09", i: "5:59" },
+        { d: "25 Feb", s: "5:09", i: "5:59" }, { d: "26 Feb", s: "5:08", i: "6:00" },
+        { d: "27 Feb", s: "5:07", i: "6:00" }, { d: "28 Feb", s: "5:06", i: "6:01" },
+        { d: "01 Mar", s: "5:05", i: "6:01" }, { d: "02 Mar", s: "5:05", i: "6:02" },
+        { d: "03 Mar", s: "5:04", i: "6:02" }, { d: "04 Mar", s: "5:03", i: "6:03" },
+        { d: "05 Mar", s: "5:02", i: "6:03" }, { d: "06 Mar", s: "5:01", i: "6:03" },
+        { d: "07 Mar", s: "5:00", i: "6:04" }, { d: "08 Mar", s: "4:59", i: "6:04" },
+        { d: "09 Mar", s: "4:58", i: "6:05" }, { d: "10 Mar", s: "4:57", i: "6:05" },
+        { d: "11 Mar", s: "4:57", i: "6:06" }, { d: "12 Mar", s: "4:56", i: "6:06" },
+        { d: "13 Mar", s: "4:55", i: "6:07" }, { d: "14 Mar", s: "4:54", i: "6:07" },
+        { d: "15 Mar", s: "4:53", i: "6:07" }, { d: "16 Mar", s: "4:52", i: "6:08" },
+        { d: "17 Mar", s: "4:51", i: "6:08" }, { d: "18 Mar", s: "4:50", i: "6:09" },
+        { d: "19 Mar", s: "4:49", i: "6:09" }, { d: "20 Mar", s: "4:48", i: "6:09" }
+    ];
 
-    async function loadRamadan() {
-        const city = document.getElementById("city").value.trim();
-        const country = document.getElementById("country").value.trim();
+    function loadRamadan() {
+        const list = document.getElementById("list");
+        const loading = document.getElementById("loading");
         
-        if(!city || !country) return alert("Please enter both city and country.");
-
         list.innerHTML = "";
         loading.style.display = "block";
 
-        // Ramadan 1447 starts approx Feb 18, 2026
-        // Hijri Month 9 (Ramadan) Year 1447
-        const url = `https://api.aladhan.com/v1/hijriCalendarByCity?city=${city}&country=${country}&method=2&month=09&year=1447`;
-
-        try {
-            const res = await fetch(url);
-            const json = await res.json();
+        setTimeout(() => {
             loading.style.display = "none";
+            
+            // Highlight Logic
+            const today = new Date();
+            const todayStr = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
-            const today = new Date().toLocaleDateString('en-GB');
-
-            json.data.forEach((d, i) => {
-                const gregDate = d.date.gregorian.date;
-                const isToday = (gregDate === today) ? 'today' : '';
+            ramadanData.forEach((day, index) => {
+                const isToday = (day.d === todayStr) ? 'today' : '';
                 
                 list.innerHTML += `
                     <div class="day-card ${isToday}">
                         <div class="day-header">
-                            <span class="day-num">Ramadan ${i+1}</span>
-                            <span class="greg-date">${d.date.gregorian.day}, ${d.date.gregorian.date}</span>
+                            <span class="day-num">Ramadan ${index + 1}</span>
+                            <span class="greg-date">${day.d}, 2026</span>
                         </div>
                         <div class="timing-row">
-                            <span class="time-label"><i class="fa-solid fa-moon"></i> Sehri Ends (Fajr)</span>
-                            <span class="time-val">${d.timings.Fajr.split(" ")[0]}</span>
+                            <span class="time-label"><i class="fa-solid fa-moon"></i> Sehri Ends</span>
+                            <span class="time-val">${day.s} AM</span>
                         </div>
                         <div class="timing-row">
-                            <span class="time-label"><i class="fa-solid fa-sun"></i> Iftar (Maghrib)</span>
-                            <span class="time-val">${d.timings.Maghrib.split(" ")[0]}</span>
+                            <span class="time-label"><i class="fa-solid fa-sun"></i> Iftar</span>
+                            <span class="time-val">${day.i} PM</span>
                         </div>
                     </div>
                 `;
             });
-
-            if(json.data.length === 0) list.innerHTML = "<p style='text-align:center'>No data found for this location.</p>";
-
-        } catch (err) {
-            loading.style.display = "none";
-            list.innerHTML = "<p style='color:red; text-align:center'>Network error. Please try again.</p>";
-        }
+        }, 600);
     }
 
-    // Auto-load if city exists
-    window.onload = () => { if(document.getElementById("city").value) loadRamadan(); };
+    window.onload = loadRamadan;
 </script>
 
 </body>
