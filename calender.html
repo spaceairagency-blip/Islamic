@@ -1,271 +1,182 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <title>Ramadan Calendar 2026 | Bangladesh</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রমজান ক্যালেন্ডার ২০২৬ | Islam Topic</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-        /* === THEME ENGINE VARIABLES === */
         :root {
-            --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
+            --primary: #00d285; --bg: #f8fafc;
             --header-grad: linear-gradient(135deg, #00d285, #00b570);
             --card-bg: #ffffff; --text-dark: #1e293b; --text-muted: #64748b;
             --border: rgba(0, 0, 0, 0.05); --input-bg: #f1f5f9;
         }
-
         [data-theme="midnight"] {
-            --primary: #38bdf8; --primary-dark: #0284c7; --bg: #0f172a;
+            --primary: #38bdf8; --bg: #0f172a;
             --header-grad: linear-gradient(135deg, #1e293b, #334155);
             --card-bg: #1e293b; --text-dark: #f8fafc; --text-muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
         }
-
-        [data-theme="royal"] {
-            --primary: #a78bfa; --primary-dark: #7c3aed; --bg: #1a1625;
-            --header-grad: linear-gradient(135deg, #2d1b4e, #4b2c85);
-            --card-bg: #2d1b4e; --text-dark: #ffffff; --text-muted: #c4b5fd;
-            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
-        }
-
-        [data-theme="gold"] {
-            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
-            --header-grad: linear-gradient(135deg, #44403c, #78716c);
-            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
-            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Hind Siliguri', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-dark); }
         
-        body {
-            background-color: var(--bg);
-            color: var(--text-dark);
-            font-family: 'Segoe UI', sans-serif;
-            min-height: 100vh;
+        header { background: var(--header-grad); padding: 15px; position: sticky; top: 0; z-index: 100; color: white; text-align: center; }
+        .theme-dots { display: flex; gap: 8px; justify-content: center; margin-top: 10px; }
+        .dot { width: 15px; height: 15px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
+
+        .container { max-width: 500px; margin: auto; padding: 15px; }
+        
+        /* Dashboard Card */
+        .dash-card { background: var(--card-bg); border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px; }
+        .time-box { text-align: center; padding: 10px; background: var(--input-bg); border-radius: 15px; }
+        .time-box h4 { font-size: 0.8rem; color: var(--text-muted); }
+        .time-box p { font-size: 1.2rem; font-weight: 800; color: var(--primary); }
+
+        /* Calendar Table */
+        .cal-list { display: grid; gap: 10px; }
+        .day-row { 
+            display: grid; grid-template-columns: 0.8fr 1.2fr 1fr 1fr; 
+            background: var(--card-bg); padding: 12px; border-radius: 12px;
+            font-size: 0.85rem; align-items: center; border: 1px solid var(--border);
         }
-
-        header {
-            background: var(--header-grad);
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        nav {
-            max-width: 1100px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .back-btn { color: white; text-decoration: none; font-size: 1.2rem; }
-        .logo { font-size: 1.1rem; font-weight: 800; color: white; }
-
-        .theme-dots { display: flex; gap: 8px; }
-        .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
-
-        .container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        /* Search Controls */
-        .controls {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 20px;
-            display: grid;
-            gap: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
-        }
-
-        input {
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--input-bg);
-            color: var(--text-dark);
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .fetch-btn {
-            background: var(--primary);
-            color: white;
-            font-weight: 700;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        /* Calendar List */
-        .list { display: grid; gap: 15px; }
-
-        .day-card {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 18px;
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .day-card.today {
-            border: 2px solid var(--primary);
-            box-shadow: 0 0 15px rgba(0, 210, 133, 0.2);
-        }
-
-        .day-card.today::before {
-            content: "TODAY";
-            position: absolute;
-            top: 10px;
-            right: -25px;
-            background: var(--primary);
-            color: white;
-            font-size: 0.6rem;
-            font-weight: 900;
-            padding: 4px 30px;
-            transform: rotate(45deg);
-        }
-
-        .day-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed var(--border);
-        }
-
-        .day-num { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
-        .greg-date { font-size: 0.8rem; color: var(--text-muted); }
-
-        .timing-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            padding: 10px;
-            background: var(--input-bg);
-            border-radius: 10px;
-        }
-
-        .time-label { font-size: 0.9rem; font-weight: 500; }
-        .time-val { font-weight: 700; color: var(--primary); }
-
-        .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.75rem; }
-
-        #loading { text-align: center; padding: 40px; display: none; }
+        .day-row.today { border: 2px solid var(--primary); background: rgba(0, 210, 133, 0.05); }
+        .head-row { font-weight: 700; background: var(--primary); color: white; border: none; }
+        
+        .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
 <header>
-    <nav>
-        <a href="index.html" class="back-btn"><i class="fa-solid fa-moon"></i></a>
-        <h2 class="logo">Ramadan 2026 Bangladesh</h2>
-        <div class="theme-dots">
-            <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
-            <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
-            <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
-            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
-        </div>
-    </nav>
+    <h3>রমজান ক্যালেন্ডার ২০২৬</h3>
+    <div class="theme-dots">
+        <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
+        <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
+    </div>
 </header>
 
 <div class="container">
-    <div class="controls">
-        <input id="city" placeholder="City" value="Dhaka" readonly>
-        <button class="fetch-btn" onclick="loadRamadan()">
-            <i class="fa-solid fa-calendar-days"></i> Refresh Calendar
-        </button>
+    <div class="dash-card">
+        <h3 id="currentDay">আজকের সময়সূচী</h3>
+        <div class="dash-grid">
+            <div class="time-box">
+                <h4>সেহরি শেষ</h4>
+                <p id="sToday">--:--</p>
+                <small id="sCount" style="color: var(--primary-dark); font-weight: bold;"></small>
+            </div>
+            <div class="time-box">
+                <h4>ইফতার শুরু</h4>
+                <p id="iToday">--:--</p>
+                <small id="iCount" style="color: var(--primary-dark); font-weight: bold;"></small>
+            </div>
+        </div>
     </div>
 
-    <div id="loading"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p>Syncing Times...</p></div>
-    <div id="list" class="list"></div>
+    <div class="section-title" style="margin-bottom:10px; font-weight:bold;">পুরো রমজান সময়সূচী (ঢাকা)</div>
+    <div class="day-row head-row">
+        <div>রমজান</div><div>তারিখ</div><div>সেহরি</div><div>ইফতার</div>
+    </div>
+    <div id="calendarList" class="cal-list">
+        </div>
 
     <div class="footer">
-       | ALL RIGHTS RESERVED | MADE BY SAMIYYAN | &copy; 2026
+        * ১লা রমজান চাঁদ দেখার ওপর নির্ভরশীল। <br>
+        © 2026 | Made By Samiyyan
     </div>
 </div>
 
 <script>
-    // === THEME ENGINE ===
     function setTheme(t) {
         document.documentElement.setAttribute('data-theme', t);
         localStorage.setItem('user_theme_pref', t);
     }
     setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
-    // === RAMADAN DATA 2026 (DHAKA) ===
+    // ২০২৬ রমজান ডাটা (ঢাকা ভিত্তিক)
+    // সেহরি টাইম ফজরের ৫ মিনিট আগে সেট করা হয়েছে
     const ramadanData = [
-        { d: "19 Feb", s: "5:13", i: "5:56" }, { d: "20 Feb", s: "5:12", i: "5:57" },
-        { d: "21 Feb", s: "5:12", i: "5:57" }, { d: "22 Feb", s: "5:11", i: "5:58" },
-        { d: "23 Feb", s: "5:10", i: "5:58" }, { d: "24 Feb", s: "5:09", i: "5:59" },
-        { d: "25 Feb", s: "5:09", i: "5:59" }, { d: "26 Feb", s: "5:08", i: "6:00" },
-        { d: "27 Feb", s: "5:07", i: "6:00" }, { d: "28 Feb", s: "5:06", i: "6:01" },
-        { d: "01 Mar", s: "5:05", i: "6:01" }, { d: "02 Mar", s: "5:05", i: "6:02" },
-        { d: "03 Mar", s: "5:04", i: "6:02" }, { d: "04 Mar", s: "5:03", i: "6:03" },
-        { d: "05 Mar", s: "5:02", i: "6:03" }, { d: "06 Mar", s: "5:01", i: "6:03" },
-        { d: "07 Mar", s: "5:00", i: "6:04" }, { d: "08 Mar", s: "4:59", i: "6:04" },
-        { d: "09 Mar", s: "4:58", i: "6:05" }, { d: "10 Mar", s: "4:57", i: "6:05" },
-        { d: "11 Mar", s: "4:57", i: "6:06" }, { d: "12 Mar", s: "4:56", i: "6:06" },
-        { d: "13 Mar", s: "4:55", i: "6:07" }, { d: "14 Mar", s: "4:54", i: "6:07" },
-        { d: "15 Mar", s: "4:53", i: "6:07" }, { d: "16 Mar", s: "4:52", i: "6:08" },
-        { d: "17 Mar", s: "4:51", i: "6:08" }, { d: "18 Mar", s: "4:50", i: "6:09" },
-        { d: "19 Mar", s: "4:49", i: "6:09" }, { d: "20 Mar", s: "4:48", i: "6:09" }
+        { r: 1, d: "19 Feb", s: "5:08", i: "5:56" },
+        { r: 2, d: "20 Feb", s: "5:07", i: "5:57" },
+        { r: 3, d: "21 Feb", s: "5:07", i: "5:57" },
+        { r: 4, d: "22 Feb", s: "5:06", i: "5:58" },
+        { r: 5, d: "23 Feb", s: "5:05", i: "5:58" },
+        { r: 6, d: "24 Feb", s: "5:04", i: "5:59" },
+        { r: 7, d: "25 Feb", s: "5:04", i: "5:59" },
+        { r: 8, d: "26 Feb", s: "5:03", i: "6:00" },
+        { r: 9, d: "27 Feb", s: "5:02", i: "6:00" },
+        { r: 10, d: "28 Feb", s: "5:01", i: "6:01" },
+        { r: 11, d: "01 Mar", s: "5:00", i: "6:01" },
+        { r: 12, d: "02 Mar", s: "5:00", i: "6:02" },
+        { r: 13, d: "03 Mar", s: "4:59", i: "6:02" },
+        { r: 14, d: "04 Mar", s: "4:58", i: "6:03" },
+        { r: 15, d: "05 Mar", s: "4:57", i: "6:03" },
+        { r: 16, d: "06 Mar", s: "4:56", i: "6:03" },
+        { r: 17, d: "07 Mar", s: "4:55", i: "6:04" },
+        { r: 18, d: "08 Mar", s: "4:54", i: "6:04" },
+        { r: 19, d: "09 Mar", s: "4:53", i: "6:05" },
+        { r: 20, d: "10 Mar", s: "4:52", i: "6:05" },
+        { r: 21, d: "11 Mar", s: "4:52", i: "6:06" },
+        { r: 22, d: "12 Mar", s: "4:51", i: "6:06" },
+        { r: 23, d: "13 Mar", s: "4:50", i: "6:07" },
+        { r: 24, d: "14 Mar", s: "4:49", i: "6:07" },
+        { r: 25, d: "15 Mar", s: "4:48", i: "6:07" },
+        { r: 26, d: "16 Mar", s: "4:47", i: "6:08" },
+        { r: 27, d: "17 Mar", s: "4:46", i: "6:08" },
+        { r: 28, d: "18 Mar", s: "4:45", i: "6:09" },
+        { r: 29, d: "19 Mar", s: "4:44", i: "6:09" },
+        { r: 30, d: "20 Mar", s: "4:43", i: "6:09" }
     ];
 
-    function loadRamadan() {
-        const list = document.getElementById("list");
-        const loading = document.getElementById("loading");
-        
-        list.innerHTML = "";
-        loading.style.display = "block";
+    function init() {
+        const listEl = document.getElementById("calendarList");
+        const today = new Date();
+        const todayStr = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
-        setTimeout(() => {
-            loading.style.display = "none";
-            
-            // Highlight Logic
-            const today = new Date();
-            const todayStr = today.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+        ramadanData.forEach(item => {
+            const isToday = item.d === todayStr;
+            if(isToday) {
+                document.getElementById("sToday").textContent = item.s + " AM";
+                document.getElementById("iToday").textContent = item.i + " PM";
+                document.getElementById("currentDay").textContent = `রমজান ${item.r} (${item.d})`;
+                startCountdown(item.s, item.i);
+            }
 
-            ramadanData.forEach((day, index) => {
-                const isToday = (day.d === todayStr) ? 'today' : '';
-                
-                list.innerHTML += `
-                    <div class="day-card ${isToday}">
-                        <div class="day-header">
-                            <span class="day-num">Ramadan ${index + 1}</span>
-                            <span class="greg-date">${day.d}, 2026</span>
-                        </div>
-                        <div class="timing-row">
-                            <span class="time-label"><i class="fa-solid fa-moon"></i> Sehri Ends</span>
-                            <span class="time-val">${day.s} AM</span>
-                        </div>
-                        <div class="timing-row">
-                            <span class="time-label"><i class="fa-solid fa-sun"></i> Iftar</span>
-                            <span class="time-val">${day.i} PM</span>
-                        </div>
-                    </div>
-                `;
-            });
-        }, 600);
+            listEl.innerHTML += `
+                <div class="day-row ${isToday ? 'today' : ''}">
+                    <div>${item.r}</div>
+                    <div>${item.d}</div>
+                    <div>${item.s}</div>
+                    <div>${item.i}</div>
+                </div>
+            `;
+        });
     }
 
-    window.onload = loadRamadan;
-</script>
+    function startCountdown(sTime, iTime) {
+        setInterval(() => {
+            const now = new Date();
+            updateTimer(sTime, "sCount", "বাকি: ", 0); // AM
+            updateTimer(iTime, "iCount", "বাকি: ", 12); // PM
+        }, 1000);
+    }
 
+    function updateTimer(tStr, id, label, addHrs) {
+        const [h, m] = tStr.split(':');
+        const target = new Date();
+        target.setHours(parseInt(h) + (addHrs === 12 && h < 12 ? 12 : 0), parseInt(m), 0);
+        
+        let diff = target - new Date();
+        if (diff < 0) { document.getElementById(id).textContent = "সময় শেষ"; return; }
+        
+        const hrs = Math.floor(diff / 3600000);
+        const mins = Math.floor((diff % 3600000) / 60000);
+        const secs = Math.floor((diff % 60000) / 1000);
+        document.getElementById(id).textContent = `${label}${hrs}ঘ ${mins}মি ${secs}সে`;
+    }
+
+    window.onload = init;
+</script>
 </body>
 </html>
-
