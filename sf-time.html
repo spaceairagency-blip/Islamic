@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ramadan 2026 | Seheri & Iftar</title>
+    <title>Sehri & Iftar | Islam Topic</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <style>
-        /* === THEME ENGINE === */
+        /* === THEME ENGINE VARIABLES === */
         :root {
             --primary: #00d285; --primary-dark: #00b570; --bg: #f8fafc;
             --header-grad: linear-gradient(135deg, #00d285, #00b570);
@@ -28,6 +28,13 @@
             --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(255,255,255,0.05);
         }
 
+        [data-theme="gold"] {
+            --primary: #facc15; --primary-dark: #ca8a04; --bg: #1c1917;
+            --header-grad: linear-gradient(135deg, #44403c, #78716c);
+            --card-bg: #292524; --text-dark: #ffffff; --text-muted: #d6d3d1;
+            --border: rgba(255, 255, 255, 0.1); --input-bg: rgba(0,0,0,0.3);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease; }
         
         body {
@@ -40,49 +47,163 @@
         header {
             background: var(--header-grad);
             padding: 15px 20px;
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        nav { max-width: 1100px; margin: auto; display: flex; align-items: center; justify-content: space-between; }
+        nav {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
         .logo { font-size: 1.1rem; font-weight: 800; color: white; }
+
         .theme-dots { display: flex; gap: 8px; }
         .dot { width: 18px; height: 18px; border-radius: 50%; border: 2px solid white; cursor: pointer; }
 
-        .container { max-width: 450px; margin: auto; padding: 20px; }
+        .container {
+            max-width: 450px;
+            margin: auto;
+            padding: 20px;
+        }
 
-        .select-box { margin-bottom: 20px; }
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin: 15px 0 10px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .select-box { position: relative; margin-bottom: 20px; }
+
         select {
-            width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--border);
-            background: var(--card-bg); color: var(--text-dark); font-weight: 600;
+            width: 100%;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 600;
+            appearance: none;
+            cursor: pointer;
         }
 
-        .section-title { font-size: 0.9rem; font-weight: 700; margin: 15px 0; display: flex; align-items: center; gap: 10px; color: var(--text-muted); }
-        .section-title::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
         .card {
-            background: var(--card-bg); padding: 15px; border-radius: 20px; text-align: center;
-            border: 1px solid var(--border); box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
         }
 
-        .label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
-        .time { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
-        .countdown { font-size: 0.75rem; color: var(--primary-dark); font-weight: 700; margin-top: 5px; }
+        .label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .time {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .countdown {
+            font-size: 0.8rem;
+            color: var(--primary-dark);
+            background: var(--input-bg);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
         .footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 0.8rem; }
-        .warning { font-size: 0.7rem; color: #ef4444; margin-top: 10px; text-align: center; }
+
+        /* === POPUP STYLES === */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1999;
+            backdrop-filter: blur(5px);
+        }
+
+        #iftarPopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--card-bg);
+            border: 3px solid var(--primary);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            z-index: 2000;
+            text-align: center;
+            width: 85%;
+            max-width: 350px;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        #iftarPopup h2 { color: var(--primary); margin-bottom: 15px; font-weight: 800; }
+        #iftarPopup .emoji-row { font-size: 2.5rem; margin-bottom: 15px; }
+        #iftarPopup button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,210,133,0.3);
+        }
     </style>
 </head>
 <body>
 
 <header>
     <nav>
-        <h2 class="logo"><i class="fa-solid fa-moon"></i> সেহরি ও ইফতার ২০২৬</h2>
+        <h2 class="logo"><i class="fa-solid fa-kaaba"></i> সেহরি ও ইফতার ২০২৬</h2>
         <div class="theme-dots">
             <div class="dot" style="background:#00d285" onclick="setTheme('emerald')"></div>
             <div class="dot" style="background:#38bdf8" onclick="setTheme('midnight')"></div>
             <div class="dot" style="background:#a78bfa" onclick="setTheme('royal')"></div>
+            <div class="dot" style="background:#facc15" onclick="setTheme('gold')"></div>
         </div>
     </nav>
 </header>
@@ -93,42 +214,51 @@
             <option value="Dhaka">ঢাকা (Dhaka)</option>
             <option value="Chittagong">চট্টগ্রাম (Chittagong)</option>
             <option value="Khulna">খুলনা (Khulna)</option>
-            <option value="Sylhet">সিলেট (Sylhet)</option>
             <option value="Rajshahi">রাজশাহী (Rajshahi)</option>
+            <option value="Sylhet">সিলেট (Sylhet)</option>
+            <option value="Barisal">বরিশাল (Barisal)</option>
+            <option value="Rangpur">রংপুর (Rangpur)</option>
+            <option value="Mymensingh">ময়মনসিংহ (Mymensingh)</option>
         </select>
     </div>
 
-    <div class="section-title">আজকের সময়সূচী</div>
+    <div class="section-title">আজকের সময়সূচী</div>
     <div class="grid">
         <div class="card">
-            <div class="label"><i class="fa-solid fa-clock"></i> সেহরি শেষ</div>
+            <div class="label">সেহরি শেষ</div>
             <div id="sehriToday" class="time">--:--</div>
             <div id="sehriCount" class="countdown">...</div>
         </div>
         <div class="card">
-            <div class="label"><i class="fa-solid fa-sun"></i> ইফতার শুরু</div>
+            <div class="label">ইফতার শুরু</div>
             <div id="iftarToday" class="time">--:--</div>
             <div id="iftarCount" class="countdown">...</div>
         </div>
     </div>
 
-    <div class="section-title">আগামীকালের সময়সূচী</div>
+    <div class="section-title">আগামীকালের সময়সূচী</div>
     <div class="grid">
-        <div class="card">
+        <div class="card" style="opacity: 0.9;">
             <div class="label">সেহরি শেষ</div>
-            <div id="sehriTomorrow" class="time">--:--</div>
+            <div id="sehriTomorrow" class="time" style="font-size: 1.5rem;">--:--</div>
         </div>
-        <div class="card">
-            <div class="label">イফতার শুরু</div>
-            <div id="iftarTomorrow" class="time">--:--</div>
+        <div class="card" style="opacity: 0.9;">
+            <div class="label">ইফতার শুরু</div>
+            <div id="iftarTomorrow" class="time" style="font-size: 1.5rem;">--:--</div>
         </div>
     </div>
 
-    <p class="warning">* সতর্কতামূলক ভাবে সেহরির সময় ৫ মিনিট কমিয়ে দেখানো হয়েছে।</p>
-    
     <div class="footer">
         © 2026 | All rights reserved | Made By Samiyyan
     </div>
+</div>
+
+<div id="overlay" class="overlay"></div>
+<div id="iftarPopup">
+    <h2>Iftar Time!</h2>
+    <div class="emoji-row">🍔🥘🥚🥙🍰</div>
+    <p style="margin-bottom: 20px; color: var(--text-dark);">ইফতারের সময় হয়েছে। আলহামদুলিল্লাহ!</p>
+    <button onclick="closePopup()">আলহামদুলিল্লাহ</button>
 </div>
 
 <script>
@@ -138,93 +268,107 @@
     }
     setTheme(localStorage.getItem('user_theme_pref') || 'emerald');
 
+    const citySelect = document.getElementById("city");
     let timingsToday = {};
     let timingsTomorrow = {};
+    let popupShown = false; // Prevents the popup from showing multiple times
 
-    async function fetchData(city) {
+    async function loadAllTimes(city) {
         const today = new Date();
         const tomorrow = new Date();
         tomorrow.setDate(today.getDate() + 1);
 
-        const dateT = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
-        const dateM = `${tomorrow.getDate()}-${tomorrow.getMonth() + 1}-${tomorrow.getFullYear()}`;
+        const dateToday = `${today.getDate()}-${today.getMonth() + 1}-${today.getFullYear()}`;
+        const dateTomorrow = `${tomorrow.getDate()}-${tomorrow.getMonth() + 1}-${tomorrow.getFullYear()}`;
 
         try {
-            const [resT, resM] = await Promise.all([
-                fetch(`https://api.aladhan.com/v1/timingsByCity/${dateT}?city=${city}&country=Bangladesh&method=1`),
-                fetch(`https://api.aladhan.com/v1/timingsByCity/${dateM}?city=${city}&country=Bangladesh&method=1`)
-            ]);
-            
+            const resT = await fetch(`https://api.aladhan.com/v1/timingsByCity/${dateToday}?city=${city}&country=Bangladesh&method=1`);
             const dataT = await resT.json();
-            const dataM = await resM.json();
-
             timingsToday = dataT.data.timings;
+
+            const resM = await fetch(`https://api.aladhan.com/v1/timingsByCity/${dateTomorrow}?city=${city}&country=Bangladesh&method=1`);
+            const dataM = await resM.json();
             timingsTomorrow = dataM.data.timings;
 
-            render();
-        } catch (e) { alert("Error loading data!"); }
+            updateUI();
+        } catch (e) {
+            console.error("Error loading times");
+        }
     }
 
-    function render() {
-        // সেহরি শেষ = ফজর - ৫ মিনিট
-        document.getElementById("sehriToday").textContent = getSehriEnd(timingsToday.Fajr);
-        document.getElementById("iftarToday").textContent = format12h(timingsToday.Maghrib);
+    function updateUI() {
+        document.getElementById("sehriToday").textContent = formatTime(timingsToday.Fajr);
+        document.getElementById("iftarToday").textContent = formatTime(timingsToday.Maghrib);
         
-        document.getElementById("sehriTomorrow").textContent = getSehriEnd(timingsTomorrow.Fajr);
-        document.getElementById("iftarTomorrow").textContent = format12h(timingsTomorrow.Maghrib);
+        document.getElementById("sehriTomorrow").textContent = formatTime(timingsTomorrow.Fajr);
+        document.getElementById("iftarTomorrow").textContent = formatTime(timingsTomorrow.Maghrib);
         
-        startTimer();
+        startCountdown();
     }
 
-    function getSehriEnd(fajr) {
-        let [h, m] = fajr.split(':');
-        let d = new Date();
-        d.setHours(h, m, 0);
-        d.setMinutes(d.getMinutes() - 5); // ৫ মিনিট বিয়োগ
-        return format12h(`${d.getHours()}:${d.getMinutes()}`);
-    }
-
-    function format12h(timeStr) {
-        let [h, m] = timeStr.split(':');
-        h = parseInt(h);
+    function formatTime(time24) {
+        let [hrs, mins] = time24.split(':');
+        let h = parseInt(hrs);
         let ampm = h >= 12 ? 'PM' : 'AM';
         h = h % 12 || 12;
-        return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;
+        return `${h}:${mins} ${ampm}`;
     }
 
-    function startTimer() {
+    function startCountdown() {
         setInterval(() => {
-            const now = new Date();
-            // সেহরি শেষ হওয়ার সময় বের করা কাউন্টডাউনের জন্য
-            let [sh, sm] = timingsToday.Fajr.split(':');
-            let targetS = new Date();
-            targetS.setHours(sh, sm, 0);
-            targetS.setMinutes(targetS.getMinutes() - 5);
-
-            updateCountdown(targetS, "sehriCount");
-
-            // ইফতারের সময়
-            let [ih, im] = timingsToday.Maghrib.split(':');
-            let targetI = new Date();
-            targetI.setHours(ih, im, 0);
-            updateCountdown(targetI, "iftarCount");
+            updateTimer(timingsToday.Fajr, "sehriCount", "বাকি: ");
+            updateTimer(timingsToday.Maghrib, "iftarCount", "বাকি: ");
         }, 1000);
     }
 
-    function updateCountdown(target, id) {
-        let diff = target - new Date();
-        if (diff < 0) {
-            document.getElementById(id).textContent = "সময় শেষ";
+    function updateTimer(targetTime, elementId, label) {
+        if (!targetTime) return;
+        const now = new Date();
+        const [hrs, mins] = targetTime.split(':');
+        const target = new Date();
+        target.setHours(hrs, mins, 0);
+
+        let diff = target - now;
+        
+        // Trigger Popup logic for Iftar
+        if (elementId === "iftarCount" && diff <= 0 && diff > -120000) { // If time is reached (within 2 minutes)
+            if (!popupShown) {
+                showIftarPopup();
+                popupShown = true; 
+            }
+            document.getElementById(elementId).textContent = "সময় শেষ";
             return;
         }
-        let h = Math.floor(diff / 3600000);
-        let m = Math.floor((diff % 3600000) / 60000);
-        let s = Math.floor((diff % 60000) / 1000);
-        document.getElementById(id).textContent = `বাকি: ${h}ঘ ${m}মি ${s}সে`;
+
+        if (diff < 0) {
+            document.getElementById(elementId).textContent = "সময় শেষ";
+            return;
+        }
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        let timeStr = (h > 0 ? `${h}ঘ: ` : "") + `${m}মি: ${s}সে`;
+        document.getElementById(elementId).textContent = label + timeStr;
     }
 
-    document.getElementById("city").addEventListener("change", (e) => fetchData(e.target.value));
-    fetchData("Dhaka");
+    function showIftarPopup() {
+        document.getElementById("iftarPopup").style.display = "block";
+        document.getElementById("overlay").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("iftarPopup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+    }
+
+    citySelect.addEventListener("change", () => {
+        popupShown = false; // Reset popup flag when city changes
+        loadAllTimes(citySelect.value);
+    });
+
+    loadAllTimes(citySelect.value);
 </script>
 
 </body>
