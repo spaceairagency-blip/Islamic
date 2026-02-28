@@ -7,147 +7,120 @@
     <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@300;400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --gold: #f1c40f;
-            --deep-blue: #090a0f;
-        }
-
+        :root { --gold: #f1c40f; --deep-blue: #090a0f; }
         * { box-sizing: border-box; }
-
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100dvh;
-            overflow: hidden;
             background: var(--deep-blue);
             font-family: 'Poppins', sans-serif;
             color: white;
-            touch-action: none;
-            overflow: auto;
+            overflow-x: hidden;
         }
-
         #bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
             z-index: -2;
         }
-
         #stars-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+        
+        .controls { position: fixed; top: 20px; right: 20px; z-index: 100; }
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white; border-radius: 50%; cursor: pointer; backdrop-filter: blur(5px);
+            width: 40px; height: 40px; display: grid; place-items: center;
+        }
 
-        .main-wrapper {
-            display: grid;
-            place-items: center;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
+        .main-wrapper { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100dvh; 
+            padding: 40px 20px;
+            gap: 20px;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: clamp(20px, 5vw, 40px);
-            border-radius: 25px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-            position: relative;
+            background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2); padding: clamp(20px, 5vw, 40px);
+            border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            width: 100%; max-width: 400px; text-align: center;
         }
 
         h1 {
-            font-family: 'Bungee', cursive;
-            font-size: clamp(1.4rem, 8vw, 2.2rem);
-            margin: 10px 0;
+            font-family: 'Bungee', cursive; font-size: clamp(1.4rem, 8vw, 2.2rem);
             background: linear-gradient(to bottom, #fff, var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 10px 0;
         }
 
-        .countdown-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        @media (min-width: 400px) {
-            .countdown-grid { grid-template-columns: repeat(4, 1fr); }
-        }
-
-        .time-box {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 15px 5px;
-            border-radius: 15px;
-            border-bottom: 3px solid var(--gold);
-        }
-
+        /* Countdown Styles */
+        .countdown-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 20px 0; }
+        @media (min-width: 400px) { .countdown-grid { grid-template-columns: repeat(4, 1fr); } }
+        .time-box { background: rgba(0, 0, 0, 0.5); padding: 15px 5px; border-radius: 15px; border-bottom: 3px solid var(--gold); }
         .num { display: block; font-family: 'Bungee'; font-size: 1.5rem; color: var(--gold); }
-        .label { font-size: 0.6rem; opacity: 0.7; letter-spacing: 1px; }
+        .label { font-size: 0.6rem; opacity: 0.7; }
 
-        .mega-btn {
-            background: linear-gradient(135deg, var(--gold), #f39c12);
-            color: #000;
-            border: none;
-            padding: 16px;
-            font-family: 'Bungee';
-            border-radius: 50px;
+        /* Salami Table Styles */
+        .salami-wrapper {
             width: 100%;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
-        }
-
-        .share-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 10px;
-            border-radius: 50px;
-            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
             margin-top: 10px;
-            cursor: pointer;
         }
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        thead { background: rgba(241, 196, 15, 0.15); color: var(--gold); font-family: 'Bungee'; }
+        th, td { padding: 15px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .symbol { color: var(--gold); font-weight: 900; }
 
-        #scene-icon { font-size: 80px; display: block; margin-bottom: 10px; transition: opacity 0.3s; }
+        /* Buttons */
+        .mega-btn {
+            background: linear-gradient(135deg, var(--gold), #f39c12); color: #000;
+            border: none; padding: 16px; font-family: 'Bungee'; border-radius: 50px;
+            width: 100%; cursor: pointer; margin-top: 15px; transition: transform 0.2s;
+        }
+        .mega-btn:active { transform: scale(0.95); }
+        .secondary-btn { background: transparent; color: var(--gold); border: 2px solid var(--gold); margin-bottom: 10px; }
+
+        /* Story/Scene Styles */
+        #scene-icon { font-size: 80px; display: block; margin-bottom: 10px; }
         #scene-text { font-family: 'Bungee'; min-height: 4em; display: grid; place-items: center; }
-
-        #progress-container {
-            width: 100%; height: 6px; background: rgba(255,255,255,0.1);
-            border-radius: 10px; overflow: hidden; margin: 20px 0;
-        }
+        #progress-container { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin: 20px 0; }
         #progress-bar { width: 0%; height: 100%; background: var(--gold); }
-
-        .shake { animation: shake 0.4s infinite; }
-        @keyframes shake {
-            0% { transform: scale(1.1) rotate(0); }
-            50% { transform: scale(1.1) rotate(3deg); }
-            100% { transform: scale(1.1) rotate(0); }
-        }
+        
+        #share-canvas { display: none; }
     </style>
 </head>
 <body>
     <div id="bg"></div>
     <canvas id="stars-canvas"></canvas>
+    <canvas id="share-canvas" width="600" height="600"></canvas>
+
+    <div class="controls">
+        <button class="control-btn" onclick="toggleFullscreen()">⛶</button>
+    </div>
 
     <div class="main-wrapper">
         <div id="countdown-ui" class="glass-card">
-            <p style="font-size: 0.7rem; letter-spacing: 3px; color: var(--gold);">EID AL-FITR 2026</p>
-            <h1>EID ARRIVING</h1>
+            <p style="font-size: 0.7rem; letter-spacing: 3px; color: var(--gold); margin: 0;">EID AL-FITR 2026</p>
+            <h1>EID IS COMING</h1>
+            <button onclick="shareCountdown()" class="mega-btn">Share</button>
             <div class="countdown-grid">
                 <div class="time-box"><span class="num" id="days">00</span><span class="label">DAYS</span></div>
                 <div class="time-box"><span class="num" id="hours">00</span><span class="label">HRS</span></div>
                 <div class="time-box"><span class="num" id="mins">00</span><span class="label">MINS</span></div>
                 <div class="time-box"><span class="num" id="secs">00</span><span class="label">SECS</span></div>
             </div>
-            <button class="share-btn" onclick="shareApp()">📲 SHARE LINK</button>
         </div>
 
         <div id="eid-ui" class="glass-card" style="display: none;">
             <div style="font-size: 60px;">🌙</div>
             <h1>EID MUBARAK</h1>
-            <p>The moon has been sighted!</p>
             <button class="mega-btn" onclick="askNameAndStart()">WATCH EID JOURNEY</button>
         </div>
         
@@ -156,16 +129,48 @@
             <div id="scene-text">PREPARING...</div>
             <div id="progress-container"><div id="progress-bar"></div></div>
             <div id="final-actions" style="display: none;">
+                <button class="mega-btn secondary-btn" onclick="shareExperience()">SHARE GIFT CARD 🎁</button>
                 <button class="mega-btn" onclick="location.reload()">REPLAY JOURNEY 🔄</button>
-                <button class="share-btn" onclick="shareApp()">📲 SHARE WITH FRIENDS</button>
             </div>
+        </div>
+
+        <div class="salami-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Salami</th>
+                        <th>Symbol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lopa Yeasmin</td>
+                        <td>50 + 50 = 100</td>
+                        <td class="symbol">৳</td>
+                    </tr>
+                    <tr>
+                        <td>Tahia Yeasmin</td>
+                        <td>50 + 50 = 100</td>
+                        <td class="symbol">৳</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        const eidDate = new Date(2026, 2, 20).getTime(); // Note: March 2026
+        const eidDate = new Date("2026-03-20T18:40:00").getTime(); 
         let userName = "Friend";
-
+        let fireworkTimer = null;
+        function shareCountdown() {
+            const text = `Eid is coming in ${document.getElementById('days').innerText}d ${document.getElementById('hours').innerText}h ${document.getElementById('mins').innerText}m ${document.getElementById('secs').innerText}s! 🌙🎉`;
+            if (navigator.share) {
+                navigator.share({ title: 'Eid Countdown', text, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(text).then(() => alert("Countdown copied to clipboard!"));
+            }
+        }
         function updateClock() {
             const distance = eidDate - new Date().getTime();
             if (distance < 0) {
@@ -181,23 +186,48 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+        }
+
+        async function shareExperience() {
+            const canvas = document.getElementById('share-canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#090a0f'; ctx.fillRect(0, 0, 600, 600);
+            ctx.strokeStyle = '#f1c40f'; ctx.lineWidth = 20; ctx.strokeRect(20, 20, 560, 560);
+            ctx.fillStyle = '#f1c40f'; ctx.font = 'bold 40px Arial'; ctx.textAlign = 'center';
+            ctx.fillText('🌙 EID MUBARAK 🌙', 300, 200);
+            ctx.fillStyle = '#ffffff'; ctx.font = '50px Georgia'; ctx.fillText(userName.toUpperCase(), 300, 300);
+            ctx.fillText('Blessed Journey!', 300, 400);
+
+            canvas.toBlob(async (blob) => {
+                const file = new File([blob], 'eid-card.png', { type: 'image/png' });
+                if (navigator.share) {
+                    try { await navigator.share({ files: [file], title: 'Eid Mubarak', text: `From ${userName}!` }); } 
+                    catch (err) { navigator.share({ title: 'Eid Mubarak', url: window.location.href }); }
+                }
+            });
+        }
+
         function askNameAndStart() {
-            const n = prompt("Enter your name for the story:", "Friend");
+            const n = prompt("Enter your name:", "Friend");
             if(n) userName = n;
             startStory();
         }
 
         async function startStory() {
+            if(fireworkTimer) clearInterval(fireworkTimer);
+            
             document.getElementById('eid-ui').style.display = 'none';
             document.getElementById('story-ui').style.display = 'block';
             
             const scenes = [
-                { i: "🚶‍♂️🕌", t: `Hey ${userName}, let's go to the Mosque!`, d: 2500, s: true },
-                { i: "🤝✨", t: "Eid Prayer", d: 3000, s: true },
-                { i: "🏠🚶‍♂️", t: "Heading back home to celebrate...", d: 2000, s: true },
-                { i: "🥣😋", t: "Eating your favorite Kunafa! Yum!", d: 3000, s: true },
-                { i: "✉️❤️", t: "Sending Eid Cards to everyone!", d: 3000, s: true },
-                { i: "🥳🎉", t: `EID MUBARAK, ${userName.toUpperCase()}!`, d: 5000, s: "finale" }
+                { i: "🚶‍♂️🕌", t: `Hey ${userName}, Mosque time!`, d: 2000 },
+                { i: "🤝✨", t: "Eid Prayer", d: 2500 },
+                { i: "🏠🚶‍♂️", t: "Going home...", d: 1500 },
+                { i: "🥣😋", t: "Eid Treats!", d: 2500 },
+                { i: "🥳🎉", t: `EID MUBARAK!`, d: 5000, finale: true }
             ];
 
             const icon = document.getElementById('scene-icon');
@@ -206,49 +236,35 @@
 
             for (let res of scenes) {
                 icon.style.opacity = "0";
-                icon.classList.remove('shake');
-                await new Promise(r => setTimeout(r, 300));
-                
+                await new Promise(r => setTimeout(r, 200));
                 icon.innerText = res.i;
                 txt.innerText = res.t;
                 icon.style.opacity = "1";
-                if(res.s) icon.classList.add('shake');
-
                 bar.style.transition = "none";
                 bar.style.width = "0%";
-                setTimeout(() => {
-                    bar.style.transition = `width ${res.d}ms linear`;
-                    bar.style.width = "100%";
-                }, 50);
+                setTimeout(() => { bar.style.transition = `width ${res.d}ms linear`; bar.style.width = "100%"; }, 50);
 
-                // --- Firework Logic ---
-                if(res.s === "finale") {
-                    // 3 Fireworks at a time
-                    confetti({ particleCount: 150, spread: 70, origin: { x: 0.2, y: 0.5 }, colors: ['#f1c40f', '#fff'] }); // Left
-                    confetti({ particleCount: 150, spread: 80, origin: { x: 0.5, y: 0.4 }, colors: ['#ff0000', '#f1c40f'] }); // Center
-                    confetti({ particleCount: 150, spread: 70, origin: { x: 0.8, y: 0.5 }, colors: ['#f1c40f', '#fff'] }); // Right
-                } else if(res.s) {
-                    confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
+                if (res.finale) {
+                    fireworkTimer = setInterval(() => {
+                        confetti({ particleCount: 30, spread: 50, origin: { x: 0.5, y: 0.7 }, ticks: 150 });
+                        confetti({ particleCount: 20, angle: 60, spread: 40, origin: { x: 0, y: 0.8 }, ticks: 150 });
+                        confetti({ particleCount: 20, angle: 120, spread: 40, origin: { x: 1, y: 0.8 }, ticks: 150 });
+                    }, 450); 
+                } else {
+                    confetti({ particleCount: 15, spread: 40, origin: { y: 0.7 } });
                 }
-
                 await new Promise(r => setTimeout(r, res.d));
             }
-
             document.getElementById('final-actions').style.display = 'block';
         }
 
-        function shareApp() {
-            const data = { title: 'Eid 2026', text: 'Watch my Eid story!', url: window.location.href };
-            navigator.share ? navigator.share(data) : alert("Link copied!");
-        }
-
-        // Starfield logic
+        // Star Background Animation
         const canvas = document.getElementById('stars-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
         function init() {
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            stars = Array(70).fill().map(() => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*0.5 }));
+            stars = Array(50).fill().map(() => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*0.5 }));
         }
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -259,8 +275,7 @@
             });
             requestAnimationFrame(draw);
         }
-        window.onresize = init;
-        init(); draw();
+        window.onresize = init; init(); draw();
     </script>
 </body>
 </html>
