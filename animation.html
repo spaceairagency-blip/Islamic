@@ -3,75 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Eid Celebration Engine</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;900&display=swap" rel="stylesheet">
+    <title>Eid Mubarak | Personal Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@300;400;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --gold: #f1c40f;
-            --white: #ffffff;
+            --deep-blue: #090a0f;
         }
+
+        * { box-sizing: border-box; }
 
         body, html {
             margin: 0; padding: 0;
-            width: 100%; height: 100%;
+            width: 100%; height: 100dvh;
             overflow: hidden;
-            background: #000;
+            background: var(--deep-blue);
             font-family: 'Poppins', sans-serif;
             color: white;
-            touch-action: none; /* Prevents scrolling while interacting */
+            touch-action: none;
+            overflow: auto;
         }
 
         #bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
-            z-index: -1;
+            z-index: -2;
         }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        #stars-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        .main-wrapper {
+            display: grid;
+            place-items: center;
             width: 100%;
-            text-align: center;
-            perspective: 1000px;
+            height: 100%;
+            padding: 20px;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 30px 20px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            width: 85%;
+            padding: clamp(20px, 5vw, 40px);
+            border-radius: 25px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            width: 100%;
             max-width: 400px;
-            transform-style: preserve-3d;
-            transition: transform 0.2s ease-out;
+            text-align: center;
+            position: relative;
         }
 
-        /* Responsive Typography */
         h1 {
             font-family: 'Bungee', cursive;
-            font-size: 2.2rem; /* Scaled for mobile */
+            font-size: clamp(1.4rem, 8vw, 2.2rem);
             margin: 10px 0;
-            line-height: 1.1;
+            background: linear-gradient(to bottom, #fff, var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        @media (min-width: 768px) {
-            h1 { font-size: 3.5rem; }
-            .glass-card { padding: 50px; }
-        }
-
-        /* Countdown Grid - Responsive */
         .countdown-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2x2 on small phones */
-            gap: 10px;
-            margin-top: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
         }
 
         @media (min-width: 400px) {
@@ -79,168 +77,190 @@
         }
 
         .time-box {
-            background: rgba(241, 196, 15, 0.1);
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid var(--gold);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px 5px;
+            border-radius: 15px;
+            border-bottom: 3px solid var(--gold);
         }
 
-        .num {
-            display: block;
-            font-family: 'Bungee', cursive;
-            font-size: 1.5rem;
-            color: var(--gold);
-        }
-
-        .label {
-            font-size: 0.6rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.8;
-        }
-
-        /* Celebration UI */
-        #eid-ui { display: none; }
-        
-        .celebration h1 {
-            animation: chroma 2s infinite linear;
-            font-size: 2.5rem;
-        }
-
-        @keyframes chroma {
-            0% { color: #ff00ea; text-shadow: 0 0 10px #ff00ea; }
-            50% { color: #00f2ff; text-shadow: 0 0 10px #00f2ff; }
-            100% { color: #ff00ea; text-shadow: 0 0 10px #ff00ea; }
-        }
+        .num { display: block; font-family: 'Bungee'; font-size: 1.5rem; color: var(--gold); }
+        .label { font-size: 0.6rem; opacity: 0.7; letter-spacing: 1px; }
 
         .mega-btn {
-            background: var(--gold);
+            background: linear-gradient(135deg, var(--gold), #f39c12);
             color: #000;
             border: none;
-            padding: 15px 30px;
-            font-family: 'Bungee', cursive;
+            padding: 16px;
+            font-family: 'Bungee';
             border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 20px;
             width: 100%;
-            max-width: 250px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
         }
 
-        #trail {
-            position: fixed;
-            top: 0; left: 0;
-            pointer-events: none;
-            z-index: 100;
+        .share-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px;
+            border-radius: 50px;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        #scene-icon { font-size: 80px; display: block; margin-bottom: 10px; transition: opacity 0.3s; }
+        #scene-text { font-family: 'Bungee'; min-height: 4em; display: grid; place-items: center; }
+
+        #progress-container {
+            width: 100%; height: 6px; background: rgba(255,255,255,0.1);
+            border-radius: 10px; overflow: hidden; margin: 20px 0;
+        }
+        #progress-bar { width: 0%; height: 100%; background: var(--gold); }
+
+        .shake { animation: shake 0.4s infinite; }
+        @keyframes shake {
+            0% { transform: scale(1.1) rotate(0); }
+            50% { transform: scale(1.1) rotate(3deg); }
+            100% { transform: scale(1.1) rotate(0); }
         }
     </style>
 </head>
 <body>
-
     <div id="bg"></div>
-    <canvas id="trail"></canvas>
+    <canvas id="stars-canvas"></canvas>
 
-    <div class="container">
+    <div class="main-wrapper">
         <div id="countdown-ui" class="glass-card">
-            <p style="letter-spacing: 3px; font-size: 0.8rem; color: var(--gold);">THE COUNTDOWN</p>
-            <h1>EID IS COMING</h1>
+            <p style="font-size: 0.7rem; letter-spacing: 3px; color: var(--gold);">EID AL-FITR 2026</p>
+            <h1>EID ARRIVING</h1>
             <div class="countdown-grid">
-                <div class="time-box"><span class="num" id="days">00</span><span class="label">Days</span></div>
-                <div class="time-box"><span class="num" id="hours">00</span><span class="label">Hrs</span></div>
-                <div class="time-box"><span class="num" id="mins">00</span><span class="label">Min</span></div>
-                <div class="time-box"><span class="num" id="secs">00</span><span class="label">Sec</span></div>
+                <div class="time-box"><span class="num" id="days">00</span><span class="label">DAYS</span></div>
+                <div class="time-box"><span class="num" id="hours">00</span><span class="label">HRS</span></div>
+                <div class="time-box"><span class="num" id="mins">00</span><span class="label">MINS</span></div>
+                <div class="time-box"><span class="num" id="secs">00</span><span class="label">SECS</span></div>
             </div>
+            <button class="share-btn" onclick="shareApp()">📲 SHARE LINK</button>
         </div>
 
-        <div id="eid-ui" class="glass-card celebration">
+        <div id="eid-ui" class="glass-card" style="display: none;">
             <div style="font-size: 60px;">🌙</div>
             <h1>EID MUBARAK</h1>
-            <p>Blessings to you and your family!</p>
-            <button class="mega-btn" onclick="megaBlast()">HYPER PARTY 🎉</button>
+            <p>The moon has been sighted!</p>
+            <button class="mega-btn" onclick="askNameAndStart()">WATCH EID JOURNEY</button>
+        </div>
+        
+        <div id="story-ui" class="glass-card" style="display: none;">
+            <span id="scene-icon">🌙</span>
+            <div id="scene-text">PREPARING...</div>
+            <div id="progress-container"><div id="progress-bar"></div></div>
+            <div id="final-actions" style="display: none;">
+                <button class="mega-btn" onclick="location.reload()">REPLAY JOURNEY 🔄</button>
+                <button class="share-btn" onclick="shareApp()">📲 SHARE WITH FRIENDS</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Set your target Eid Date
-        const eidDate = new Date(2026, 2, 20).getTime(); 
+        const eidDate = new Date(2026, 2, 20).getTime(); // Note: March 2026
+        let userName = "Friend";
 
         function updateClock() {
-            const now = new Date().getTime();
-            const distance = eidDate - now;
-
+            const distance = eidDate - new Date().getTime();
             if (distance < 0) {
                 document.getElementById('countdown-ui').style.display = 'none';
                 document.getElementById('eid-ui').style.display = 'block';
                 return;
             }
-
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerText = d.toString().padStart(2, '0');
-            document.getElementById('hours').innerText = h.toString().padStart(2, '0');
-            document.getElementById('mins').innerText = m.toString().padStart(2, '0');
-            document.getElementById('secs').innerText = s.toString().padStart(2, '0');
+            document.getElementById('days').innerText = Math.floor(distance / 86400000).toString().padStart(2, '0');
+            document.getElementById('hours').innerText = Math.floor((distance % 86400000) / 3600000).toString().padStart(2, '0');
+            document.getElementById('mins').innerText = Math.floor((distance % 3600000) / 60000).toString().padStart(2, '0');
+            document.getElementById('secs').innerText = Math.floor((distance % 60000) / 1000).toString().padStart(2, '0');
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- MOBILE FRIENDLY INTERACTION ---
-        const card = document.querySelector('.glass-card');
-        const trailCanvas = document.getElementById('trail');
-        const tctx = trailCanvas.getContext('2d');
-        let dots = [];
+        function askNameAndStart() {
+            const n = prompt("Enter your name for the story:", "Friend");
+            if(n) userName = n;
+            startStory();
+        }
 
-        function handleMove(e) {
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        async function startStory() {
+            document.getElementById('eid-ui').style.display = 'none';
+            document.getElementById('story-ui').style.display = 'block';
+            
+            const scenes = [
+                { i: "🚶‍♂️🕌", t: `Hey ${userName}, let's go to the Mosque!`, d: 2500, s: true },
+                { i: "🤝✨", t: "Eid Prayer", d: 3000, s: true },
+                { i: "🏠🚶‍♂️", t: "Heading back home to celebrate...", d: 2000, s: true },
+                { i: "🥣😋", t: "Eating your favorite Kunafa! Yum!", d: 3000, s: true },
+                { i: "✉️❤️", t: "Sending Eid Cards to everyone!", d: 3000, s: true },
+                { i: "🥳🎉", t: `EID MUBARAK, ${userName.toUpperCase()}!`, d: 5000, s: "finale" }
+            ];
 
-            // Tilt effect
-            const x = (window.innerWidth / 2 - clientX) / 15;
-            const y = (window.innerHeight / 2 - clientY) / 15;
-            document.querySelectorAll('.glass-card').forEach(c => {
-                c.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
+            const icon = document.getElementById('scene-icon');
+            const txt = document.getElementById('scene-text');
+            const bar = document.getElementById('progress-bar');
+
+            for (let res of scenes) {
+                icon.style.opacity = "0";
+                icon.classList.remove('shake');
+                await new Promise(r => setTimeout(r, 300));
+                
+                icon.innerText = res.i;
+                txt.innerText = res.t;
+                icon.style.opacity = "1";
+                if(res.s) icon.classList.add('shake');
+
+                bar.style.transition = "none";
+                bar.style.width = "0%";
+                setTimeout(() => {
+                    bar.style.transition = `width ${res.d}ms linear`;
+                    bar.style.width = "100%";
+                }, 50);
+
+                // --- Firework Logic ---
+                if(res.s === "finale") {
+                    // 3 Fireworks at a time
+                    confetti({ particleCount: 150, spread: 70, origin: { x: 0.2, y: 0.5 }, colors: ['#f1c40f', '#fff'] }); // Left
+                    confetti({ particleCount: 150, spread: 80, origin: { x: 0.5, y: 0.4 }, colors: ['#ff0000', '#f1c40f'] }); // Center
+                    confetti({ particleCount: 150, spread: 70, origin: { x: 0.8, y: 0.5 }, colors: ['#f1c40f', '#fff'] }); // Right
+                } else if(res.s) {
+                    confetti({ particleCount: 40, spread: 50, origin: { y: 0.7 } });
+                }
+
+                await new Promise(r => setTimeout(r, res.d));
+            }
+
+            document.getElementById('final-actions').style.display = 'block';
+        }
+
+        function shareApp() {
+            const data = { title: 'Eid 2026', text: 'Watch my Eid story!', url: window.location.href };
+            navigator.share ? navigator.share(data) : alert("Link copied!");
+        }
+
+        // Starfield logic
+        const canvas = document.getElementById('stars-canvas');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        function init() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            stars = Array(70).fill().map(() => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, v: Math.random()*0.5 }));
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            stars.forEach(s => {
+                ctx.beginPath(); ctx.arc(s.x, s.y, 1, 0, Math.PI*2); ctx.fill();
+                s.y += s.v; if(s.y > canvas.height) s.y = 0;
             });
-
-            // Trail particles
-            dots.push({ x: clientX, y: clientY, alpha: 1, color: Math.random() * 360 });
+            requestAnimationFrame(draw);
         }
-
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('touchmove', handleMove);
-
-        // Trail Animation
-        function animateTrail() {
-            tctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
-            dots.forEach((dot, index) => {
-                dot.alpha -= 0.03;
-                tctx.fillStyle = `hsla(${dot.color}, 100%, 70%, ${dot.alpha})`;
-                tctx.beginPath();
-                tctx.arc(dot.x, dot.y, 4, 0, Math.PI * 2);
-                tctx.fill();
-                if(dot.alpha <= 0) dots.splice(index, 1);
-            });
-            requestAnimationFrame(animateTrail);
-        }
-        animateTrail();
-
-        window.addEventListener('resize', () => {
-            trailCanvas.width = window.innerWidth;
-            trailCanvas.height = window.innerHeight;
-        });
-        window.dispatchEvent(new Event('resize'));
-
-        function megaBlast() {
-            const end = Date.now() + (3 * 1000);
-            (function frame() {
-              confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-              confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-              if (Date.now() < end) requestAnimationFrame(frame);
-            }());
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-        }
+        window.onresize = init;
+        init(); draw();
     </script>
 </body>
 </html>
